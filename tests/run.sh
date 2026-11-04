@@ -19,6 +19,10 @@ moth=$out/site/creatures/lanternmoth/index.html
 
 has "$home" '<title>Example Bestiary</title>'
 has "$home" 'href="[^"]*/creatures/inkwyrm/"'
+
+sections() { grep -o 'class="bestiary-index-section"[^>]*>[^<]*<a [^>]*>[^<]*' "$1" | sed 's/.*>//' | paste -sd, -; }
+[ "$(sections "$home")" = "Creatures,Apparitions" ] || fail "home index sections are not in weight order: $(sections "$home")"
+grep -A3 'href="[^"]*/apparitions/hollowbell/"' "$home" | grep -q 'data-choice="spirit"' || fail "home index shows no seal beside Hollow Bell"
 has "$ink" 'Inkwyrm'
 
 css=$(grep -o '<link rel="stylesheet" href="[^"]*"' "$ink" | sed 's/.*href="//; s/"$//') || fail "Inkwyrm links no stylesheet"

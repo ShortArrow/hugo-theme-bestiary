@@ -1,7 +1,11 @@
 {{ define "main" }}
-<ul>
-  {{ range site.RegularPages }}
-  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-  {{ end }}
-</ul>
+{{- with where site.RegularPages "Section" "" }}
+{{ partial "bestiary/index-list.html" . }}
+{{- end }}
+{{- range site.Sections.ByWeight }}
+<section class="bestiary-index">
+  <h2 class="bestiary-index-section"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+  {{ partial "bestiary/index-list.html" .RegularPages }}
+</section>
+{{- end }}
 {{ end }}

@@ -1,0 +1,7 @@
+{{- /* Renders the seals of every declared choice field that the page sets, in declared order. */ -}}
+{{- $page := . -}}
+{{- range $field := where (site.Params.bestiary.fields | default slice) "type" "choice" -}}
+  {{- with index $page.Params (lower $field.key) }}
+    {{- partial "bestiary/field/choice.html" (dict "field" $field "value" . "page" $page) -}}
+  {{- end -}}
+{{- end -}}
