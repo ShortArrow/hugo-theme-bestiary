@@ -1,0 +1,117 @@
+/* Bestiary: an old natural-history book. Light pages are paper by day; dark pages are the study at night. */
+:root {
+  --paper: #f3ead6;
+  --paper-shade: #e8dcc0;
+  --ink: #2b2118;
+  --ink-faint: #6b5a47;
+  --rule: #8a7458;
+  --accent: #7a2e1f;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c1712;
+    --paper-shade: #262019;
+    --ink: #e9dec6;
+    --ink-faint: #b3a285;
+    --rule: #7d6a50;
+    --accent: #e0a37a;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 2.5rem 16px 4rem;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, var(--paper-shade) 100%) fixed,
+    var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+header, main { max-width: 40rem; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding-bottom: 0.75rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 3px double var(--rule);
+}
+
+header a {
+  color: var(--ink);
+  text-decoration: none;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-size: 1.5rem;
+}
+
+a { color: var(--accent); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+h1 {
+  text-align: center;
+  font-weight: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 2rem;
+  line-height: 1.3;
+  margin: 0 0 1.5rem;
+}
+
+h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; margin: 0 0.6em; vertical-align: 0.15em; }
+
+.bestiary-card {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1.25rem;
+  margin: 0 0 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.bestiary-field { display: contents; }
+
+.bestiary-field-label {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+
+.bestiary-card dd { margin: 0; }
+
+.bestiary-choice {
+  --bestiary-choice-color: var(--accent);
+  display: inline-block;
+  padding: 0 0.6em;
+  border: 1.5px solid var(--bestiary-choice-color);
+  border-radius: 0.3em;
+  color: var(--bestiary-choice-color);
+  background: color-mix(in srgb, var(--bestiary-choice-color) 10%, transparent);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  transform: rotate(-2deg);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bestiary-choice { filter: brightness(1.6); }
+}
+
+.bestiary-links { list-style: none; margin: 0; padding: 0; }
+.bestiary-links a::after { content: " ↗"; font-size: 0.8em; }
+
+main > ul { list-style: none; padding: 0; columns: 2 14rem; }
+main > ul li { break-inside: avoid; padding: 0.15rem 0; }
+
+@media (max-width: 30rem) {
+  .bestiary-card { grid-template-columns: 1fr; gap: 0; }
+  .bestiary-card dd { margin-bottom: 0.5rem; }
+}
