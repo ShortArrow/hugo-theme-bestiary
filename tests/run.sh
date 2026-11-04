@@ -21,6 +21,10 @@ has "$home" '<title>Example Bestiary</title>'
 has "$home" 'href="[^"]*/creatures/inkwyrm/"'
 has "$ink" 'Inkwyrm'
 
+css=$(grep -o '<link rel="stylesheet" href="[^"]*"' "$ink" | sed 's/.*href="//; s/"$//') || fail "Inkwyrm links no stylesheet"
+[ -s "$out/site$css" ] || fail "stylesheet $css was not published"
+grep -q -- '--bestiary-choice-color' "$out/site$css" || fail "stylesheet does not colour choices"
+
 [ "$(labels "$ink")" = "Kind,Habitat,Sightings,Last seen" ] || fail "Inkwyrm fields are not in declared order: $(labels "$ink")"
 has "$ink" 'data-choice="beast"'
 has "$ink" '--bestiary-choice-color: #8b3a2b'
