@@ -1,5 +1,6 @@
+{{- $weathered := ne site.Params.bestiary.weathering false -}}
 <!doctype html>
-<html lang="{{ site.Language.Locale }}">
+<html lang="{{ site.Language.Locale }}"{{ if $weathered }} class="bestiary-weathered"{{ end }}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +10,12 @@
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
 </head>
 <body>
-  <header><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></header>
-  <main>{{ block "main" . }}{{ end }}</main>
+  {{- if $weathered }}
+  {{ partial "bestiary/weathering-filters.html" . }}
+  {{- end }}
+  <div class="bestiary-leaf">
+    <header><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></header>
+    <main>{{ block "main" . }}{{ end }}</main>
+  </div>
 </body>
 </html>

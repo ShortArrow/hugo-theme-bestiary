@@ -39,6 +39,14 @@ has "$ink" '<time datetime="2026-01-02">January 2, 2026</time>'
 
 [ "$(labels "$moth")" = "Kind" ] || fail "Lanternmoth shows fields it does not have: $(labels "$moth")"
 
+has "$ink" '<html [^>]*class="bestiary-weathered"'
+has "$ink" '<filter id="bestiary-ink"'
+grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
+
+build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
+lacks "$out/plain/clean/index.html" 'bestiary-weathered'
+lacks "$out/plain/clean/index.html" '<filter id='
+
 expect_error() {
   if err=$(build "$root/tests/fixtures/$1" ../../../.. "$out/$1" 2>&1); then fail "$1 built without error"; fi
   echo "$err" | grep -q -- "$2" || fail "$1 failed without naming the cause: $err"

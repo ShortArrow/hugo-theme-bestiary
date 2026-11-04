@@ -60,6 +60,15 @@ params:
 
 The build fails when a field declares another `type`, and when a `choice` value is not one of the declared choices.
 
+## Weathering
+
+By default the page is a worn leaf: headings, seals and rules are printed in uneven ink, the leaf has ragged and browned edges, and the paper carries a ring stain and foxing. Body text is not weathered. To print on a clean sheet instead:
+
+```toml
+[params.bestiary]
+  weathering = false
+```
+
 ## Development
 
 `tests/run.sh` builds `exampleSite` with the theme and fails if a page does not render. It needs `hugo` on `PATH`.
