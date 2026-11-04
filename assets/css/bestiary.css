@@ -108,8 +108,33 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
 .bestiary-links { list-style: none; margin: 0; padding: 0; }
 .bestiary-links a::after { content: " ↗"; font-size: 0.8em; }
 
-main > ul { list-style: none; padding: 0; columns: 2 14rem; }
-main > ul li { break-inside: avoid; padding: 0.15rem 0; }
+.bestiary-index + .bestiary-index { margin-top: 2.5rem; }
+
+.bestiary-index-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 0 0 0.75rem;
+  font-weight: normal;
+  font-size: 1.25rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+}
+
+.bestiary-index-section::before, .bestiary-index-section::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
+.bestiary-index-section a { color: var(--ink); text-decoration: none; }
+
+.bestiary-index-entries { list-style: none; margin: 0; padding: 0; }
+
+.bestiary-index-entries li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  padding: 0.2rem 0;
+}
+
+.bestiary-index-entries li::after { content: ""; order: 1; flex: 1; min-width: 1.5em; border-bottom: 1px dotted var(--rule); }
+.bestiary-index-entries .bestiary-choice { order: 2; font-size: 0.85em; }
 
 @media (max-width: 30rem) {
   .bestiary-card { grid-template-columns: 1fr; gap: 0; }

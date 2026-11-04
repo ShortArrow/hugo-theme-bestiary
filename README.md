@@ -2,7 +2,7 @@
 
 A Hugo theme for field guides to imaginary creatures.
 
-The theme is at an early stage. It renders a home page that lists every entry, list pages for sections, and a page for each entry with an entry card.
+The theme is at an early stage. The home page is an index of every entry, grouped by section in the order of the sections' `weight`, with the seals of each entry's choice fields beside it. Each section has a list page of the same form, and each entry has a page with its entry card.
 
 ## Requirements
 

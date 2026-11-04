@@ -1,0 +1,7 @@
+{{- /* Lists pages as index entries: the title as a link, followed by its seals. */ -}}
+<ul class="bestiary-index-entries">
+  {{- range . }}
+  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{ partial "bestiary/seals.html" . }}</li>
+  {{- end }}
+</ul>
