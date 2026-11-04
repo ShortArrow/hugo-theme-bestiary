@@ -40,7 +40,16 @@ The site declares which fields an entry can have, in the order the entry card sh
   type = "text"
 ```
 
-An entry sets a field under its `key` in front matter. The card leaves out the fields an entry does not set.
+An entry sets its fields under `params` in front matter, so that a key such as `kind` does not collide with Hugo's own front matter. The card leaves out the fields an entry does not set.
+
+```yaml
+---
+title: Inkwyrm
+params:
+  kind: beast
+  habitat: Inkwells
+---
+```
 
 | `type` | Front matter value | Card shows |
 |---|---|---|
@@ -50,8 +59,6 @@ An entry sets a field under its `key` in front matter. The card leaves out the f
 | `date` | a date | the date in the site's locale |
 
 The build fails when a field declares another `type`, and when a `choice` value is not one of the declared choices.
-
-A `key` must not be one of Hugo's own front matter fields, such as `type`, `layout` or `date`.
 
 ## Development
 

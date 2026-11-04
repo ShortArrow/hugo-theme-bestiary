@@ -1,4 +1,5 @@
 ---
 title: Typo
-kind: baest
+params:
+  kind: baest
 ---

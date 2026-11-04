@@ -1,4 +1,5 @@
 ---
 title: Typo
-habitat: Caves
+params:
+  habitat: Caves
 ---
