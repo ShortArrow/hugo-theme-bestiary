@@ -69,6 +69,10 @@ By default the page is a worn leaf: headings, seals and rules are printed in une
   weathering = false
 ```
 
+## Analytics
+
+When the site sets `services.googleAnalytics.ID`, every page loads Hugo's Google Analytics template, which follows the site's `privacy.googleAnalytics` settings. Without an ID, pages load no analytics.
+
 ## Development
 
 `tests/run.sh` builds `exampleSite` with the theme and fails if a page does not render. It needs `hugo` on `PATH`.

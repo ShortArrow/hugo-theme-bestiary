@@ -47,6 +47,10 @@ build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
 
+lacks "$ink" 'googletagmanager'
+build "$root/tests/fixtures/analytics" ../../../.. "$out/analytics"
+has "$out/analytics/counted/index.html" 'googletagmanager.com/gtag/js?id=G-TEST123'
+
 expect_error() {
   if err=$(build "$root/tests/fixtures/$1" ../../../.. "$out/$1" 2>&1); then fail "$1 built without error"; fi
   echo "$err" | grep -q -- "$2" || fail "$1 failed without naming the cause: $err"
