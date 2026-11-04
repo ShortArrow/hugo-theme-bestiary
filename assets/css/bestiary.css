@@ -1,7 +1,9 @@
 /* Bestiary: an old natural-history book. Light pages are paper by day; dark pages are the study at night. */
 :root {
+  --desk: #cdbb95;
   --paper: #f3ead6;
-  --paper-shade: #e8dcc0;
+  --paper-burn: rgba(122, 82, 34, 0.38);
+  --stain: rgba(130, 88, 38, 0.16);
   --ink: #2b2118;
   --ink-faint: #6b5a47;
   --rule: #8a7458;
@@ -12,8 +14,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #1c1712;
-    --paper-shade: #262019;
+    --desk: #0e0b08;
+    --paper: #1f1914;
+    --paper-burn: rgba(0, 0, 0, 0.55);
+    --stain: rgba(200, 160, 100, 0.06);
     --ink: #e9dec6;
     --ink-faint: #b3a285;
     --rule: #7d6a50;
@@ -26,26 +30,50 @@
 
 body {
   margin: 0;
-  padding: 2.5rem 16px 4rem;
-  background:
-    radial-gradient(ellipse at center, transparent 55%, var(--paper-shade) 100%) fixed,
-    var(--paper);
+  padding: 1.5rem 8px 3rem;
+  background: var(--desk);
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.125rem;
   line-height: 1.7;
 }
 
-header, main { max-width: 40rem; margin: 0 auto; }
+.bestiary-leaf {
+  position: relative;
+  isolation: isolate;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2.5rem clamp(16px, 5vw, 2.5rem) 4rem;
+}
+
+.bestiary-leaf::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--paper);
+  box-shadow: inset 0 0 2.5rem var(--paper-burn), 0 0.25rem 1.5rem rgba(0, 0, 0, 0.25);
+}
 
 header {
+  position: relative;
   text-align: center;
   padding-bottom: 0.75rem;
   margin-bottom: 2.5rem;
-  border-bottom: 3px double var(--rule);
 }
 
+header::after, .bestiary-card::before, .bestiary-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--rule);
+}
+
+header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
+
 header a {
+  display: inline-block;
   color: var(--ink);
   text-decoration: none;
   font-variant: small-caps;
@@ -69,14 +97,16 @@ h1 {
 h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; margin: 0 0.6em; vertical-align: 0.15em; }
 
 .bestiary-card {
+  position: relative;
   display: grid;
   grid-template-columns: max-content 1fr;
   gap: 0.35rem 1.25rem;
   margin: 0 0 2rem;
   padding: 1rem 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
 }
+
+.bestiary-card::before { top: 0; }
+.bestiary-card::after { bottom: 0; }
 
 .bestiary-field { display: contents; }
 
@@ -139,4 +169,27 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
 @media (max-width: 30rem) {
   .bestiary-card { grid-template-columns: 1fr; gap: 0; }
   .bestiary-card dd { margin-bottom: 0.5rem; }
+}
+
+/* Weathering: worn ink on display type and rules, a ragged and browned leaf, foxing and a ring stain. Body text is left clean. */
+.bestiary-weathered .bestiary-leaf::before {
+  filter: url(#bestiary-edge);
+  background:
+    radial-gradient(circle at 84% 12%, transparent 2.6rem, var(--stain) 2.75rem, transparent 3.1rem),
+    radial-gradient(ellipse at 12% 78%, var(--stain), transparent 4rem),
+    radial-gradient(circle at 70% 64%, var(--stain), transparent 0.6rem),
+    radial-gradient(circle at 26% 30%, var(--stain), transparent 0.4rem),
+    var(--paper);
+}
+
+.bestiary-weathered :is(header a, h1, .bestiary-index-section, .bestiary-choice),
+.bestiary-weathered header::after,
+.bestiary-weathered .bestiary-card::before,
+.bestiary-weathered .bestiary-card::after,
+.bestiary-weathered .bestiary-index-entries li::after {
+  filter: url(#bestiary-ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) brightness(1.6); }
 }
