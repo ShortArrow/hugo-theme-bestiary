@@ -1,0 +1,6 @@
+{{- /* Renders a list of {label, url} as links. */ -}}
+<ul class="bestiary-links">
+  {{- range .value }}
+  <li><a href="{{ .url }}">{{ .label }}</a></li>
+  {{- end }}
+</ul>

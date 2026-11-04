@@ -1,0 +1,26 @@
+{{- /*
+  Renders the entry card of a page: each field declared in site.Params.bestiary.fields,
+  in declared order, that the page sets in its front matter.
+  Fails the build when a field declares an unknown type.
+*/ -}}
+{{- $page := . -}}
+{{- $types := slice "text" "choice" "links" "date" -}}
+{{- $present := slice -}}
+{{- range site.Params.bestiary.fields | default slice -}}
+  {{- if not (in $types .type) -}}
+    {{- errorf "%s: field type %q is not one of %s" .key .type (delimit $types ", ") -}}
+  {{- end -}}
+  {{- if isset $page.Params (lower .key) -}}
+    {{- $present = $present | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- with $present }}
+<dl class="bestiary-card">
+  {{- range . }}
+  <div class="bestiary-field" data-field="{{ .key }}">
+    <dt class="bestiary-field-label">{{ .label }}</dt>
+    <dd>{{ partial (printf "bestiary/field/%s.html" .type) (dict "field" . "value" (index $page.Params (lower .key)) "page" $page) }}</dd>
+  </div>
+  {{- end }}
+</dl>
+{{- end }}
