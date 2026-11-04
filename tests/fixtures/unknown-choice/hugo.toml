@@ -1,0 +1,12 @@
+baseURL = "https://example.org/"
+title = "Fixture"
+locale = "en"
+theme = "hugo-theme-bestiary"
+
+[[params.bestiary.fields]]
+  key = "kind"
+  label = "Kind"
+  type = "choice"
+  [[params.bestiary.fields.choices]]
+    value = "beast"
+    label = "Beast"

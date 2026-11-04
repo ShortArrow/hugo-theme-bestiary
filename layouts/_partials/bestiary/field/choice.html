@@ -1,0 +1,11 @@
+{{- /* Renders the declared choice whose value matches; fails the build when none does. */ -}}
+{{- $value := .value -}}
+{{- $choice := "" -}}
+{{- range .field.choices -}}
+  {{- if eq .value $value }}{{ $choice = . }}{{ end -}}
+{{- end -}}
+{{- with $choice -}}
+<span class="bestiary-choice" data-choice="{{ .value }}"{{ with .color }} style="--bestiary-choice-color: {{ . | safeCSS }}"{{ end }}>{{ .label }}</span>
+{{- else -}}
+  {{- errorf "%s: %s: %q is not one of the declared choices" .page.File.Path .field.key .value -}}
+{{- end -}}

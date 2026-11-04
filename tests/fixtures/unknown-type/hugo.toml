@@ -1,0 +1,9 @@
+baseURL = "https://example.org/"
+title = "Fixture"
+locale = "en"
+theme = "hugo-theme-bestiary"
+
+[[params.bestiary.fields]]
+  key = "habitat"
+  label = "Habitat"
+  type = "paragraph"

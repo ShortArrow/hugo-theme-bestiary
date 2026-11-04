@@ -2,3 +2,31 @@ baseURL = "https://example.org/"
 title = "Example Bestiary"
 locale = "en"
 theme = "hugo-theme-bestiary"
+
+[[params.bestiary.fields]]
+  key = "kind"
+  label = "Kind"
+  type = "choice"
+  [[params.bestiary.fields.choices]]
+    value = "beast"
+    label = "Beast"
+    color = "#8b3a2b"
+  [[params.bestiary.fields.choices]]
+    value = "spirit"
+    label = "Spirit"
+    color = "#2b5d8b"
+
+[[params.bestiary.fields]]
+  key = "habitat"
+  label = "Habitat"
+  type = "text"
+
+[[params.bestiary.fields]]
+  key = "sightings"
+  label = "Sightings"
+  type = "links"
+
+[[params.bestiary.fields]]
+  key = "lastseen"
+  label = "Last seen"
+  type = "date"
