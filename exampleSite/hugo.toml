@@ -1,0 +1,4 @@
+baseURL = "https://example.org/"
+title = "Example Bestiary"
+locale = "en"
+theme = "hugo-theme-bestiary"

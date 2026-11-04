@@ -1,0 +1,12 @@
+name = "Bestiary"
+license = "MIT"
+licenselink = "https://github.com/ShortArrow/hugo-theme-bestiary/blob/main/LICENSE"
+description = "A field guide to imaginary creatures, where each page is an entry with the fields your site defines."
+homepage = "https://github.com/ShortArrow/hugo-theme-bestiary"
+demosite = "https://vhabitat.shortarrow.jp/"
+tags = ["catalog", "directory", "minimal"]
+features = []
+
+[author]
+  name = "ShortArrow"
+  homepage = "https://github.com/ShortArrow"
