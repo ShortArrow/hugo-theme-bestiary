@@ -11,7 +11,7 @@
     {{ template "bestiary-drawing" "forest-day-floor" }},
     #6a5a3e;
   --bestiary-sky:
-    {{ template "bestiary-drawing" "sky-day-near" }},
+    {{ template "bestiary-drawing" "sky-day-near" }} 0 var(--bestiary-drift) fixed,
     {{ template "bestiary-drawing" "sky-day-sun" }} right 6% top 12rem / 200px no-repeat fixed,
     {{ template "bestiary-drawing" "sky-day-far" }} fixed,
     linear-gradient(#6f97bd, #a9c3d6 65%, #dcdcd0) fixed,
@@ -61,7 +61,7 @@
       {{ template "bestiary-drawing" "forest-night-floor" }},
       #14130d;
     --bestiary-sky:
-      {{ template "bestiary-drawing" "sky-night-near" }},
+      {{ template "bestiary-drawing" "sky-night-near" }} 0 var(--bestiary-drift) fixed,
       {{ template "bestiary-drawing" "sky-night-moon" }} right 6% top 12rem / 160px no-repeat fixed,
       {{ template "bestiary-drawing" "sky-night-far" }} fixed,
       linear-gradient(#060a1c, #18203d) fixed,
@@ -179,6 +179,21 @@ header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
 
 :root[data-place="forest"] body { background: var(--bestiary-forest); }
 :root[data-place="sky"] body { background: var(--bestiary-sky); }
+
+/* The near clouds drift up at three tenths of the page's scroll, slower than the leaf and faster than the far sky. */
+@property --bestiary-drift {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+@keyframes bestiary-drift {
+  to { --bestiary-drift: -3000px; }
+}
+:root[data-place="sky"] {
+  animation: bestiary-drift linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0px 10000px;
+}
 
 header a {
   display: inline-block;

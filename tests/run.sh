@@ -114,6 +114,12 @@ for drawing in desk-day desk-night forest-day forest-night sky-day sky-night sky
   [ -n "$url" ] || fail "stylesheet draws no $drawing"
   [ -s "$out/site$url" ] || fail "drawing $url was not published"
 done
+grep -q "sky-[a-z]*-near[^,]*var(--bestiary-drift)[^,]*fixed" "$out/site$css" || fail "the near clouds scroll with the leaf instead of drifting behind it"
+grep -q "animation-timeline:scroll(root)" "$out/site$css" || fail "nothing drifts the near clouds as the page scrolls"
+for drawing in "$root"/assets/images/bestiary/places/*.svg; do
+  twice=$(grep -o "id='[^']*'" "$drawing" | sort | uniq -d | head -1)
+  [ -z "$twice" ] || fail "drawing $drawing names $twice twice, so its copies clip or fill by the wrong shape"
+done
 has "$ink" '<filter id="bestiary-wear"'
 js=$(grep -o '<script src="[^"]*bestiary-hand[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 [ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
