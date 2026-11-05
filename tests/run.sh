@@ -109,6 +109,11 @@ for place in forest sky; do
   grep -q ":root\[data-place=.\?$place.\?\] body" "$out/site$css" || fail "stylesheet lays the leaf nowhere in the $place"
   grep -q -- "--bestiary-$place:" "$out/site$css" || fail "stylesheet paints no $place"
 done
+for drawing in desk-day desk-night forest-day forest-night sky-day sky-night; do
+  url=$(grep -o "/images/bestiary/places/$drawing[^\")]*\.svg" "$out/site$css" | head -1)
+  [ -n "$url" ] || fail "stylesheet draws no $drawing"
+  [ -s "$out/site$url" ] || fail "drawing $url was not published"
+done
 has "$ink" '<filter id="bestiary-wear"'
 js=$(grep -o '<script src="[^"]*bestiary-hand[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 [ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
