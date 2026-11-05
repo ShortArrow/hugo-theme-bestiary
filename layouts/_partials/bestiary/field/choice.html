@@ -13,6 +13,7 @@
 {{- $hash := hash.FNV32a (printf "%s|%s" $.page.RelPermalink $.field.key) -}}
 {{- $style := printf "--bestiary-tilt: %.1fdeg; --bestiary-nudge: %dpx %.1fpx" (sub (div (mod $hash 450) 100.0) 3.0) (mul -1 (mod (div $hash 450) 7)) (sub (div (mod (div $hash 3150) 30) 10.0) 1.5) -}}
 {{- with .color }}{{ $style = printf "--bestiary-choice-color: %s; %s" . $style }}{{ end -}}
+{{- with or .nightColor .nightcolor }}{{ $style = printf "--bestiary-choice-night: %s; %s" . $style }}{{ $attrs = printf "%s data-night" $attrs }}{{ end -}}
 {{- $attrs = printf `%s style="%s"` $attrs ($style | safeCSS) -}}
 {{- if $href -}}
 <a class="bestiary-choice" href="{{ $href }}" {{ $attrs | safeHTMLAttr }}>{{ .label }}</a>

@@ -19,6 +19,7 @@ theme = "hugo-theme-bestiary"
     value = "spirit"
     label = "Spirit"
     color = "#2b5d8b"
+    nightColor = "#6aa3d7"
 
 [[params.bestiary.fields]]
   key = "habitat"
