@@ -57,6 +57,9 @@ grep -A3 'href="/apparitions/hollowbell/"' "$home" | grep -q '<a class="bestiary
 has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
+marks() { grep -o '<div class="bestiary-leaf" style="[^"]*"' "$1"; }
+[ -n "$(marks "$ink")" ] || fail "Inkwyrm's leaf carries no marks of its own"
+[ "$(marks "$ink")" != "$(marks "$moth")" ] || fail "Inkwyrm and Lanternmoth carry the same marks"
 for mark in stain foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
@@ -87,6 +90,7 @@ build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
 lacks "$out/plain/clean/index.html" 'bestiary-hand'
+lacks "$out/plain/clean/index.html" '<div class="bestiary-leaf" style='
 lacks "$out/plain/clean/index.html" '<footer'
 
 lacks "$ink" 'googletagmanager'
