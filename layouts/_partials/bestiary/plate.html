@@ -1,0 +1,23 @@
+{{- /*
+  Renders an entry's plate: the page resource plate.svg drawn inline, so it takes the page's ink and weathering,
+  with its resource title as the caption. When the site sets params.bestiary.plates and the entry has no plate,
+  renders the theme's plate of an unconfirmed creature instead, captioned params.bestiary.wantedCaption.
+  Renders nothing for list pages or when plates are off and the entry has none.
+*/ -}}
+{{- if .IsPage }}
+  {{- with .Resources.GetMatch "plate.svg" }}
+<figure class="bestiary-plate">
+  {{ .Content | safeHTML }}
+  {{- if ne .Title .Name }}
+  <figcaption>{{ .Title }}</figcaption>
+  {{- end }}
+</figure>
+  {{- else }}
+    {{- if site.Params.bestiary.plates }}
+<figure class="bestiary-plate bestiary-plate-wanted">
+  {{ (resources.Get "images/bestiary/wanted.svg").Content | safeHTML }}
+  <figcaption>{{ site.Params.bestiary.wantedCaption | default "Not yet drawn. Sightings wanted." }}</figcaption>
+</figure>
+    {{- end }}
+  {{- end }}
+{{- end -}}

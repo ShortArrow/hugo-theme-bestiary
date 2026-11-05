@@ -41,6 +41,11 @@ has "$ink" '<a href="https://example.org/notes/inkwyrm">Field notes</a>'
 has "$ink" '<time datetime="2026-01-02">January 2, 2026</time>'
 
 [ "$(labels "$moth")" = "Kind" ] || fail "Lanternmoth shows fields it does not have: $(labels "$moth")"
+has "$ink" '<figure class="bestiary-plate">'
+grep -A40 '<figure class="bestiary-plate">' "$ink" | grep -q '<title>Inkwyrm coiled about an inkwell</title>' || fail "Inkwyrm's plate is not drawn inline"
+has "$ink" '<figcaption>The inkwyrm, coiled about the well it was found in</figcaption>'
+has "$moth" '<figure class="bestiary-plate bestiary-plate-wanted">'
+lacks "$home" 'bestiary-plate'
 
 spirit=$out/site/kind/spirit/index.html
 has "$spirit" '<h1>Spirit</h1>'
@@ -106,6 +111,7 @@ lacks "$out/plain/clean/index.html" 'bestiary-hand'
 lacks "$out/plain/clean/index.html" '<div class="bestiary-leaf" style='
 lacks "$out/plain/clean/index.html" 'bestiary-stains'
 lacks "$out/plain/clean/index.html" '<footer'
+lacks "$out/plain/clean/index.html" 'bestiary-plate'
 
 lacks "$ink" 'googletagmanager'
 build "$root/tests/fixtures/analytics" ../../../.. "$out/analytics"

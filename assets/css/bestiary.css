@@ -162,6 +162,18 @@ h1 {
 
 h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; margin: 0 0.6em; vertical-align: 0.15em; }
 
+.bestiary-plate {
+  margin: 0 auto 2rem;
+  padding: 1rem 1rem 0.75rem;
+  max-width: 26rem;
+  border: 3px double var(--rule);
+  text-align: center;
+}
+
+.bestiary-plate svg { display: block; width: 100%; height: auto; color: var(--ink); }
+.bestiary-plate-wanted svg { color: var(--ink-faint); }
+.bestiary-plate figcaption { margin-top: 0.5rem; font-style: italic; font-size: 0.9rem; color: var(--ink-faint); }
+
 .bestiary-card {
   position: relative;
   display: grid;
@@ -337,6 +349,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
 .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) var(--bestiary-seal-light); }
 
 .bestiary-weathered .bestiary-scheme svg { filter: url(#bestiary-ink); }
+.bestiary-weathered .bestiary-plate svg { filter: url(#bestiary-ink); }
 
 /* The turn between day and night: the new scheme billows out from the moon or sun like a puff of smoke, soft at its edge, while the old one blurs away. */
 ::view-transition-old(root),
