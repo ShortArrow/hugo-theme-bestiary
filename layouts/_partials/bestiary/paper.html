@@ -1,0 +1,25 @@
+{{- /*
+  Lays the leaf's fibres as Wang tiles from the sprite images/bestiary/paper.svg: each tile's top edge matches the bottom of the tile
+  above it and its left edge the right of the tile to its left, so fibres run on across borders and no pattern repeats.
+  Of the two tiles that fit each place, the one laid is rolled from the page's path, so a page keeps its paper from build to build.
+  The grid is four tiles wide and forty deep; the leaf clips what it does not need. Arguments: the page.
+*/ -}}
+{{- $path := .RelPermalink -}}
+{{- $sprite := (resources.Get "images/bestiary/paper.svg" | fingerprint).RelPermalink -}}
+{{- $size := 192 -}}
+{{- $above := slice 0 0 0 0 -}}
+<svg class="bestiary-paper" aria-hidden="true" focusable="false">
+  {{- range $row := seq 0 39 }}
+    {{- $left := partial "bestiary/roll.html" (dict "path" $path "name" (printf "paper-%d" $row) "low" 0 "high" 2) }}
+    {{- $below := slice }}
+    {{- range $col := seq 0 3 }}
+      {{- $top := cond (eq $row 0) (partial "bestiary/roll.html" (dict "path" $path "name" (printf "paper-top-%d" $col) "low" 0 "high" 2)) (index $above $col) }}
+      {{- $pick := partial "bestiary/roll.html" (dict "path" $path "name" (printf "paper-%d-%d" $row $col) "low" 0 "high" 2) }}
+      {{- $right := cond (eq $pick 0) 0 1 }}{{ $bottom := cond (eq $pick 0) 1 0 }}
+  <use href="{{ $sprite }}#t{{ $top }}{{ $right }}{{ $bottom }}{{ $left }}" x="{{ mul $col $size }}" y="{{ mul $row $size }}" width="{{ $size }}" height="{{ $size }}"/>
+      {{- $left = $right }}
+      {{- $below = $below | append $bottom }}
+    {{- end }}
+    {{- $above = $below }}
+  {{- end }}
+</svg>
