@@ -113,6 +113,15 @@ Pages follow the reader's system scheme. A moon in the header turns them to nigh
   schemeToggle = false
 ```
 
+## Where the leaf lies
+
+The leaf lies on a wooden desk. A house in the header, opposite the moon or sun, shows that it is at home; pressing it takes the leaf out to the forest floor, then under the open sky, then home again, and the tree, the cloud or the house shows where it lies now. Each place has a day and a night: leaf litter and moss under dappled light or moonlight, a blue sky with clouds or a starry one, oak or dark walnut. The move billows out from the button as the turn between day and night does, and the choice is kept in the reader's browser apart from the scheme. Without JavaScript the button stays hidden and the leaf stays on the desk. To keep it there:
+
+```toml
+[params.bestiary]
+  placeToggle = false
+```
+
 ## Favicon
 
 When the site has `assets/favicon.svg`, every page links it as its icon, fingerprinted so a changed icon is not kept from a cache. An SVG icon can follow the reader's scheme with a `prefers-color-scheme` media query inside it. Without the file, pages link no icon.

@@ -1,6 +1,23 @@
 /* Bestiary: an old natural-history book. Light pages are paper by day; dark pages are the study at night. */
 :root {
   --desk: #b89a70;
+  --bestiary-home:
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(20, 10, 0, 0.35)),
+    var(--desk);
+  --bestiary-forest:
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 40%, rgba(0, 0, 0, 0.4)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1.000  0 0 0 0 0.894  0 0 0 0 0.588  0 0 0 1.3 -0.68'/%3E%3C/filter%3E%3Crect width='700' height='700' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.022' numOctaves='2' seed='21' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.490  0 0 0 0 0.275  0 0 0 0 0.137  0 0 0 4.5 -2.95'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='380'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.026' numOctaves='2' seed='33' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.588  0 0 0 0 0.451  0 0 0 0 0.235  0 0 0 4.5 -3.05'/%3E%3C/filter%3E%3Crect width='380' height='380' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='460' height='460'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='47' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.373  0 0 0 0 0.243  0 0 0 0 0.137  0 0 0 4 -2.45'/%3E%3C/filter%3E%3Crect width='460' height='460' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.333  0 0 0 0 0.392  0 0 0 0 0.204  0 0 0 2.4 -1.25'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 1.2 -0.5'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    #5e4d33;
+  --bestiary-sky:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0028 0.006' numOctaves='5' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.988  0 0 0 0 0.973  0 0 0 0 0.925  0 0 0 2.4 -1.2'/%3E%3C/filter%3E%3Crect width='900' height='900' filter='url%28%23n%29'/%3E%3C/svg%3E") fixed,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1100' height='1100'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0018 0.004' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.910  0 0 0 0 0.910  0 0 0 0 0.894  0 0 0 1.5 -0.76'/%3E%3C/filter%3E%3Crect width='1100' height='1100' filter='url%28%23n%29'/%3E%3C/svg%3E") fixed,
+    linear-gradient(#6f97bd, #a9c3d6 65%, #dcdcd0) fixed,
+    #93b2cc;
   --paper: #f3ead6;
   --paper-burn: rgba(122, 82, 34, 0.38);
   --foxing: rgba(150, 92, 38, 0.22);
@@ -34,6 +51,21 @@
 {{- /* Night tokens, defined once: they apply when the system is dark and the reader has not chosen day, or when the reader has chosen night. */ -}}
 {{- define "bestiary-night" }}
     --desk: #0d0906;
+    --bestiary-forest:
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 40%, rgba(0, 0, 0, 0.4)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.471  0 0 0 0 0.549  0 0 0 0 0.706  0 0 0 0.9 -0.48'/%3E%3C/filter%3E%3Crect width='700' height='700' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.022' numOctaves='2' seed='21' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.137  0 0 0 0 0.078  0 0 0 0 0.039  0 0 0 4.5 -2.95'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='380'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.026' numOctaves='2' seed='33' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.165  0 0 0 0 0.125  0 0 0 0 0.067  0 0 0 4.5 -3.05'/%3E%3C/filter%3E%3Crect width='380' height='380' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='460' height='460'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='47' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.106  0 0 0 0 0.067  0 0 0 0 0.039  0 0 0 4 -2.45'/%3E%3C/filter%3E%3Crect width='460' height='460' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.094  0 0 0 0 0.110  0 0 0 0 0.059  0 0 0 2.4 -1.25'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 1.2 -0.5'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url%28%23n%29'/%3E%3C/svg%3E"),
+    #17140d;
+    --bestiary-sky:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='1' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.922  0 0 0 0 0.922  0 0 0 0 1.000  0 0 0 14 -10.4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url%28%23n%29'/%3E%3C/svg%3E") fixed,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='517' height='517'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='1' seed='17' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1.000  0 0 0 0 0.980  0 0 0 0 0.902  0 0 0 16 -12.9'/%3E%3C/filter%3E%3Crect width='517' height='517' filter='url%28%23n%29'/%3E%3C/svg%3E") fixed,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0025 0.005' numOctaves='4' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.275  0 0 0 0 0.314  0 0 0 0 0.471  0 0 0 1.2 -0.62'/%3E%3C/filter%3E%3Crect width='900' height='900' filter='url%28%23n%29'/%3E%3C/svg%3E") fixed,
+    linear-gradient(#060a1c, #18203d) fixed,
+    #0b1026;
     --paper: #2b231b;
     --paper-burn: rgba(10, 6, 2, 0.22);
     --foxing: rgba(200, 150, 90, 0.12);
@@ -76,7 +108,7 @@
 body {
   margin: 0;
   padding: 1.5rem 8px 3rem;
-  background: var(--desk);
+  background: var(--bestiary-home);
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.125rem;
@@ -117,10 +149,9 @@ header::after, footer::before, .bestiary-card::before, .bestiary-card::after {
 
 header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
 
-.bestiary-scheme {
+.bestiary-scheme, .bestiary-place {
   position: absolute;
   top: -0.5rem;
-  right: 0;
   width: 2.75rem;
   height: 2.75rem;
   padding: 0.2rem;
@@ -131,13 +162,23 @@ header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
   cursor: pointer;
 }
 
-.bestiary-scheme:hover { opacity: 1; }
-.bestiary-scheme:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.bestiary-scheme svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-.bestiary-scheme svg .bestiary-scheme-face { stroke-width: 0.8; }
+.bestiary-scheme { right: 0; }
+.bestiary-place { left: 0; }
+:is(.bestiary-scheme, .bestiary-place):hover { opacity: 1; }
+:is(.bestiary-scheme, .bestiary-place):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:is(.bestiary-scheme, .bestiary-place) svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+:is(.bestiary-scheme-face, .bestiary-place-detail) { stroke-width: 0.8; }
 .bestiary-scheme-moon { display: var(--bestiary-moon); }
 .bestiary-scheme-sun { display: var(--bestiary-sun); }
-.bestiary-scheme[hidden] { display: none; }
+.bestiary-place svg { display: none; }
+:root:not([data-place]) .bestiary-place-home,
+:root[data-place="home"] .bestiary-place-home,
+:root[data-place="forest"] .bestiary-place-forest,
+:root[data-place="sky"] .bestiary-place-sky { display: block; }
+:is(.bestiary-scheme, .bestiary-place)[hidden] { display: none; }
+
+:root[data-place="forest"] body { background: var(--bestiary-forest); }
+:root[data-place="sky"] body { background: var(--bestiary-sky); }
 
 header a {
   display: inline-block;
@@ -393,7 +434,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
 
 .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) var(--bestiary-seal-light); }
 
-.bestiary-weathered .bestiary-scheme svg { filter: url(#bestiary-ink); }
+.bestiary-weathered :is(.bestiary-scheme, .bestiary-place) svg { filter: url(#bestiary-ink); }
 .bestiary-weathered .bestiary-plate svg { filter: url(#bestiary-plate); }
 
 .bestiary-weathered .bestiary-plate { position: relative; border-color: transparent; }
