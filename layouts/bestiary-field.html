@@ -1,0 +1,16 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{- $key := .Params.bestiary_field }}
+<ul class="bestiary-index-entries">
+  {{- range site.Params.bestiary.fields }}
+  {{- if eq (lower .key) $key }}
+  {{- range .choices }}
+  {{- with site.GetPage (printf "/%s/%s" $key .value) }}
+  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    <span class="bestiary-index-note">{{ len (where site.RegularPages (printf "Params.%s" $key) .Params.bestiary_value) }}</span></li>
+  {{- end }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
+</ul>
+{{ end }}

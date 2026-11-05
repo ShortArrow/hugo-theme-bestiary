@@ -1,11 +1,21 @@
-{{- /* Renders the declared choice whose value matches; fails the build when none does. */ -}}
+{{- /* Renders the declared choice whose value matches, linked to its page when the field has pages = true; fails the build when none does. */ -}}
 {{- $value := .value -}}
 {{- $choice := "" -}}
 {{- range .field.choices -}}
   {{- if eq .value $value }}{{ $choice = . }}{{ end -}}
 {{- end -}}
+{{- $href := "" -}}
+{{- if and $choice .field.pages -}}
+  {{- with site.GetPage (printf "/%s/%s" (lower .field.key) $choice.value) }}{{ $href = .RelPermalink }}{{ end -}}
+{{- end -}}
 {{- with $choice -}}
-<span class="bestiary-choice" data-choice="{{ .value }}"{{ with .color }} style="--bestiary-choice-color: {{ . | safeCSS }}"{{ end }}>{{ .label }}</span>
+{{- $attrs := printf `data-choice="%s"` .value -}}
+{{- with .color }}{{ $attrs = printf `%s style="--bestiary-choice-color: %s"` $attrs (. | safeCSS) }}{{ end -}}
+{{- if $href -}}
+<a class="bestiary-choice" href="{{ $href }}" {{ $attrs | safeHTMLAttr }}>{{ .label }}</a>
+{{- else -}}
+<span class="bestiary-choice" {{ $attrs | safeHTMLAttr }}>{{ .label }}</span>
+{{- end -}}
 {{- else -}}
   {{- errorf "%s: %s: %q is not one of the declared choices" .page.File.Path .field.key .value -}}
 {{- end -}}

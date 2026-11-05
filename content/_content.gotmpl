@@ -1,0 +1,28 @@
+{{- /*
+  For each choice field the site declares with pages = true, adds a page at /<key>/ that lists the field's choices,
+  and a page at /<key>/<value>/ for each choice that lists the entries set to it.
+  These pages stay out of the home index and section lists.
+*/ -}}
+{{- range $field := where (site.Params.bestiary.fields | default slice) "type" "choice" -}}
+  {{- if $field.pages -}}
+    {{- $key := lower $field.key -}}
+    {{- $.AddPage (dict
+      "kind" "section"
+      "path" $key
+      "title" $field.label
+      "layout" "bestiary-field"
+      "params" (dict "bestiary_field" $key)
+      "build" (dict "list" "never" "render" "always")
+    ) -}}
+    {{- range $field.choices -}}
+      {{- $.AddPage (dict
+        "kind" "page"
+        "path" (printf "%s/%s" $key .value)
+        "title" .label
+        "layout" "bestiary-choice"
+        "params" (dict "bestiary_field" $key "bestiary_value" .value)
+        "build" (dict "list" "never" "render" "always")
+      ) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

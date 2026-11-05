@@ -42,6 +42,18 @@ has "$ink" '<time datetime="2026-01-02">January 2, 2026</time>'
 
 [ "$(labels "$moth")" = "Kind" ] || fail "Lanternmoth shows fields it does not have: $(labels "$moth")"
 
+spirit=$out/site/kind/spirit/index.html
+has "$spirit" '<h1>Spirit</h1>'
+has "$spirit" 'href="/creatures/lanternmoth/"'
+has "$spirit" 'href="/apparitions/hollowbell/"'
+lacks "$spirit" 'href="/creatures/inkwyrm/"'
+grep -A2 'href="/apparitions/hollowbell/"' "$spirit" | grep -q 'Apparitions' || fail "Spirit page does not name Hollow Bell's section"
+has "$out/site/kind/index.html" '<h1>Kind</h1>'
+has "$out/site/kind/index.html" 'href="/kind/beast/"'
+has "$out/site/kind/index.html" 'href="/kind/spirit/"'
+has "$ink" '<a class="bestiary-choice" href="/kind/beast/"'
+grep -A3 'href="/apparitions/hollowbell/"' "$home" | grep -q '<a class="bestiary-choice" href="/kind/spirit/"' || fail "home index seal does not link to its kind"
+
 has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
@@ -49,6 +61,11 @@ has "$ink" '<filter id="bestiary-rule"'
 has "$ink" '<filter id="bestiary-hand"'
 grep -q 'url(#bestiary-rule)' "$out/site$css" || fail "stylesheet does not waver the rules"
 grep -q 'url(#bestiary-hand)' "$out/site$css" || fail "stylesheet does not waver the links"
+grep -q 'a:not([^)]*\.bestiary-choice)[^{]*{filter:url(#bestiary-hand)' "$out/site$css" || fail "stylesheet wavers seal links as if they were text links"
+
+build "$root/tests/fixtures/unpaged-choice" ../../../.. "$out/unpaged-choice"
+has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
+[ ! -e "$out/unpaged-choice/mood" ] || fail "a choice field without pages = true got pages"
 
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'

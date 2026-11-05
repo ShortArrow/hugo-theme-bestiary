@@ -60,6 +60,18 @@ params:
 
 The build fails when a field declares another `type`, and when a `choice` value is not one of the declared choices.
 
+### Pages for each choice
+
+A `choice` field with `pages = true` gets a page at `/<key>/` that lists its choices, and a page at `/<key>/<value>/` for each choice that lists the entries set to it. The seals on entry cards and in indexes link to these pages. The pages stay out of the home index and section lists. Without `pages = true`, no pages are made and seals are not links.
+
+```toml
+[[params.bestiary.fields]]
+  key = "kind"
+  label = "Kind"
+  type = "choice"
+  pages = true
+```
+
 ## Weathering
 
 By default the page is a worn leaf: headings, seals and rules are printed in uneven ink, the leaf has ragged and browned edges, and the paper carries a ring stain and foxing. Body text is not weathered. To print on a clean sheet instead:
