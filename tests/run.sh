@@ -58,8 +58,12 @@ has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
 for mark in stain foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
+has "$ink" '<button type="button" class="bestiary-scheme" hidden'
+grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
+grep -q ':root\[data-theme=.\?dark.\?\]' "$out/site$css" || fail "stylesheet has no dark scheme a reader can choose"
+grep -q ':root:not(\[data-theme=.\?light.\?\])' "$out/site$css" || fail "stylesheet does not follow the system scheme when the reader chose none"
 has "$ink" '<filter id="bestiary-wear"'
-js=$(grep -o '<script src="[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
+js=$(grep -o '<script src="[^"]*bestiary-hand[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 [ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
 grep -q 'bestiary-glyph' "$out/site$js" || fail "script $js does not set letters"
 lacks "$ink" '<filter id="bestiary-hand"'
@@ -75,10 +79,14 @@ build "$root/tests/fixtures/unpaged-choice" ../../../.. "$out/unpaged-choice"
 has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
 [ ! -e "$out/unpaged-choice/mood" ] || fail "a choice field without pages = true got pages"
 
+build "$root/tests/fixtures/fixed-scheme" ../../../.. "$out/fixed-scheme"
+lacks "$out/fixed-scheme/still/index.html" 'class="bestiary-scheme"'
+lacks "$out/fixed-scheme/still/index.html" 'bestiary-scheme")'
+
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
-lacks "$out/plain/clean/index.html" '<script'
+lacks "$out/plain/clean/index.html" 'bestiary-hand'
 lacks "$out/plain/clean/index.html" '<footer'
 
 lacks "$ink" 'googletagmanager'

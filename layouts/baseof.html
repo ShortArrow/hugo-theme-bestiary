@@ -1,10 +1,14 @@
 {{- $weathered := ne site.Params.bestiary.weathering false -}}
+{{- $toggle := ne site.Params.bestiary.schemeToggle false -}}
 <!doctype html>
 <html lang="{{ site.Language.Locale }}"{{ if $weathered }} class="bestiary-weathered"{{ end }}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {{- with resources.Get "css/bestiary.css" | minify | fingerprint }}
+  {{- if $toggle }}
+  <script>try{var s=localStorage.getItem("bestiary-scheme");if(s==="light"||s==="dark")document.documentElement.dataset.theme=s}catch(e){}</script>
+  {{- end }}
+  {{- with resources.Get "css/bestiary.css" | resources.ExecuteAsTemplate "css/bestiary.css" . | minify | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
   {{- end }}
   {{- if site.Config.Services.GoogleAnalytics.ID }}
@@ -17,7 +21,12 @@
   {{ partial "bestiary/weathering-filters.html" . }}
   {{- end }}
   <div class="bestiary-leaf">
-    <header><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></header>
+    <header>
+      <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
+      {{- if $toggle }}
+      {{ partial "bestiary/scheme-toggle.html" . }}
+      {{- end }}
+    </header>
     <main>{{ block "main" . }}{{ end }}</main>
     {{- with site.Menus.footer }}
     <footer>
@@ -29,6 +38,11 @@
     </footer>
     {{- end }}
   </div>
+  {{- if $toggle }}
+  {{- with resources.Get "js/bestiary-scheme.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{- end }}
+  {{- end }}
   {{- if $weathered }}
   {{- with resources.Get "js/bestiary-hand.js" | minify | fingerprint }}
   <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
