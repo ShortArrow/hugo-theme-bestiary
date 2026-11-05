@@ -24,6 +24,7 @@ sections() { grep -o 'class="bestiary-index-section"[^>]*>[^<]*<a [^>]*>[^<]*' "
 [ "$(sections "$home")" = "Creatures,Apparitions" ] || fail "home index sections are not in weight order: $(sections "$home")"
 grep -A3 'href="[^"]*/apparitions/hollowbell/"' "$home" | grep -q 'data-choice="spirit"' || fail "home index shows no seal beside Hollow Bell"
 has "$ink" 'Inkwyrm'
+grep -A3 '<footer' "$ink" | grep -q '<a href="https://example.org/colophon/">Colophon</a>' || fail "Inkwyrm has no footer link to the colophon"
 
 css=$(grep -o '<link rel="stylesheet" href="[^"]*"' "$ink" | sed 's/.*href="//; s/"$//') || fail "Inkwyrm links no stylesheet"
 [ -s "$out/site$css" ] || fail "stylesheet $css was not published"
@@ -46,6 +47,7 @@ grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply 
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
+lacks "$out/plain/clean/index.html" '<footer'
 
 lacks "$ink" 'googletagmanager'
 build "$root/tests/fixtures/analytics" ../../../.. "$out/analytics"

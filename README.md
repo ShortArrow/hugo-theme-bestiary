@@ -69,6 +69,16 @@ By default the page is a worn leaf: headings, seals and rules are printed in une
   weathering = false
 ```
 
+## Footer links
+
+Entries in the site's `footer` menu are listed at the foot of every page, in menu order. Without a footer menu, pages have no footer.
+
+```toml
+[[menus.footer]]
+  name = "Privacy policy"
+  pageRef = "/privacy"
+```
+
 ## Analytics
 
 When the site sets `services.googleAnalytics.ID`, every page loads Hugo's Google Analytics template, which follows the site's `privacy.googleAnalytics` settings. Without an ID, pages load no analytics.

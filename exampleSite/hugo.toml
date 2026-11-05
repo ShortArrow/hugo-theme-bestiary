@@ -30,3 +30,7 @@ theme = "hugo-theme-bestiary"
   key = "lastseen"
   label = "Last seen"
   type = "date"
+
+[[menus.footer]]
+  name = "Colophon"
+  url = "https://example.org/colophon/"
