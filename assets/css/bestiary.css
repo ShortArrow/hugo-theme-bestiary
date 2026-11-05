@@ -4,6 +4,8 @@
   --paper: #f3ead6;
   --paper-burn: rgba(122, 82, 34, 0.38);
   --stain: rgba(130, 88, 38, 0.16);
+  --foxing: rgba(150, 92, 38, 0.32);
+  --smudge: rgba(70, 50, 30, 0.07);
   --ink: #2b2118;
   --ink-faint: #6b5a47;
   --rule: #8a7458;
@@ -22,6 +24,8 @@
     --paper: #1f1914;
     --paper-burn: rgba(0, 0, 0, 0.55);
     --stain: rgba(200, 160, 100, 0.06);
+    --foxing: rgba(200, 150, 90, 0.12);
+    --smudge: rgba(0, 0, 0, 0.18);
     --ink: #e9dec6;
     --ink-faint: #b3a285;
     --rule: #7d6a50;
@@ -194,14 +198,30 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   .bestiary-card dd { margin-bottom: 0.5rem; }
 }
 
-/* Weathering: worn ink on display type, rules, leaders and underlines drawn by hand, a ragged and browned leaf, foxing and a ring stain. Body text is left clean. */
+/* Weathering: worn ink on display type, rules, leaders and underlines drawn by hand, a ragged and browned leaf, foxing, cup rings, a dried tide mark, splashes and thumb smudges. Body text is left clean. */
 .bestiary-weathered .bestiary-leaf::before {
   filter: url(#bestiary-edge);
   background:
     radial-gradient(circle at 84% 12%, transparent 2.6rem, var(--stain) 2.75rem, transparent 3.1rem),
+    radial-gradient(circle at 81% 15%, transparent 2.1rem, var(--stain) 2.2rem, transparent 2.45rem),
+    radial-gradient(circle at 77% 21%, var(--stain) 0.2rem, transparent 0.3rem),
+    radial-gradient(circle at 90% 19%, var(--stain) 0.12rem, transparent 0.2rem),
+    radial-gradient(circle at 88% 6%, var(--stain) 0.08rem, transparent 0.15rem),
+    radial-gradient(ellipse 10rem 6rem at 74% 92%, transparent 70%, var(--stain) 82%, transparent 88%),
+    radial-gradient(ellipse 10rem 6rem at 74% 92%, var(--stain), transparent 75%),
+    radial-gradient(ellipse 2.2rem 3.4rem at 3% 47%, var(--smudge), transparent),
+    radial-gradient(ellipse 2rem 2.8rem at 97% 71%, var(--smudge), transparent),
     radial-gradient(ellipse at 12% 78%, var(--stain), transparent 4rem),
-    radial-gradient(circle at 70% 64%, var(--stain), transparent 0.6rem),
-    radial-gradient(circle at 26% 30%, var(--stain), transparent 0.4rem),
+    radial-gradient(circle at 70% 64%, var(--foxing) 0.12rem, transparent 0.5rem),
+    radial-gradient(circle at 26% 30%, var(--foxing) 0.08rem, transparent 0.35rem),
+    radial-gradient(circle at 41% 9%, var(--foxing) 0.05rem, transparent 0.22rem),
+    radial-gradient(circle at 58% 37%, var(--foxing) 0.04rem, transparent 0.18rem),
+    radial-gradient(circle at 17% 55%, var(--foxing) 0.1rem, transparent 0.3rem),
+    radial-gradient(circle at 63% 81%, var(--foxing) 0.06rem, transparent 0.25rem),
+    radial-gradient(circle at 35% 69%, var(--foxing) 0.03rem, transparent 0.15rem),
+    radial-gradient(circle at 92% 44%, var(--foxing) 0.07rem, transparent 0.28rem),
+    radial-gradient(circle at 8% 15%, var(--foxing) 0.05rem, transparent 0.2rem),
+    radial-gradient(circle at 49% 96%, var(--foxing) 0.09rem, transparent 0.3rem),
     var(--paper);
 }
 
