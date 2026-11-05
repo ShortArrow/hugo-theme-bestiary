@@ -57,11 +57,15 @@ grep -A3 'href="/apparitions/hollowbell/"' "$home" | grep -q '<a class="bestiary
 has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
-has "$ink" '<filter id="bestiary-rule"'
-has "$ink" '<filter id="bestiary-hand"'
-grep -q 'url(#bestiary-rule)' "$out/site$css" || fail "stylesheet does not waver the rules"
-grep -q 'url(#bestiary-hand)' "$out/site$css" || fail "stylesheet does not waver the links"
-grep -q 'a:not([^)]*\.bestiary-choice)[^{]*{filter:url(#bestiary-hand)' "$out/site$css" || fail "stylesheet wavers seal links as if they were text links"
+has "$ink" '<filter id="bestiary-wear"'
+lacks "$ink" '<filter id="bestiary-hand"'
+lacks "$ink" '<filter id="bestiary-rule"'
+for line in underline leader rule-line rule-double; do
+  grep -q "var(--bestiary-$line)" "$out/site$css" || fail "stylesheet draws no $line"
+done
+seal_style() { grep -A3 "href=\"[^\"]*$2\"" "$1" | grep -o 'class="bestiary-choice"[^>]*' | grep -o -- '--bestiary-tilt: [^;"]*'; }
+[ -n "$(seal_style "$home" /apparitions/hollowbell/)" ] || fail "Hollow Bell's seal has no tilt of its own"
+[ "$(seal_style "$home" /apparitions/hollowbell/)" != "$(seal_style "$home" /creatures/lanternmoth/)" ] || fail "seals of different entries share one tilt"
 
 build "$root/tests/fixtures/unpaged-choice" ../../../.. "$out/unpaged-choice"
 has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
