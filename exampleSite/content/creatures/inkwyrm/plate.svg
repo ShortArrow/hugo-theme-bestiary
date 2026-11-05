@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 30 185 130" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+  <title>Inkwyrm coiled about an inkwell</title>
+  <path stroke-width="1.6" d="M86 148c-8-1-12-6-11-14l3-38c1-6 6-9 12-9h60c6 0 11 3 12 9l3 38c1 8-3 13-11 14z"/>
+  <path stroke-width="1.2" d="M92 87c0-8 5-12 14-12h28c9 0 14 4 14 12"/>
+  <path stroke-width="1.4" d="M102 75c-1-5 2-8 7-8h22c5 0 8 3 7 8"/>
+  <path stroke-width="0.7" d="M84 104l-2 30M90 100l-2 38M156 104l2 30M150 100l2 38M100 96l-1 44M140 96l1 44"/>
+  <path stroke-width="2.2" d="M120 70c-6-18 8-30 24-28 20 2 30 22 22 38-6 12-22 16-38 14-26-3-48 4-58 20-9 14-4 30 12 34"/>
+  <path stroke-width="1.1" d="M128 64c-2-12 8-18 17-16 13 2 19 15 14 26-4 8-14 11-26 10-30-2-55 6-66 25-8 14-1 27 14 31"/>
+  <path stroke-width="1.6" d="M166 56c8-10 22-12 30-4 5 5 4 12-2 15l-14 6"/>
+  <path stroke-width="1.2" d="M196 52c6-3 12-1 14 3M196 66l12 6M200 62l14 2"/>
+  <circle cx="188" cy="55" r="1.8" fill="currentColor" stroke="none"/>
+  <path stroke-width="0.8" d="M150 47l3-5M158 47l3-6M166 50l4-5M174 56l5-3M142 50l2-5"/>
+  <path stroke-width="0.6" d="M60 140c6-4 12-4 18 0M96 154c10 3 40 3 52 0"/>
+  <path stroke-width="0.9" d="M210 72c3 4 3 8 0 11M214 76c2 2 2 4 0 6" stroke-dasharray="1.5 2"/>
+</svg>

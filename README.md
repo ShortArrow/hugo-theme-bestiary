@@ -74,6 +74,27 @@ A `choice` field with `pages = true` gets a page at `/<key>/` that lists its cho
   pages = true
 ```
 
+## Plates
+
+An entry gets a plate when its page bundle holds a `plate.svg`. The SVG is drawn inline, so it takes the page's ink colour and weathering: draw it with `currentColor` and no fill of its own. The plate's resource title becomes its caption.
+
+```yaml
+---
+title: Inkwyrm
+resources:
+  - src: plate.svg
+    title: The inkwyrm, coiled about the well it was found in
+---
+```
+
+With `plates = true`, entries without a plate show the theme's plate of an unconfirmed creature, known only by its tracks, captioned "Not yet drawn. Sightings wanted." or the site's `wantedCaption`.
+
+```toml
+[params.bestiary]
+  plates = true
+  wantedCaption = "Not yet drawn. Sightings wanted."
+```
+
 ## Weathering
 
 By default the page is a worn leaf: headings and seals are printed in uneven ink, rules, index leaders and link underlines are drawn by hand, the leaf has ragged and browned edges, and the paper shows the wear of a book that has been looked after: now and then a mishap smoothed over (a corner turned down to keep the place, a page caught as the book was shut, a corner crushed in a fall, a tear mended with tape, a leaf folded to carry), a cup ring, a tide mark or a small scorch, faint foxing and thumb smudges, each placed and shaped differently on each page and the same on every build. Every letter on the leaf is set slightly askew by a small script, the same way on every visit. To print on a clean sheet instead:

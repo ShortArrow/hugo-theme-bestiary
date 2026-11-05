@@ -3,6 +3,9 @@ title = "Example Bestiary"
 locale = "en"
 theme = "hugo-theme-bestiary"
 
+[params.bestiary]
+  plates = true
+
 [[params.bestiary.fields]]
   key = "kind"
   label = "Kind"
