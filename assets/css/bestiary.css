@@ -18,7 +18,7 @@
   --stain-ink: rgb(130, 88, 38);
   --bestiary-fibre-dark: #6b4a2a;
   --bestiary-fibre-light: #fffaf0;
-  --bestiary-speckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='s' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -14 9.6'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url%28%23s%29'/%3E%3C/svg%3E");
+  --bestiary-speckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='s' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.12 0.26' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -3.6 3.0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url%28%23s%29'/%3E%3C/svg%3E");
   --stain-strength: 1;
   --crease-light: rgba(255, 253, 245, 0.3);
   --scorch-ink: rgb(84, 42, 14);
@@ -288,9 +288,10 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   pointer-events: none;
 }
 
-.bestiary-weathered .bestiary-leaf :is(p, dt, figcaption, li > a, footer li, .bestiary-card dd:not(:has(.bestiary-choice))) {
+.bestiary-glyph-speckled {
   mask-image: var(--bestiary-speckle);
-  mask-size: 150px 150px;
+  mask-size: 240px 240px;
+  mask-position: var(--bestiary-speckle-x, 0) var(--bestiary-speckle-y, 0);
 }
 
 .bestiary-stains {
@@ -368,6 +369,13 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
 .bestiary-word { white-space: nowrap; }
 .bestiary-glyph { display: inline-block; }
 .bestiary-glyph-low { mask-image: linear-gradient(var(--bestiary-low-angle, 90deg), #000 30%, rgba(0, 0, 0, 0.3) 80%, rgba(0, 0, 0, 0.6)); }
+.bestiary-glyph-low.bestiary-glyph-speckled {
+  mask-image: linear-gradient(var(--bestiary-low-angle, 90deg), #000 30%, rgba(0, 0, 0, 0.3) 80%, rgba(0, 0, 0, 0.6)), var(--bestiary-speckle);
+  mask-size: 100% 100%, 240px 240px;
+  mask-position: 0 0, var(--bestiary-speckle-x, 0) var(--bestiary-speckle-y, 0);
+  mask-repeat: no-repeat, repeat;
+  mask-composite: intersect;
+}
 .bestiary-glyph-high { text-shadow: 0 0 0.9px currentColor, 0 0 0.3px currentColor; }
 .bestiary-glyph-wet { filter: blur(0.4px); }
 .bestiary-weathered .bestiary-leaf :is(p, li, dd, dt, figcaption, footer) { text-shadow: 0 0 0.6px color-mix(in srgb, currentColor 45%, transparent); }

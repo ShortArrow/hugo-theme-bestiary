@@ -4,9 +4,10 @@
   - a few sorts stand a hair low and print faint and broken on one side, and a few stand high and print heavy;
   - the ink and the pressure fall off across the page in one direction, as when a roller runs dry or the platen is not quite level;
   - here and there the paper resisted the ink, and the letters over such a patch print short;
+  - the grain of the paper breaks every letter a little, through a soft mask laid continuously across the leaf;
   - inside a tide mark, where the leaf was wet and dried, the letters are faded and slightly blurred.
   Titles, section headings and seals already print through the worn-ink filter, so only their tilt is set here.
-  However faint a letter prints, its average ink, counted with the share of it a mask leaves, keeps a contrast of at least 4.5:1
+  However faint a letter prints, its average ink, counted with the share of it the masks leave where it stands, keeps a contrast of at least 4.5:1
   against the paper (WCAG 2 AA for body text), worked out from the page's own colours and again when the scheme turns.
   Every amount comes from the page's path and the letter's place, so a page prints the same on every visit.
   Latin words stay unbroken across lines; Han and kana may still break between any two letters.
@@ -124,6 +125,9 @@
       }
     }
 
+    span.classList.add("bestiary-glyph-speckled");
+    span.style.setProperty("--bestiary-speckle-x", `${-(box.left - sheet.left).toFixed(1)}px`);
+    span.style.setProperty("--bestiary-speckle-y", `${-(box.top - sheet.top).toFixed(1)}px`);
     inked.push([span, ink]);
   }
 
@@ -143,9 +147,9 @@
     const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
     return (hi + 0.05) / (lo + 0.05);
   };
-  const SPECKLE = 0.95;
   const AA = 4.52;
-  const LOW = 0.72;
+  const LOW = 0.7;
+  let speckleAt = () => 0.6;
 
   const legible = () => {
     const paper = rgb(getComputedStyle(document.documentElement).getPropertyValue("--paper"));
@@ -166,15 +170,55 @@
     };
     for (const [span, ink] of inked) {
       const need = leastFor(getComputedStyle(span).color);
-      let cover = SPECKLE;
+      span.classList.add("bestiary-glyph-speckled");
+      let cover = speckleAt(span);
       if (span.classList.contains("bestiary-glyph-low")) {
-        if (need / (SPECKLE * LOW) <= 1) cover *= LOW;
+        if (need / (cover * LOW) <= 1) cover *= LOW;
         else span.classList.remove("bestiary-glyph-low");
+      }
+      if (need / cover > 1) {
+        span.classList.remove("bestiary-glyph-speckled");
+        cover = span.classList.contains("bestiary-glyph-low") ? LOW : 1;
       }
       span.style.opacity = String(Math.min(1, Math.ceil(Math.max(ink, need / cover) * 1000) / 1000));
     }
   };
+
+  const loadSpeckle = () => {
+    const url = getComputedStyle(document.documentElement).getPropertyValue("--bestiary-speckle").match(/url\(["']?(.*?)["']?\)$/);
+    if (!url) return;
+    const img = new Image();
+    img.src = url[1];
+    img.decode().then(() => {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      const g = canvas.getContext("2d");
+      g.drawImage(img, 0, 0);
+      const alpha = g.getImageData(0, 0, w, h).data;
+      const sum = new Float64Array((w + 1) * (h + 1));
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        sum[(y + 1) * (w + 1) + x + 1] = alpha[(y * w + x) * 4 + 3] / 255
+          + sum[y * (w + 1) + x + 1] + sum[(y + 1) * (w + 1) + x] - sum[y * (w + 1) + x];
+      }
+      const at = (x, y) => {
+        const fx = Math.floor(x / w), fy = Math.floor(y / h);
+        const px = x - fx * w, py = y - fy * h;
+        return fx * fy * sum[h * (w + 1) + w] + fx * sum[py * (w + 1) + w] + fy * sum[h * (w + 1) + px] + sum[py * (w + 1) + px];
+      };
+      speckleAt = (span) => {
+        const origin = leaf.getBoundingClientRect();
+        const box = span.getBoundingClientRect();
+        const x0 = Math.max(0, Math.floor(box.left - origin.left)), y0 = Math.max(0, Math.floor(box.top - origin.top));
+        const x1 = Math.max(x0 + 1, Math.ceil(box.right - origin.left)), y1 = Math.max(y0 + 1, Math.ceil(box.bottom - origin.top));
+        return Math.max(0.05, (at(x1, y1) - at(x0, y1) - at(x1, y0) + at(x0, y0)) / ((x1 - x0) * (y1 - y0)));
+      };
+      legible();
+    });
+  };
+
   legible();
+  loadSpeckle();
   new MutationObserver(legible).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", legible);
 })();
