@@ -8,7 +8,8 @@
   - inside a tide mark, where the leaf was wet and dried, the letters are faded and slightly blurred.
   Titles, section headings and seals already print through the worn-ink filter, so only their tilt is set here.
   However faint a letter prints, its average ink, counted with the share of it the masks leave where it stands, keeps a contrast of at least 4.5:1
-  against the paper (WCAG 2 AA for body text), worked out from the page's own colours and again when the scheme turns.
+  against the paper where its mottling leaves it least in contrast (WCAG 2 AA for body text), worked out from the page's own
+  colours and again when the scheme turns.
   Every amount comes from the page's path and the letter's place, so a page prints the same on every visit.
   Latin words stay unbroken across lines; Han and kana may still break between any two letters.
 */
@@ -152,7 +153,8 @@
   let speckleAt = () => 0.6;
 
   const legible = () => {
-    const paper = rgb(getComputedStyle(document.documentElement).getPropertyValue("--paper"));
+    const root = getComputedStyle(document.documentElement);
+    const paper = rgb(root.getPropertyValue("--bestiary-paper-darkest") || root.getPropertyValue("--paper"));
     const least = new Map();
     const leastFor = (color) => {
       if (!least.has(color)) {
