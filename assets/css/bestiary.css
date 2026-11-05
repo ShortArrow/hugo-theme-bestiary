@@ -207,10 +207,10 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
   --bestiary-choice-color: var(--accent);
   display: inline-block;
   padding: 0 0.6em;
-  border: 1.5px solid var(--bestiary-choice-color);
+  border: 1.5px solid var(--bestiary-choice-ink, var(--bestiary-choice-color));
   border-radius: 0.3em;
-  color: var(--bestiary-choice-color);
-  background: color-mix(in srgb, var(--bestiary-choice-color) 10%, transparent);
+  color: var(--bestiary-choice-ink, var(--bestiary-choice-color));
+  background: color-mix(in srgb, var(--bestiary-choice-ink, var(--bestiary-choice-color)) 10%, transparent);
   font-variant: small-caps;
   letter-spacing: 0.08em;
   translate: var(--bestiary-nudge, 0);
@@ -252,7 +252,13 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
 .bestiary-index-note { order: 2; color: var(--ink-faint); font-variant: small-caps; letter-spacing: 0.06em; }
 
 a.bestiary-choice { text-decoration: none; }
-a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-color) 22%, transparent); }
+a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-ink, var(--bestiary-choice-color)) 22%, transparent); }
+
+/* A choice with a night colour is drawn in it at night instead of being brightened. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .bestiary-choice[data-night] { --bestiary-choice-ink: var(--bestiary-choice-night); --bestiary-seal-light: brightness(1); }
+}
+:root[data-theme="dark"] .bestiary-choice[data-night] { --bestiary-choice-ink: var(--bestiary-choice-night); --bestiary-seal-light: brightness(1); }
 
 @media (max-width: 30rem) {
   .bestiary-card { grid-template-columns: 1fr; gap: 0; }

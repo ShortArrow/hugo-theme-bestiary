@@ -38,6 +38,9 @@ grep -q -- '--bestiary-choice-color' "$out/site$css" || fail "stylesheet does no
 [ "$(labels "$ink")" = "Kind,Habitat,Sightings,Last seen" ] || fail "Inkwyrm fields are not in declared order: $(labels "$ink")"
 has "$ink" 'data-choice="beast"'
 has "$ink" '--bestiary-choice-color: #8b3a2b'
+lacks "$ink" 'data-night'
+has "$moth" 'data-night style="--bestiary-choice-night: #6aa3d7; --bestiary-choice-color: #2b5d8b'
+grep -q 'data-night]{[^}]*--bestiary-seal-light:brightness(1)' "$out/site$css" || fail "stylesheet brightens seals that have a night colour"
 has "$ink" '>Beast<'
 has "$ink" '>Inkwells<'
 has "$ink" '<a href="https://example.org/notes/inkwyrm">Field notes</a>'

@@ -56,7 +56,7 @@ params:
 | `type` | Front matter value | Card shows |
 |---|---|---|
 | `text` | a string | the string |
-| `choice` | the `value` of one of the field's `choices` | the choice's `label`, coloured with its optional `color` |
+| `choice` | the `value` of one of the field's `choices` | the choice's `label`, coloured with its optional `color`, and at night with its optional `nightColor` (otherwise `color` brightened) |
 | `links` | a list of `{label, url}` | the links |
 | `date` | a date | the date in the site's locale |
 
