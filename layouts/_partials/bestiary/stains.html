@@ -1,14 +1,14 @@
 {{- /*
-  Draws the larger handling marks of a page's leaf as an SVG layer behind its text: a cup ring (on three pages in four),
-  sometimes a second ring and a few splashes beside it, a dried tide mark (on two pages in three) and a soft blot.
+  Draws the larger handling marks of a page's leaf as an SVG layer behind its text: where a cup was set down
+  (on three pages in four, and somewhere else as well on one page in four), a dried tide mark (on two pages in three) and a soft blot.
   Every position, size and outline comes from a few numbers rolled from the page's path, so each page has stains of its own
   and keeps them from build to build. The ragged edges come from noise seeded the same way.
 */ -}}
 {{- $path := .RelPermalink -}}
 {{- $n := dict -}}
 {{- range $name, $range := dict
-  "ring" (slice 0 4) "ring-x" (slice 4 84) "ring-y" (slice 2 86) "ring-size" (slice 70 124) "ring-lumps" (slice 3 6) "ring-wobble" (slice 2 7)
-  "ring-sweep" (slice 0 3) "ring-start" (slice 0 360) "ring-2" (slice 0 2) "ring-2-x" (slice -40 40) "ring-2-y" (slice -40 40) "splashes" (slice 1 5)
+  "ring" (slice 0 4) "ring-x" (slice 4 84) "ring-y" (slice 2 86) "ring-size" (slice 70 124)
+  "cup-b" (slice 0 4) "cup-b-x" (slice 4 84) "cup-b-y" (slice 2 86) "cup-b-size" (slice 60 110)
   "tide" (slice 0 3) "tide-x" (slice 3 78) "tide-y" (slice 4 88) "tide-w" (slice 110 210) "tide-h" (slice 70 150) "tide-lumps" (slice 4 8) "tide-wobble" (slice 10 22)
   "blot-x" (slice 3 88) "blot-y" (slice 3 92) "blot-w" (slice 45 110) "blot-h" (slice 35 95) "blot-lumps" (slice 4 9) "blot-wobble" (slice 15 30)
   "edge-seed" (slice 1 9999)
@@ -27,23 +27,10 @@
     <feGaussianBlur stdDeviation="4"/>
   </filter>
   {{- if ne $n.ring 0 }}
-  {{- $outline := dict "cx" 50 "cy" 50 "r" 40 "seed" (printf "%s#ring" $path) "lumps" (index $n "ring-lumps") "wobble" (div (index $n "ring-wobble") 100.0) }}
-  {{- $sweep := index (slice 360 310 250) (index $n "ring-sweep") }}
-  <svg x="{{ index $n "ring-x" }}%" y="{{ index $n "ring-y" }}%" width="{{ index $n "ring-size" }}" height="{{ index $n "ring-size" }}" viewBox="0 0 100 100" overflow="visible" filter="url(#bestiary-stain-edge)">
-    <path class="bestiary-stain-wash" d="{{ partial "bestiary/stain-outline.html" $outline }}"/>
-    <path class="bestiary-stain-ring" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "sweep" $sweep "start" (index $n "ring-start"))) }}"/>
-    <path class="bestiary-stain-ring-inner" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "r" 37 "sweep" (mul $sweep 0.8) "start" (add (index $n "ring-start") 25))) }}"/>
-    {{- if ne (index $n "ring-2") 0 }}
-    <path class="bestiary-stain-ring" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "cx" (add 50 (index $n "ring-2-x")) "cy" (add 50 (index $n "ring-2-y")) "r" 33 "seed" (printf "%s#ring-2" $path))) }}"/>
-    {{- end }}
-    {{- range $i := seq $n.splashes }}
-    {{- $angle := partial "bestiary/roll.html" (dict "path" $path "name" (printf "splash-%d-angle" $i) "low" 0 "high" 360) }}
-    {{- $reach := partial "bestiary/roll.html" (dict "path" $path "name" (printf "splash-%d-reach" $i) "low" 48 "high" 70) }}
-    {{- $size := partial "bestiary/roll.html" (dict "path" $path "name" (printf "splash-%d-size" $i) "low" 1 "high" 4) }}
-    {{- $t := mul (div $angle 180.0) math.Pi }}
-    <path class="bestiary-stain-splash" d="{{ partial "bestiary/stain-outline.html" (dict "cx" (add 50 (mul $reach (math.Cos $t))) "cy" (add 50 (mul $reach (math.Sin $t))) "r" $size "seed" (printf "%s#splash-%d" $path $i) "lumps" 3 "wobble" 0.3) }}"/>
-    {{- end }}
-  </svg>
+  {{ partial "bestiary/cup-set.html" (dict "path" $path "name" "cup" "x" (index $n "ring-x") "y" (index $n "ring-y") "size" (index $n "ring-size")) }}
+  {{- end }}
+  {{- if eq (index $n "cup-b") 0 }}
+  {{ partial "bestiary/cup-set.html" (dict "path" $path "name" "cup-b" "x" (index $n "cup-b-x") "y" (index $n "cup-b-y") "size" (index $n "cup-b-size")) }}
   {{- end }}
   {{- if ne $n.tide 0 }}
   {{- $outline := dict "cx" 50 "cy" 50 "r" 42 "seed" (printf "%s#tide" $path) "lumps" (index $n "tide-lumps") "wobble" (div (index $n "tide-wobble") 100.0) }}
