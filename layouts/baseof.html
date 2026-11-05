@@ -1,5 +1,6 @@
 {{- $weathered := ne site.Params.bestiary.weathering false -}}
 {{- $toggle := ne site.Params.bestiary.schemeToggle false -}}
+{{- $places := ne site.Params.bestiary.placeToggle false -}}
 <!doctype html>
 <html lang="{{ site.Language.Locale }}"{{ if $weathered }} class="bestiary-weathered"{{ end }}>
 <head>
@@ -10,6 +11,9 @@
   {{- end }}
   {{- if $toggle }}
   <script>try{var s=localStorage.getItem("bestiary-scheme");if(s==="light"||s==="dark")document.documentElement.dataset.theme=s}catch(e){}</script>
+  {{- end }}
+  {{- if $places }}
+  <script>try{var p=localStorage.getItem("bestiary-place");if(p==="forest"||p==="sky"||p==="home")document.documentElement.dataset.place=p}catch(e){}</script>
   {{- end }}
   {{- with resources.Get "css/bestiary.css" | resources.ExecuteAsTemplate "css/bestiary.css" . | minify | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
@@ -29,6 +33,9 @@
     {{ partial "bestiary/stains.html" . }}
     {{- end }}
     <header>
+      {{- if $places }}
+      {{ partial "bestiary/place-toggle.html" . }}
+      {{- end }}
       <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
       {{- if $toggle }}
       {{ partial "bestiary/scheme-toggle.html" . }}
@@ -45,8 +52,8 @@
     </footer>
     {{- end }}
   </div>
-  {{- if $toggle }}
-  {{- with resources.Get "js/bestiary-scheme.js" | minify | fingerprint }}
+  {{- if or $toggle $places }}
+  {{- with resources.Get "js/bestiary-turn.js" | minify | fingerprint }}
   <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
   {{- end }}
   {{- end }}

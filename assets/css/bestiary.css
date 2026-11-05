@@ -1,6 +1,21 @@
 /* Bestiary: an old natural-history book. Light pages are paper by day; dark pages are the study at night. */
 :root {
   --desk: #b89a70;
+  --bestiary-home:
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)),
+    {{ template "bestiary-drawing" "desk-day" }},
+    var(--desk);
+  --bestiary-forest:
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)),
+    {{ template "bestiary-drawing" "forest-day-canopy" }} fixed,
+    {{ template "bestiary-drawing" "forest-day-floor" }},
+    #6a5a3e;
+  --bestiary-sky:
+    {{ template "bestiary-drawing" "sky-day-near" }},
+    {{ template "bestiary-drawing" "sky-day-sun" }} right 6% top 12rem / 200px no-repeat fixed,
+    {{ template "bestiary-drawing" "sky-day-far" }} fixed,
+    linear-gradient(#6f97bd, #a9c3d6 65%, #dcdcd0) fixed,
+    #93b2cc;
   --paper: #f3ead6;
   --paper-burn: rgba(122, 82, 34, 0.38);
   --foxing: rgba(150, 92, 38, 0.22);
@@ -31,9 +46,26 @@
   color-scheme: light;
 }
 
+{{- /* A drawing of a place behind the leaf, by its name under images/bestiary/places. */ -}}
+{{- define "bestiary-drawing" }}url("{{ (resources.Get (printf "images/bestiary/places/%s.svg" .) | fingerprint).RelPermalink }}"){{ end }}
 {{- /* Night tokens, defined once: they apply when the system is dark and the reader has not chosen day, or when the reader has chosen night. */ -}}
 {{- define "bestiary-night" }}
     --desk: #0d0906;
+    --bestiary-home:
+      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)),
+      {{ template "bestiary-drawing" "desk-night" }},
+      var(--desk);
+    --bestiary-forest:
+      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)),
+      {{ template "bestiary-drawing" "forest-night-canopy" }} fixed,
+      {{ template "bestiary-drawing" "forest-night-floor" }},
+      #14130d;
+    --bestiary-sky:
+      {{ template "bestiary-drawing" "sky-night-near" }},
+      {{ template "bestiary-drawing" "sky-night-moon" }} right 6% top 12rem / 160px no-repeat fixed,
+      {{ template "bestiary-drawing" "sky-night-far" }} fixed,
+      linear-gradient(#060a1c, #18203d) fixed,
+      #0b1026;
     --paper: #2b231b;
     --paper-burn: rgba(10, 6, 2, 0.22);
     --foxing: rgba(200, 150, 90, 0.12);
@@ -76,7 +108,7 @@
 body {
   margin: 0;
   padding: 1.5rem 8px 3rem;
-  background: var(--desk);
+  background: var(--bestiary-home);
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.125rem;
@@ -117,10 +149,9 @@ header::after, footer::before, .bestiary-card::before, .bestiary-card::after {
 
 header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
 
-.bestiary-scheme {
+.bestiary-scheme, .bestiary-place {
   position: absolute;
   top: -0.5rem;
-  right: 0;
   width: 2.75rem;
   height: 2.75rem;
   padding: 0.2rem;
@@ -131,13 +162,23 @@ header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
   cursor: pointer;
 }
 
-.bestiary-scheme:hover { opacity: 1; }
-.bestiary-scheme:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.bestiary-scheme svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-.bestiary-scheme svg .bestiary-scheme-face { stroke-width: 0.8; }
+.bestiary-scheme { right: 0; }
+.bestiary-place { left: 0; }
+:is(.bestiary-scheme, .bestiary-place):hover { opacity: 1; }
+:is(.bestiary-scheme, .bestiary-place):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:is(.bestiary-scheme, .bestiary-place) svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+:is(.bestiary-scheme-face, .bestiary-place-detail) { stroke-width: 0.8; }
 .bestiary-scheme-moon { display: var(--bestiary-moon); }
 .bestiary-scheme-sun { display: var(--bestiary-sun); }
-.bestiary-scheme[hidden] { display: none; }
+.bestiary-place svg { display: none; }
+:root:not([data-place]) .bestiary-place-home,
+:root[data-place="home"] .bestiary-place-home,
+:root[data-place="forest"] .bestiary-place-forest,
+:root[data-place="sky"] .bestiary-place-sky { display: block; }
+:is(.bestiary-scheme, .bestiary-place)[hidden] { display: none; }
+
+:root[data-place="forest"] body { background: var(--bestiary-forest); }
+:root[data-place="sky"] body { background: var(--bestiary-sky); }
 
 header a {
   display: inline-block;
@@ -393,7 +434,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
 
 .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) var(--bestiary-seal-light); }
 
-.bestiary-weathered .bestiary-scheme svg { filter: url(#bestiary-ink); }
+.bestiary-weathered :is(.bestiary-scheme, .bestiary-place) svg { filter: url(#bestiary-ink); }
 .bestiary-weathered .bestiary-plate svg { filter: url(#bestiary-plate); }
 
 .bestiary-weathered .bestiary-plate { position: relative; border-color: transparent; }

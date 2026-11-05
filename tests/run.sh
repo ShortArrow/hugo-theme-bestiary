@@ -97,11 +97,23 @@ for mark in stain-ink foxing; do grep -q "var(--$mark)" "$out/site$css" || fail 
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
 grep -q '::view-transition-new(root)' "$out/site$css" || fail "stylesheet does not shape the turn between day and night"
-scheme_js=$(grep -o '<script src="[^"]*bestiary-scheme[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
+scheme_js=$(grep -o '<script src="[^"]*bestiary-turn[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 grep -q 'startViewTransition' "$out/site$scheme_js" || fail "the scheme turns without a transition"
 grep -q 'prefers-reduced-motion' "$out/site$scheme_js" || fail "the scheme turn ignores a request for reduced motion"
 grep -q ':root\[data-theme=.\?dark.\?\]' "$out/site$css" || fail "stylesheet has no dark scheme a reader can choose"
 grep -q ':root:not(\[data-theme=.\?light.\?\])' "$out/site$css" || fail "stylesheet does not follow the system scheme when the reader chose none"
+has "$ink" '<button type="button" class="bestiary-place" hidden'
+grep -q 'localStorage.getItem("bestiary-place")' "$ink" || fail "Inkwyrm does not restore the reader's chosen place"
+grep -q 'bestiary-place' "$out/site$scheme_js" || fail "the place button turns nothing"
+for place in forest sky; do
+  grep -q ":root\[data-place=.\?$place.\?\] body" "$out/site$css" || fail "stylesheet lays the leaf nowhere in the $place"
+  grep -q -- "--bestiary-$place:" "$out/site$css" || fail "stylesheet paints no $place"
+done
+for drawing in desk-day desk-night forest-day forest-night sky-day sky-night sky-day-sun sky-night-moon; do
+  url=$(grep -o "/images/bestiary/places/$drawing[^\")]*\.svg" "$out/site$css" | head -1)
+  [ -n "$url" ] || fail "stylesheet draws no $drawing"
+  [ -s "$out/site$url" ] || fail "drawing $url was not published"
+done
 has "$ink" '<filter id="bestiary-wear"'
 js=$(grep -o '<script src="[^"]*bestiary-hand[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 [ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
@@ -124,6 +136,12 @@ has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
 build "$root/tests/fixtures/fixed-scheme" ../../../.. "$out/fixed-scheme"
 lacks "$out/fixed-scheme/still/index.html" 'class="bestiary-scheme"'
 lacks "$out/fixed-scheme/still/index.html" 'bestiary-scheme")'
+has "$out/fixed-scheme/still/index.html" 'class="bestiary-place"'
+
+build "$root/tests/fixtures/fixed-place" ../../../.. "$out/fixed-place"
+lacks "$out/fixed-place/still/index.html" 'class="bestiary-place"'
+lacks "$out/fixed-place/still/index.html" 'bestiary-place")'
+has "$out/fixed-place/still/index.html" 'class="bestiary-scheme"'
 
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
