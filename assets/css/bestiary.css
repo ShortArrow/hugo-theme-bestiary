@@ -246,6 +246,9 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   box-decoration-break: clone;
 }
 
+.bestiary-word { white-space: nowrap; }
+.bestiary-glyph { display: inline-block; }
+
 @media (prefers-color-scheme: dark) {
   .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) brightness(1.6); }
 }

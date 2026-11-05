@@ -58,6 +58,9 @@ has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
 has "$ink" '<filter id="bestiary-wear"'
+js=$(grep -o '<script src="[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
+[ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
+grep -q 'bestiary-glyph' "$out/site$js" || fail "script $js does not set letters"
 lacks "$ink" '<filter id="bestiary-hand"'
 lacks "$ink" '<filter id="bestiary-rule"'
 for line in underline leader rule-line rule-double; do
@@ -74,6 +77,7 @@ has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
+lacks "$out/plain/clean/index.html" '<script'
 lacks "$out/plain/clean/index.html" '<footer'
 
 lacks "$ink" 'googletagmanager'
