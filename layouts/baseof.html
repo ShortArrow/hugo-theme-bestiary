@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {{- with resources.Get "favicon.svg" | fingerprint }}
-  <link rel="icon" type="image/svg+xml" href="{{ .RelPermalink }}">
+  {{- with resources.Get "favicon.svg" }}
+  <link rel="icon" type="image/svg+xml" href="{{ (. | fingerprint).RelPermalink }}">
   {{- end }}
   {{- if $toggle }}
   <script>try{var s=localStorage.getItem("bestiary-scheme");if(s==="light"||s==="dark")document.documentElement.dataset.theme=s}catch(e){}</script>
