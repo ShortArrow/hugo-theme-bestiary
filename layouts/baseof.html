@@ -22,6 +22,7 @@
   {{- end }}
   <div class="bestiary-leaf"{{ if $weathered }} style="{{ partial "bestiary/leaf-marks.html" . | safeCSS }}"{{ end }}>
     {{- if $weathered }}
+    {{ partial "bestiary/paper.html" . }}
     {{ partial "bestiary/stains.html" . }}
     {{- end }}
     <header>

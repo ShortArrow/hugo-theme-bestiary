@@ -76,6 +76,16 @@ grep -q '<svg class="bestiary-stains"' "$ink" || fail "Inkwyrm's leaf has no sta
 ! grep -l '%!' "$out"/site/index.html "$out"/site/*/index.html "$out"/site/*/*/index.html || fail "a page carries a malformed number from a template's printf"
 mishap() { grep -o 'data-mishap="[a-z-]*"' "$1" || echo none; }
 [ "$(for page in "$out"/site/index.html "$out"/site/*/index.html "$out"/site/*/*/index.html; do mishap "$page"; done | sort -u | wc -l)" -gt 1 ] || fail "every example page met the same mishap"
+grep -q 'var(--bestiary-speckle)' "$out/site$css" || fail "stylesheet does not wear the letters of the text"
+tiles() { grep -o '<use href="[^"]*#t[01]\{4\}"' "$1" | sed 's/.*#t//; s/"$//'; }
+[ "$(tiles "$ink" | wc -l)" -eq 160 ] || fail "Inkwyrm's paper is not four tiles by forty"
+sprite=$(grep -o '<use href="[^"#]*' "$ink" | head -1 | sed 's/<use href="//')
+[ -s "$out/site$sprite" ] || fail "paper sprite $sprite was not published"
+tiles "$ink" | awk 'NR > 1 && (NR - 1) % 4 != 0 && substr($0, 4, 1) != right { bad = 1 }
+  NR > 4 && substr($0, 1, 1) != bottom[(NR - 1) % 4] { bad = 1 }
+  { right = substr($0, 2, 1); bottom[(NR - 1) % 4] = substr($0, 3, 1) }
+  END { exit bad }' || fail "Inkwyrm's paper tiles do not meet edge to edge"
+[ "$(tiles "$ink")" != "$(tiles "$moth")" ] || fail "Inkwyrm and Lanternmoth are laid on the same paper"
 for mark in stain-ink foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
