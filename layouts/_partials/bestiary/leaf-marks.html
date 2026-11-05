@@ -1,36 +1,21 @@
 {{- /*
-  Returns the custom properties that place the handling marks on a page's leaf: where its cup ring, tide mark, thumb smudges,
-  blot and each foxing spot fall, how large the ring is, and which of the ring, second ring, tide mark and spots the page lacks.
+  Returns the custom properties that place a page's small handling marks: where its two thumb smudges and each foxing spot fall,
+  and which spots the page lacks. The larger stains are drawn by bestiary/stains.html.
   Each value comes from its own hash of the page's path and the mark's name, so marks move independently of one another
   and each page keeps its own marks from build to build.
 */ -}}
 {{- $path := .RelPermalink -}}
-{{- $ranges := dict
-  "ring-x" (slice 8 92) "ring-y" (slice 4 90) "ring-size" (slice 70 135)
-  "tide-x" (slice 10 90) "tide-y" (slice 8 95)
-  "smudge-left" (slice 10 90) "smudge-right" (slice 10 90)
-  "blot-x" (slice 5 95) "blot-y" (slice 5 95)
--}}
+{{- $ranges := dict "smudge-left" (slice 10 90) "smudge-right" (slice 10 90) -}}
 {{- range seq 10 }}
   {{- $ranges = merge $ranges (dict (printf "fox-%d-x" .) (slice 3 97) (printf "fox-%d-y" .) (slice 3 97)) }}
 {{- end -}}
 {{- $props := slice -}}
 {{- range $name, $range := $ranges }}
-  {{- $low := index $range 0 }}
-  {{- $value := add $low (mod (hash.FNV32a (printf "%s#%s" $path $name)) (sub (index $range 1) $low)) }}
-  {{- if eq $name "ring-size" }}
-    {{- $props = $props | append (printf "--mark-%s: %.2f" $name (div $value 100.0)) }}
-  {{- else }}
-    {{- $props = $props | append (printf "--mark-%s: %d%%" $name $value) }}
-  {{- end }}
+  {{- $props = $props | append (printf "--mark-%s: %d%%" $name (partial "bestiary/roll.html" (dict "path" $path "name" $name "low" (index $range 0) "high" (index $range 1)))) }}
 {{- end -}}
-{{- $absent := dict "ring" 4 "ring-2" 2 "tide" 3 -}}
 {{- range seq 10 }}
-  {{- $absent = merge $absent (dict (printf "fox-%d" .) 3) }}
-{{- end -}}
-{{- range $name, $odds := $absent }}
-  {{- if eq (mod (hash.FNV32a (printf "%s#%s?" $path $name)) $odds) 0 }}
-    {{- $props = $props | append (printf "--mark-%s: transparent" $name) }}
+  {{- if eq (mod (hash.FNV32a (printf "%s#fox-%d?" $path .)) 3) 0 }}
+    {{- $props = $props | append (printf "--mark-fox-%d: transparent" .) }}
   {{- end }}
 {{- end -}}
 {{- return delimit $props "; " -}}

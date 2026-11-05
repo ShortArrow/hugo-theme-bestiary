@@ -1,0 +1,2 @@
+{{- /* Returns a whole number from low up to but not including high, fixed by a hash of `path` and `name`. Arguments: dict with path, name, low, high. */ -}}
+{{- return add .low (mod (hash.FNV32a (printf "%s#%s" .path .name)) (sub .high .low)) -}}

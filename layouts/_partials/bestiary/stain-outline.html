@@ -1,0 +1,26 @@
+{{- /*
+  Returns SVG path data for an irregular outline around (cx, cy) in a 100 × 100 box.
+  A circle of radius r is bent by `lumps` harmonics whose sizes scale with `wobble` and whose phases come from `seed`.
+  With `sweep` below 360 the outline is an open arc from `start` degrees, as a cup ring broken where the cup was lifted.
+  Arguments: dict with cx, cy, r, seed (string), lumps (int), wobble (fraction of r); optional start, sweep (degrees).
+*/ -}}
+{{- $sweep := .sweep | default 360 -}}
+{{- $start := .start | default 0 -}}
+{{- $closed := ge $sweep 360 -}}
+{{- $harmonics := slice -}}
+{{- range $k := seq 2 (add 1 .lumps) }}
+  {{- $u := hash.FNV32a (printf "%s~%d" $.seed $k) }}
+  {{- $size := div (mul $.wobble (add 0.3 (div (mod $u 700) 1000.0))) (math.Pow $k 0.6) }}
+  {{- $phase := div (mod (div $u 700) 6283) 1000.0 }}
+  {{- $harmonics = $harmonics | append (dict "size" $size "k" $k "phase" $phase) }}
+{{- end -}}
+{{- $steps := 48 -}}
+{{- $d := "" -}}
+{{- range $i := seq 0 (cond $closed (sub $steps 1) $steps) }}
+  {{- $t := mul (div (add $start (div (mul $sweep $i) $steps)) 180.0) math.Pi }}
+  {{- $f := 1.0 }}
+  {{- range $harmonics }}{{ $f = add $f (mul .size (math.Sin (add (mul .k $t) .phase))) }}{{ end }}
+  {{- $radius := mul $.r $f }}
+  {{- $d = printf "%s%s%.1f %.1f" $d (cond (eq $i 0) "M" "L") (add $.cx (mul $radius (math.Cos $t))) (add $.cy (mul $radius (math.Sin $t))) }}
+{{- end -}}
+{{- return (cond $closed (printf "%sZ" $d) $d) -}}
