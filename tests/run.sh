@@ -63,6 +63,10 @@ marks() { grep -o '<div class="bestiary-leaf" style="[^"]*"' "$1"; }
 for mark in stain foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
+grep -q '::view-transition-new(root)' "$out/site$css" || fail "stylesheet does not shape the turn between day and night"
+scheme_js=$(grep -o '<script src="[^"]*bestiary-scheme[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
+grep -q 'startViewTransition' "$out/site$scheme_js" || fail "the scheme turns without a transition"
+grep -q 'prefers-reduced-motion' "$out/site$scheme_js" || fail "the scheme turn ignores a request for reduced motion"
 grep -q ':root\[data-theme=.\?dark.\?\]' "$out/site$css" || fail "stylesheet has no dark scheme a reader can choose"
 grep -q ':root:not(\[data-theme=.\?light.\?\])' "$out/site$css" || fail "stylesheet does not follow the system scheme when the reader chose none"
 has "$ink" '<filter id="bestiary-wear"'

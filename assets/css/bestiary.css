@@ -306,3 +306,15 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
 .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) var(--bestiary-seal-light); }
 
 .bestiary-weathered .bestiary-scheme svg { filter: url(#bestiary-ink); }
+
+/* The turn between day and night: the new scheme billows out from the moon or sun like a puff of smoke, soft at its edge, while the old one blurs away. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='f' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='3' seed='6'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='26' xChannelSelector='R' yChannelSelector='G'/%3E%3CfeGaussianBlur stdDeviation='9'/%3E%3C/filter%3E%3Cg filter='url%28%23f%29' fill='white'%3E%3Ccircle cx='100' cy='100' r='52'/%3E%3Ccircle cx='70' cy='86' r='30'/%3E%3Ccircle cx='132' cy='82' r='28'/%3E%3Ccircle cx='124' cy='128' r='30'/%3E%3Ccircle cx='76' cy='126' r='28'/%3E%3Ccircle cx='100' cy='62' r='24'/%3E%3Ccircle cx='100' cy='140' r='24'/%3E%3Ccircle cx='58' cy='106' r='22'/%3E%3Ccircle cx='144' cy='106' r='22'/%3E%3C/g%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+}
