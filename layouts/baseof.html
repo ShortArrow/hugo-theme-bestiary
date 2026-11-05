@@ -29,5 +29,10 @@
     </footer>
     {{- end }}
   </div>
+  {{- if $weathered }}
+  {{- with resources.Get "js/bestiary-hand.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{- end }}
+  {{- end }}
 </body>
 </html>
