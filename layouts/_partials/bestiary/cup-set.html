@@ -1,0 +1,29 @@
+{{- /*
+  Draws the marks one cup left where it was set down, at x%, y% of the leaf and `size` pixels across:
+  a faint wash, one to four rings (one on half of all sets, two on three in ten, three on three in twenty, four on one in twenty)
+  and one to four splashes. Every ring after the first is rolled its own size and offset from the first.
+  Arguments: dict with path, name, x, y, size.
+*/ -}}
+{{- $roll := dict -}}
+{{- range $trait, $range := dict "rings" (slice 0 20) "splashes" (slice 1 5) }}
+  {{- $roll = merge $roll (dict $trait (partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-%s" $.name $trait) "low" (index $range 0) "high" (index $range 1)))) }}
+{{- end -}}
+{{- $rings := cond (lt $roll.rings 10) 1 (cond (lt $roll.rings 16) 2 (cond (lt $roll.rings 19) 3 4)) -}}
+<svg x="{{ .x }}%" y="{{ .y }}%" width="{{ .size }}" height="{{ .size }}" viewBox="0 0 100 100" overflow="visible" filter="url(#bestiary-stain-edge)">
+  <path class="bestiary-stain-wash" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 40 "seed" (printf "%s#%s-wash" .path .name) "lumps" 4 "wobble" 0.06) }}"/>
+  {{ partial "bestiary/cup-ring.html" (dict "path" .path "name" (printf "%s-1" .name) "cx" 50 "cy" 50 "r" 40) }}
+  {{- range $i := cond (gt $rings 1) (seq 2 $rings) slice }}
+  {{- $angle := partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-%d-angle" $.name $i) "low" 0 "high" 360) }}
+  {{- $reach := partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-%d-reach" $.name $i) "low" 14 "high" 50) }}
+  {{- $scale := partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-%d-scale" $.name $i) "low" 60 "high" 105) }}
+  {{- $t := mul (div $angle 180.0) math.Pi }}
+  {{ partial "bestiary/cup-ring.html" (dict "path" $.path "name" (printf "%s-%d" $.name $i) "cx" (add 50 (mul $reach (math.Cos $t))) "cy" (add 50 (mul $reach (math.Sin $t))) "r" (mul 40 (div $scale 100.0))) }}
+  {{- end }}
+  {{- range $i := seq $roll.splashes }}
+  {{- $angle := partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-splash-%d-angle" $.name $i) "low" 0 "high" 360) }}
+  {{- $reach := partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-splash-%d-reach" $.name $i) "low" 48 "high" 72) }}
+  {{- $size := partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-splash-%d-size" $.name $i) "low" 1 "high" 4) }}
+  {{- $t := mul (div $angle 180.0) math.Pi }}
+  <path class="bestiary-stain-splash" d="{{ partial "bestiary/stain-outline.html" (dict "cx" (add 50 (mul $reach (math.Cos $t))) "cy" (add 50 (mul $reach (math.Sin $t))) "r" $size "seed" (printf "%s#%s-splash-%d" $.path $.name $i) "lumps" 3 "wobble" 0.3) }}"/>
+  {{- end }}
+</svg>
