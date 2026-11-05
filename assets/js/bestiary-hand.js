@@ -6,6 +6,8 @@
   - here and there the paper resisted the ink, and the letters over such a patch print short;
   - inside a tide mark, where the leaf was wet and dried, the letters are faded and slightly blurred.
   Titles, section headings and seals already print through the worn-ink filter, so only their tilt is set here.
+  However faint a letter prints, its average ink, counted with the share of it a mask leaves, keeps a contrast of at least 4.5:1
+  against the paper (WCAG 2 AA for body text), worked out from the page's own colours and again when the scheme turns.
   Every amount comes from the page's path and the letter's place, so a page prints the same on every visit.
   Latin words stay unbroken across lines; Han and kana may still break between any two letters.
 */
@@ -84,6 +86,7 @@
   const tides = Array.from(leaf.querySelectorAll(".bestiary-stain-tide"), (tide) => tide.getBoundingClientRect());
 
   const wornAlready = "h1, header, .bestiary-index-section, .bestiary-choice";
+  const inked = [];
   for (const [span, n] of glyphs) {
     if (span.closest(wornAlready)) continue;
     const box = span.getBoundingClientRect();
@@ -121,6 +124,57 @@
       }
     }
 
-    span.style.opacity = Math.min(1, Math.max(0.35, ink)).toFixed(2);
+    inked.push([span, ink]);
   }
+
+  const rgb = (value) => {
+    const hex = value.trim().match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    if (hex) return hex.slice(1).map((h) => parseInt(h, 16));
+    return value.match(/[\d.]+/g).slice(0, 3).map(Number);
+  };
+  const luminance = (c) => {
+    const [r, g, b] = c.map((v) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a, b) => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const SPECKLE = 0.95;
+  const AA = 4.52;
+  const LOW = 0.72;
+
+  const legible = () => {
+    const paper = rgb(getComputedStyle(document.documentElement).getPropertyValue("--paper"));
+    const least = new Map();
+    const leastFor = (color) => {
+      if (!least.has(color)) {
+        const text = rgb(color);
+        const mixed = (a) => text.map((t, i) => a * t + (1 - a) * paper[i]);
+        let lo = 0, hi = 1;
+        if (contrast(mixed(1), paper) < AA) lo = 1;
+        else for (let i = 0; i < 20; i++) {
+          const mid = (lo + hi) / 2;
+          if (contrast(mixed(mid), paper) >= AA) hi = mid; else lo = mid;
+        }
+        least.set(color, Math.max(lo, hi));
+      }
+      return least.get(color);
+    };
+    for (const [span, ink] of inked) {
+      const need = leastFor(getComputedStyle(span).color);
+      let cover = SPECKLE;
+      if (span.classList.contains("bestiary-glyph-low")) {
+        if (need / (SPECKLE * LOW) <= 1) cover *= LOW;
+        else span.classList.remove("bestiary-glyph-low");
+      }
+      span.style.opacity = String(Math.min(1, Math.ceil(Math.max(ink, need / cover) * 1000) / 1000));
+    }
+  };
+  legible();
+  new MutationObserver(legible).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", legible);
 })();
