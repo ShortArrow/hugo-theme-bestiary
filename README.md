@@ -81,6 +81,15 @@ By default the page is a worn leaf: headings and seals are printed in uneven ink
   weathering = false
 ```
 
+## Day and night
+
+Pages follow the reader's system scheme. A moon in the header turns them to night, and a sun turns them back to day; the choice is kept in the reader's browser and restored before the page is painted. Without JavaScript the button stays hidden and the system scheme applies. To leave the scheme to the system alone:
+
+```toml
+[params.bestiary]
+  schemeToggle = false
+```
+
 ## Footer links
 
 Entries in the site's `footer` menu are listed at the foot of every page, in menu order. Without a footer menu, pages have no footer.
