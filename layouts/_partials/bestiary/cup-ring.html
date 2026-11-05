@@ -1,0 +1,21 @@
+{{- /*
+  Draws one cup ring centred at (cx, cy) with radius r in a 100 × 100 box, with every trait of its own rolled from `path` and `name`:
+  how lumpy and how far out of round its outline is, how much of it was printed and where the gap falls,
+  how much it is squashed into an ellipse and at what angle, and whether a thin inner ring shows inside it.
+  Arguments: dict with path, name, cx, cy, r.
+*/ -}}
+{{- $roll := dict -}}
+{{- range $trait, $range := dict
+  "lumps" (slice 3 8) "wobble" (slice 3 12) "sweep" (slice 0 4) "start" (slice 0 360)
+  "squash" (slice 78 101) "tilt" (slice 0 180) "inner" (slice 0 2) "inner-shift" (slice -3 4)
+}}
+  {{- $roll = merge $roll (dict $trait (partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-%s" $.name $trait) "low" (index $range 0) "high" (index $range 1)))) }}
+{{- end -}}
+{{- $sweep := index (slice 360 330 290 240) $roll.sweep -}}
+{{- $outline := dict "cx" .cx "cy" .cy "r" .r "seed" (printf "%s#%s" .path .name) "lumps" $roll.lumps "wobble" (div $roll.wobble 100.0) -}}
+<g transform="rotate({{ $roll.tilt }} {{ .cx }} {{ .cy }}) translate({{ .cx }} {{ .cy }}) scale(1 {{ div $roll.squash 100.0 }}) translate({{ sub 0 .cx }} {{ sub 0 .cy }})">
+  <path class="bestiary-stain-ring" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "sweep" $sweep "start" $roll.start)) }}"/>
+  {{- if ne $roll.inner 0 }}
+  <path class="bestiary-stain-ring-inner" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "cx" (add .cx (index $roll "inner-shift")) "r" (mul .r 0.92) "seed" (printf "%s#%s-inner" .path .name) "sweep" (mul $sweep 0.7) "start" (add $roll.start 40))) }}"/>
+  {{- end }}
+</g>

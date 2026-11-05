@@ -7,8 +7,8 @@
 {{- $path := .RelPermalink -}}
 {{- $n := dict -}}
 {{- range $name, $range := dict
-  "ring" (slice 0 4) "ring-x" (slice 4 84) "ring-y" (slice 2 86) "ring-size" (slice 70 124) "ring-lumps" (slice 3 6) "ring-wobble" (slice 2 7)
-  "ring-sweep" (slice 0 3) "ring-start" (slice 0 360) "ring-2" (slice 0 2) "ring-2-x" (slice -40 40) "ring-2-y" (slice -40 40) "splashes" (slice 1 5)
+  "ring" (slice 0 4) "ring-x" (slice 4 84) "ring-y" (slice 2 86) "ring-size" (slice 70 124)
+  "ring-2" (slice 0 2) "ring-2-angle" (slice 0 360) "ring-2-reach" (slice 18 46) "ring-2-scale" (slice 62 101) "splashes" (slice 1 5)
   "tide" (slice 0 3) "tide-x" (slice 3 78) "tide-y" (slice 4 88) "tide-w" (slice 110 210) "tide-h" (slice 70 150) "tide-lumps" (slice 4 8) "tide-wobble" (slice 10 22)
   "blot-x" (slice 3 88) "blot-y" (slice 3 92) "blot-w" (slice 45 110) "blot-h" (slice 35 95) "blot-lumps" (slice 4 9) "blot-wobble" (slice 15 30)
   "edge-seed" (slice 1 9999)
@@ -27,14 +27,12 @@
     <feGaussianBlur stdDeviation="4"/>
   </filter>
   {{- if ne $n.ring 0 }}
-  {{- $outline := dict "cx" 50 "cy" 50 "r" 40 "seed" (printf "%s#ring" $path) "lumps" (index $n "ring-lumps") "wobble" (div (index $n "ring-wobble") 100.0) }}
-  {{- $sweep := index (slice 360 310 250) (index $n "ring-sweep") }}
   <svg x="{{ index $n "ring-x" }}%" y="{{ index $n "ring-y" }}%" width="{{ index $n "ring-size" }}" height="{{ index $n "ring-size" }}" viewBox="0 0 100 100" overflow="visible" filter="url(#bestiary-stain-edge)">
-    <path class="bestiary-stain-wash" d="{{ partial "bestiary/stain-outline.html" $outline }}"/>
-    <path class="bestiary-stain-ring" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "sweep" $sweep "start" (index $n "ring-start"))) }}"/>
-    <path class="bestiary-stain-ring-inner" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "r" 37 "sweep" (mul $sweep 0.8) "start" (add (index $n "ring-start") 25))) }}"/>
+    <path class="bestiary-stain-wash" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 40 "seed" (printf "%s#ring-wash" $path) "lumps" 4 "wobble" 0.06) }}"/>
+    {{ partial "bestiary/cup-ring.html" (dict "path" $path "name" "ring" "cx" 50 "cy" 50 "r" 40) }}
     {{- if ne (index $n "ring-2") 0 }}
-    <path class="bestiary-stain-ring" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "cx" (add 50 (index $n "ring-2-x")) "cy" (add 50 (index $n "ring-2-y")) "r" 33 "seed" (printf "%s#ring-2" $path))) }}"/>
+    {{- $t := mul (div (index $n "ring-2-angle") 180.0) math.Pi }}
+    {{ partial "bestiary/cup-ring.html" (dict "path" $path "name" "ring-2" "cx" (add 50 (mul (index $n "ring-2-reach") (math.Cos $t))) "cy" (add 50 (mul (index $n "ring-2-reach") (math.Sin $t))) "r" (mul 40 (div (index $n "ring-2-scale") 100.0))) }}
     {{- end }}
     {{- range $i := seq $n.splashes }}
     {{- $angle := partial "bestiary/roll.html" (dict "path" $path "name" (printf "splash-%d-angle" $i) "low" 0 "high" 360) }}
