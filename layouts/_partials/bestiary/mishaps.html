@@ -1,0 +1,71 @@
+{{- /*
+  Draws the one mishap a cared-for leaf may have met, if any, rolled from the page's path:
+  a corner turned down to keep the place (one page in five); the page caught and folded as the book was shut,
+  a long crease running in from the binding side (one in ten); a corner crushed when the book was dropped (one in twelve);
+  an edge torn and mended with tape (one in fourteen); or the leaf folded once to carry it outdoors (one in twenty).
+  About half of all pages met none. Each crease is a fine dark line in a soft light band that wavers along its length.
+  Arguments: the page.
+*/ -}}
+{{- $path := .RelPermalink -}}
+{{- $roll := dict -}}
+{{- range $name, $range := dict
+  "mishap" (slice 0 280) "size" (slice 0 1000) "spread" (slice 0 1000) "side" (slice 0 2) "at" (slice 18 82) "tilt" (slice -12 13)
+}}
+  {{- $roll = merge $roll (dict $name (partial "bestiary/roll.html" (dict "path" $path "name" (printf "mishap-%s" $name) "low" (index $range 0) "high" (index $range 1)))) }}
+{{- end -}}
+{{- $m := $roll.mishap -}}
+{{- $size := div $roll.size 1000.0 -}}
+{{- $spread := div $roll.spread 1000.0 -}}
+{{- $seed := printf "%s#mishap" $path -}}
+{{- if lt $m 56 }}
+  {{- $s := add 28 (mul 32 $size) }}
+  {{- $d := partial "bestiary/crease-path.html" (dict "x1" (mul -1 $s) "y1" 0 "x2" 0 "y2" (mul $s (add 0.8 (mul 0.4 $spread))) "wobble" 0.8 "seed" $seed) }}
+<g class="bestiary-mishap" data-mishap="dog-ear"><svg x="100%" y="0" overflow="visible">
+  <path class="bestiary-mishap-wear" d="M{{ mul -1 $s }} 0L0 0L0 {{ mul $s (add 0.8 (mul 0.4 $spread)) }}Z"/>
+  <path class="bestiary-crease-light" d="{{ $d }}"/>
+  <path class="bestiary-crease" d="{{ $d }}"/>
+</svg></g>
+{{- else if lt $m 84 }}
+  {{- $a := add 120 (mul 200 $size) }}{{ $b := add 160 (mul 260 $spread) }}
+  {{- $d := partial "bestiary/crease-path.html" (dict "x1" $a "y1" 0 "x2" 0 "y2" $b "wobble" 2.5 "seed" $seed) }}
+  {{- $echo := partial "bestiary/crease-path.html" (dict "x1" (mul $a 0.35) "y1" 0 "x2" 0 "y2" (mul $b 0.3) "wobble" 1.2 "seed" (printf "%s-echo" $seed)) }}
+<g class="bestiary-mishap" data-mishap="caught"><svg x="0" y="{{ cond (eq $roll.side 0) "0" "100%" }}" overflow="visible">
+  <g transform="scale(1 {{ cond (eq $roll.side 0) 1 -1 }})">
+    <path class="bestiary-crease-light" d="{{ $d }}"/>
+    <path class="bestiary-crease" d="{{ $d }}"/>
+    <path class="bestiary-crease-faint" d="{{ $echo }}"/>
+  </g>
+</svg></g>
+{{- else if lt $m 107 }}
+  {{- $flip := cond (eq $roll.side 0) 1 -1 }}
+<g class="bestiary-mishap" data-mishap="dropped"><svg x="{{ cond (eq $roll.side 0) "0" "100%" }}" y="100%" overflow="visible">
+  {{- range $i := seq 0 (add 2 (mod (int (mul $size 10)) 3)) }}
+    {{- $angle := mul (add 12 (mul $i 17) (mul 10 $spread)) 0.0174533 }}
+    {{- $from := add 4 (mul 6 (mod $i 2)) }}
+    {{- $to := add 26 (mul 44 (div (mod (hash.FNV32a (printf "%s-%d" $seed $i)) 100) 100.0)) }}
+    {{- $d := partial "bestiary/crease-path.html" (dict "x1" (mul $flip $from (math.Cos $angle)) "y1" (mul -1 $from (math.Sin $angle)) "x2" (mul $flip $to (math.Cos $angle)) "y2" (mul -1 $to (math.Sin $angle)) "wobble" 1.4 "seed" (printf "%s-%d" $seed $i)) }}
+  <path class="bestiary-crease-light" d="{{ $d }}"/>
+  <path class="bestiary-crease" d="{{ $d }}"/>
+  {{- end }}
+</svg></g>
+{{- else if lt $m 127 }}
+  {{- $flip := cond (eq $roll.side 0) 1 -1 }}
+  {{- $reach := add 30 (mul 40 $size) }}
+  {{- $tear := printf "M0 0" }}
+  {{- range $i := seq 1 6 }}
+    {{- $tear = printf "%sL%.1f %.1f" $tear (mul $flip (div (mul $reach $i) 6.0)) (sub (div (mod (hash.FNV32a (printf "%s-tear-%d" $seed $i)) 70) 10.0) 3.5) }}
+  {{- end }}
+<g class="bestiary-mishap" data-mishap="mended"><svg x="{{ cond (eq $roll.side 0) "0" "100%" }}" y="{{ $roll.at }}%" overflow="visible">
+  <path class="bestiary-tear" d="{{ $tear }}"/>
+  <g transform="translate({{ mul $flip (div $reach 2) }} 0) rotate({{ $roll.tilt }})">
+    <rect class="bestiary-tape" x="{{ sub 0 (add (div $reach 2) 14) }}" y="-11" width="{{ add $reach 28 }}" height="22" rx="1.5"/>
+  </g>
+</svg></g>
+{{- else if lt $m 141 }}
+  {{- $y := $roll.at }}{{ $slope := div $roll.tilt 6.0 }}
+  {{- $d := partial "bestiary/crease-path.html" (dict "x1" 0 "y1" (sub $y $slope) "x2" 100 "y2" (add $y $slope) "wobble" 0.25 "seed" $seed) }}
+<g class="bestiary-mishap" data-mishap="carried"><svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" overflow="visible">
+  <path class="bestiary-crease-light" d="{{ $d }}"/>
+  <path class="bestiary-crease" d="{{ $d }}"/>
+</svg></g>
+{{- end -}}

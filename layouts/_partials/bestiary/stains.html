@@ -1,7 +1,7 @@
 {{- /*
   Draws the marks a cared-for leaf gathers over the years as an SVG layer behind its text: where a cup was set down
   (on one page in four, and somewhere else as well on one in twelve), a dried tide mark (on one page in ten), a soft blot (on half),
-  the creases of a fold smoothed out again, and now and then a small scorch.
+  the trace of the one mishap the page may have met, and now and then a small scorch.
   Every position, size and outline comes from a few numbers rolled from the page's path, so each page has stains of its own
   and keeps them from build to build. The ragged edges come from noise seeded the same way.
 */ -}}
@@ -45,6 +45,6 @@
     <path class="bestiary-stain-blot" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 36 "seed" (printf "%s#blot" $path) "lumps" (index $n "blot-lumps") "wobble" (div (index $n "blot-wobble") 100.0)) }}"/>
   </svg>
   {{- end }}
-  {{ partial "bestiary/creases.html" . }}
+  {{ partial "bestiary/mishaps.html" . }}
   {{ partial "bestiary/scorch.html" . }}
 </svg>

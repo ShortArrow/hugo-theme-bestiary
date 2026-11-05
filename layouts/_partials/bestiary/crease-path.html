@@ -1,0 +1,17 @@
+{{- /*
+  Returns SVG path data for a crease from (x1, y1) to (x2, y2) that wavers a little to either side along its length,
+  as a fold pressed flat by hand does. `wobble` is the largest sideways shift, in the same units as the ends.
+  Arguments: dict with x1, y1, x2, y2, wobble, seed (string).
+*/ -}}
+{{- $x1 := float .x1 -}}{{- $y1 := float .y1 -}}{{- $x2 := float .x2 -}}{{- $y2 := float .y2 -}}
+{{- $dx := sub $x2 $x1 -}}{{- $dy := sub $y2 $y1 -}}
+{{- $length := math.Sqrt (add (mul $dx $dx) (mul $dy $dy)) -}}
+{{- $nx := div (mul -1 $dy) $length -}}{{- $ny := div $dx $length -}}
+{{- $steps := 9 -}}
+{{- $d := printf "M%.1f %.1f" $x1 $y1 -}}
+{{- range $i := seq 1 (sub $steps 1) }}
+  {{- $t := div $i (float $steps) }}
+  {{- $shift := mul $.wobble (sub (div (mod (hash.FNV32a (printf "%s~%d" $.seed $i)) 2001) 1000.0) 1) }}
+  {{- $d = printf "%sL%.1f %.1f" $d (add (add $x1 (mul $dx $t)) (mul $nx $shift)) (add (add $y1 (mul $dy $t)) (mul $ny $shift)) }}
+{{- end -}}
+{{- return printf "%sL%.1f %.1f" $d $x2 $y2 -}}

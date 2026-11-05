@@ -76,7 +76,7 @@ A `choice` field with `pages = true` gets a page at `/<key>/` that lists its cho
 
 ## Weathering
 
-By default the page is a worn leaf: headings and seals are printed in uneven ink, rules, index leaders and link underlines are drawn by hand, the leaf has ragged and browned edges, and the paper shows the wear of a book that has been looked after: creases from a fold smoothed out, now and then a corner turned back, a cup ring, a tide mark or a small scorch, faint foxing and thumb smudges, each placed and shaped differently on each page and the same on every build. Every letter on the leaf is set slightly askew by a small script, the same way on every visit. To print on a clean sheet instead:
+By default the page is a worn leaf: headings and seals are printed in uneven ink, rules, index leaders and link underlines are drawn by hand, the leaf has ragged and browned edges, and the paper shows the wear of a book that has been looked after: now and then a mishap smoothed over (a corner turned down to keep the place, a page caught as the book was shut, a corner crushed in a fall, a tear mended with tape, a leaf folded to carry), a cup ring, a tide mark or a small scorch, faint foxing and thumb smudges, each placed and shaped differently on each page and the same on every build. Every letter on the leaf is set slightly askew by a small script, the same way on every visit. To print on a clean sheet instead:
 
 ```toml
 [params.bestiary]
