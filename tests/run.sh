@@ -109,7 +109,7 @@ for place in forest sky; do
   grep -q ":root\[data-place=.\?$place.\?\] body" "$out/site$css" || fail "stylesheet lays the leaf nowhere in the $place"
   grep -q -- "--bestiary-$place:" "$out/site$css" || fail "stylesheet paints no $place"
 done
-for drawing in desk-day desk-night forest-day forest-night sky-day sky-night; do
+for drawing in desk-day desk-night forest-day forest-night sky-day sky-night sky-day-sun sky-night-moon; do
   url=$(grep -o "/images/bestiary/places/$drawing[^\")]*\.svg" "$out/site$css" | head -1)
   [ -n "$url" ] || fail "stylesheet draws no $drawing"
   [ -s "$out/site$url" ] || fail "drawing $url was not published"

@@ -12,6 +12,7 @@
     #6a5a3e;
   --bestiary-sky:
     {{ template "bestiary-drawing" "sky-day-near" }},
+    {{ template "bestiary-drawing" "sky-day-sun" }} right 6% top 12rem / 200px no-repeat fixed,
     {{ template "bestiary-drawing" "sky-day-far" }} fixed,
     linear-gradient(#6f97bd, #a9c3d6 65%, #dcdcd0) fixed,
     #93b2cc;
@@ -61,7 +62,7 @@
       #14130d;
     --bestiary-sky:
       {{ template "bestiary-drawing" "sky-night-near" }},
-      {{ template "bestiary-drawing" "sky-night-moon" }} right 12% top 6rem / 160px no-repeat fixed,
+      {{ template "bestiary-drawing" "sky-night-moon" }} right 6% top 12rem / 160px no-repeat fixed,
       {{ template "bestiary-drawing" "sky-night-far" }} fixed,
       linear-gradient(#060a1c, #18203d) fixed,
       #0b1026;
