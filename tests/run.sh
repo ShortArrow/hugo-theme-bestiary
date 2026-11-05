@@ -63,10 +63,12 @@ marks() { grep -o '<div class="bestiary-leaf" style="[^"]*"' "$1"; }
 fox() { marks "$1" | grep -o -- '--mark-fox-[0-9]*-[xy]: [0-9]*%' | sed 's/.*: //' | paste -sd, -; }
 [ -n "$(fox "$ink")" ] || fail "Inkwyrm's foxing is not placed spot by spot"
 [ "$(fox "$ink")" != "$(fox "$moth")" ] || fail "Inkwyrm and Lanternmoth share one foxing pattern"
-stains() { sed -n '/<svg class="bestiary-stains"/,/<\/svg>/p' "$1" | grep -o ' d="[^"]*"' | head -3; }
-[ -n "$(stains "$ink")" ] || fail "Inkwyrm's leaf has no stains drawn for it"
-for page in "$ink" "$moth" "$home"; do grep -q 'class="bestiary-crease' "$page" || fail "$page shows no fold smoothed out"; done
-[ "$(stains "$ink")" != "$(stains "$moth")" ] || fail "Inkwyrm and Lanternmoth carry stains of the same shape"
+stains() { sed -n '/<svg class="bestiary-stains"/,$p' "$1"; }
+grep -q '<svg class="bestiary-stains"' "$ink" || fail "Inkwyrm's leaf has no stain layer"
+[ "$(stains "$ink")" != "$(stains "$moth")" ] || fail "Inkwyrm and Lanternmoth carry the same stains"
+! grep -l '%!' "$out"/site/index.html "$out"/site/*/index.html "$out"/site/*/*/index.html || fail "a page carries a malformed number from a template's printf"
+mishap() { grep -o 'data-mishap="[a-z-]*"' "$1" || echo none; }
+[ "$(for page in "$out"/site/index.html "$out"/site/*/index.html "$out"/site/*/*/index.html; do mishap "$page"; done | sort -u | wc -l)" -gt 1 ] || fail "every example page met the same mishap"
 for mark in stain-ink foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"

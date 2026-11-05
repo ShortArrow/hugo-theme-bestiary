@@ -16,8 +16,9 @@
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
   --stain-ink: rgb(130, 88, 38);
   --stain-strength: 1;
-  --crease-light: rgba(255, 252, 240, 0.7);
+  --crease-light: rgba(255, 253, 245, 0.75);
   --scorch-ink: rgb(84, 42, 14);
+  --tape: rgba(222, 196, 128, 0.32);
   --bestiary-seal-light: brightness(1);
   --bestiary-moon: block;
   --bestiary-sun: none;
@@ -43,6 +44,7 @@
     --stain-strength: 0.4;
     --crease-light: rgba(255, 235, 200, 0.05);
     --scorch-ink: rgb(8, 5, 3);
+    --tape: rgba(200, 175, 110, 0.08);
     --bestiary-seal-light: brightness(1.6);
     --bestiary-moon: none;
     --bestiary-sun: block;
@@ -274,8 +276,12 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
 .bestiary-stain-splash { fill: currentColor; fill-opacity: calc(0.22 * var(--stain-strength)); }
 .bestiary-stain-tide { fill: currentColor; fill-opacity: calc(0.05 * var(--stain-strength)); stroke: currentColor; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-opacity: calc(0.22 * var(--stain-strength)); }
 .bestiary-stain-blot { fill: currentColor; fill-opacity: calc(0.08 * var(--stain-strength)); }
-.bestiary-crease { fill: none; stroke: var(--stain-ink); stroke-width: 0.8; vector-effect: non-scaling-stroke; stroke-opacity: calc(0.22 * var(--stain-strength)); }
-.bestiary-crease-light { fill: none; stroke: var(--crease-light); stroke-width: 5; vector-effect: non-scaling-stroke; filter: blur(1.5px); }
+.bestiary-crease { fill: none; stroke: var(--stain-ink); stroke-width: 0.9; vector-effect: non-scaling-stroke; stroke-opacity: calc(0.32 * var(--stain-strength)); }
+.bestiary-crease-light { fill: none; stroke: var(--crease-light); stroke-width: 4; vector-effect: non-scaling-stroke; filter: blur(1px); }
+.bestiary-crease-faint { fill: none; stroke: var(--stain-ink); stroke-width: 0.6; vector-effect: non-scaling-stroke; stroke-opacity: calc(0.25 * var(--stain-strength)); }
+.bestiary-mishap-wear { fill: var(--stain-ink); fill-opacity: calc(0.07 * var(--stain-strength)); }
+.bestiary-tear { fill: none; stroke: var(--stain-ink); stroke-width: 0.9; stroke-linejoin: round; stroke-opacity: calc(0.45 * var(--stain-strength)); }
+.bestiary-tape { fill: var(--tape); stroke: var(--stain-ink); stroke-width: 0.5; stroke-opacity: calc(0.12 * var(--stain-strength)); }
 .bestiary-scorch-halo { fill: var(--scorch-ink); fill-opacity: 0.14; }
 .bestiary-scorch-singe { fill: var(--scorch-ink); fill-opacity: 0.45; }
 .bestiary-scorch-heart { fill: var(--scorch-ink); fill-opacity: 0.8; }
