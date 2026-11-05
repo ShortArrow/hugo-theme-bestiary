@@ -63,7 +63,10 @@ marks() { grep -o '<div class="bestiary-leaf" style="[^"]*"' "$1"; }
 fox() { marks "$1" | grep -o -- '--mark-fox-[0-9]*-[xy]: [0-9]*%' | sed 's/.*: //' | paste -sd, -; }
 [ -n "$(fox "$ink")" ] || fail "Inkwyrm's foxing is not placed spot by spot"
 [ "$(fox "$ink")" != "$(fox "$moth")" ] || fail "Inkwyrm and Lanternmoth share one foxing pattern"
-for mark in stain foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
+stains() { sed -n '/<svg class="bestiary-stains"/,/<\/svg>/p' "$1" | grep -o ' d="[^"]*"' | head -3; }
+[ -n "$(stains "$ink")" ] || fail "Inkwyrm's leaf has no stains drawn for it"
+[ "$(stains "$ink")" != "$(stains "$moth")" ] || fail "Inkwyrm and Lanternmoth carry stains of the same shape"
+for mark in stain-ink foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
 grep -q '::view-transition-new(root)' "$out/site$css" || fail "stylesheet does not shape the turn between day and night"
@@ -98,6 +101,7 @@ lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
 lacks "$out/plain/clean/index.html" 'bestiary-hand'
 lacks "$out/plain/clean/index.html" '<div class="bestiary-leaf" style='
+lacks "$out/plain/clean/index.html" 'bestiary-stains'
 lacks "$out/plain/clean/index.html" '<footer'
 
 lacks "$ink" 'googletagmanager'
