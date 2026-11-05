@@ -175,6 +175,10 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
 
 .bestiary-index-entries li::after { content: ""; order: 1; flex: 1; min-width: 1.5em; border-bottom: 1px dotted var(--rule); }
 .bestiary-index-entries .bestiary-choice { order: 2; font-size: 0.85em; }
+.bestiary-index-note { order: 2; color: var(--ink-faint); font-variant: small-caps; letter-spacing: 0.06em; }
+
+a.bestiary-choice { text-decoration: none; }
+a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-color) 22%, transparent); }
 
 @media (max-width: 30rem) {
   .bestiary-card { grid-template-columns: 1fr; gap: 0; }

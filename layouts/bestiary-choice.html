@@ -1,0 +1,11 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+<ul class="bestiary-index-entries">
+  {{- range where site.RegularPages (printf "Params.%s" .Params.bestiary_field) .Params.bestiary_value }}
+  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{- with .Parent }}{{ if not .IsHome }}
+    <span class="bestiary-index-note">{{ .Title }}</span>
+    {{- end }}{{ end }}</li>
+  {{- end }}
+</ul>
+{{ end }}
