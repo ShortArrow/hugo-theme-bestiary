@@ -1,6 +1,6 @@
 {{- /*
   Draws the marks one cup left where it was set down, at x%, y% of the leaf and `size` pixels across:
-  a faint wash, one to four rings (one on half of all sets, two on three in ten, three on three in twenty, four on one in twenty)
+  a faint wash, one to three rings (one on thirteen sets in twenty, two on five in twenty, three on two in twenty)
   and one to four splashes. Every ring after the first is rolled its own size and offset from the first.
   Arguments: dict with path, name, x, y, size.
 */ -}}
@@ -8,7 +8,7 @@
 {{- range $trait, $range := dict "rings" (slice 0 20) "splashes" (slice 1 5) }}
   {{- $roll = merge $roll (dict $trait (partial "bestiary/roll.html" (dict "path" $.path "name" (printf "%s-%s" $.name $trait) "low" (index $range 0) "high" (index $range 1)))) }}
 {{- end -}}
-{{- $rings := cond (lt $roll.rings 10) 1 (cond (lt $roll.rings 16) 2 (cond (lt $roll.rings 19) 3 4)) -}}
+{{- $rings := cond (lt $roll.rings 13) 1 (cond (lt $roll.rings 18) 2 3) -}}
 <svg x="{{ .x }}%" y="{{ .y }}%" width="{{ .size }}" height="{{ .size }}" viewBox="0 0 100 100" overflow="visible" filter="url(#bestiary-stain-edge)">
   <path class="bestiary-stain-wash" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 40 "seed" (printf "%s#%s-wash" .path .name) "lumps" 4 "wobble" 0.06) }}"/>
   {{ partial "bestiary/cup-ring.html" (dict "path" .path "name" (printf "%s-1" .name) "cx" 50 "cy" 50 "r" 40) }}

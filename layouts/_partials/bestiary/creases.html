@@ -1,0 +1,34 @@
+{{- /*
+  Draws where a page's leaf was folded and smoothed out again: folded in three like a letter or in half,
+  and on one page in four a corner turned down and back. Each crease is a fine dark line in a soft light band, slightly bent.
+  Every position and bend is rolled from the page's path. Arguments: the page.
+*/ -}}
+{{- $path := .RelPermalink -}}
+{{- $roll := dict -}}
+{{- range $name, $range := dict
+  "fold" (slice 0 3) "fold-a" (slice 30 37) "fold-b" (slice 62 70) "fold-half" (slice 46 54)
+  "slope-a" (slice -8 9) "slope-b" (slice -8 9) "bend-a" (slice -6 7) "bend-b" (slice -6 7)
+  "corner" (slice 0 16) "corner-size" (slice 40 90)
+}}
+  {{- $roll = merge $roll (dict $name (partial "bestiary/roll.html" (dict "path" $path "name" (printf "crease-%s" $name) "low" (index $range 0) "high" (index $range 1)))) }}
+{{- end -}}
+{{- $folds := cond (lt $roll.fold 2)
+  (slice (slice (index $roll "fold-a") (index $roll "slope-a") (index $roll "bend-a")) (slice (index $roll "fold-b") (index $roll "slope-b") (index $roll "bend-b")))
+  (slice (slice (index $roll "fold-half") (index $roll "slope-a") (index $roll "bend-a"))) -}}
+<svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" overflow="visible">
+  {{- range $folds }}
+  {{- $y := index . 0 }}{{ $slope := div (index . 1) 10.0 }}{{ $bend := div (index . 2) 10.0 }}
+  {{- $d := printf "M0 %.2f Q50 %.2f 100 %.2f" (sub $y $slope) (add $y $bend) (add $y $slope) }}
+  <path class="bestiary-crease-light" d="{{ $d }}"/>
+  <path class="bestiary-crease" d="{{ $d }}"/>
+  {{- end }}
+</svg>
+{{- if lt $roll.corner 4 }}
+{{- $s := index $roll "corner-size" }}{{ $t := mul $s 0.7 }}
+{{- $at := index (slice (slice "0" "0" 1 1) (slice "100%" "0" -1 1) (slice "0" "100%" 1 -1) (slice "100%" "100%" -1 -1)) $roll.corner }}
+{{- $d := printf "M%.1f 0 L0 %.1f" (mul (index $at 2) $s) (mul (index $at 3) $t) }}
+<svg x="{{ index $at 0 }}" y="{{ index $at 1 }}" overflow="visible">
+  <path class="bestiary-crease-light" d="{{ $d }}"/>
+  <path class="bestiary-crease" d="{{ $d }}"/>
+</svg>
+{{- end -}}

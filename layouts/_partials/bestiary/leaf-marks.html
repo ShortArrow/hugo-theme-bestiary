@@ -14,7 +14,7 @@
   {{- $props = $props | append (printf "--mark-%s: %d%%" $name (partial "bestiary/roll.html" (dict "path" $path "name" $name "low" (index $range 0) "high" (index $range 1)))) }}
 {{- end -}}
 {{- range seq 10 }}
-  {{- if eq (mod (hash.FNV32a (printf "%s#fox-%d?" $path .)) 3) 0 }}
+  {{- if ne (mod (hash.FNV32a (printf "%s#fox-%d?" $path .)) 2) 0 }}
     {{- $props = $props | append (printf "--mark-fox-%d: transparent" .) }}
   {{- end }}
 {{- end -}}
