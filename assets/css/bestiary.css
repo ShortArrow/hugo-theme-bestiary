@@ -8,6 +8,10 @@
   --ink-faint: #6b5a47;
   --rule: #8a7458;
   --accent: #7a2e1f;
+  --bestiary-rule-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 7' preserveAspectRatio='none'%3E%3Cpath d='M0 3.7C70 3.1 140 4.3 230 3.6S390 2.9 480 3.5S660 4.4 760 3.6S910 3.0 1000 3.8' fill='none' stroke='%238a7458' stroke-width='1.1' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M40 3.9C150 3.5 230 4.4 330 3.8S540 3.2 640 3.9S850 4.3 960 3.5' fill='none' stroke='%238a7458' stroke-width='0.7' stroke-linecap='round' stroke-opacity='0.55' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --bestiary-rule-double: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 9' preserveAspectRatio='none'%3E%3Cpath d='M0 2.4C90 1.9 170 3.0 260 2.4S440 1.7 540 2.3S730 3.1 830 2.5S950 1.9 1000 2.6' fill='none' stroke='%238a7458' stroke-width='1.1' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 6.6C110 7.1 200 6.1 300 6.6S500 7.3 600 6.7S810 6.0 900 6.6S970 7.0 1000 6.5' fill='none' stroke='%238a7458' stroke-width='1.1' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M60 2.7C200 2.2 330 3.0 470 2.5S760 2.1 940 2.8' fill='none' stroke='%238a7458' stroke-width='0.6' stroke-opacity='0.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --bestiary-leader: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='6' viewBox='0 0 260 6'%3E%3Cpath d='M0 3.6C40 3.1 90 4.1 130 3.5S220 3.0 260 3.6' fill='none' stroke='%238a7458' stroke-width='1.1' stroke-linecap='round' stroke-dasharray='0.2 4.4 0.5 3.1 0.1 5.2 0.4 3.6 0.6 4.8 0.15 2.9 0.35 5.6 0.5 3.4 0.25 3.0 0.45 4.6'/%3E%3C/svg%3E");
+  --bestiary-underline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='6' viewBox='0 0 420 6'%3E%3Cpath d='M0 3.2C50 2.6 95 3.9 150 3.4S265 2.5 320 3.3S395 3.6 420 3.2' fill='none' stroke='%237a2e1f' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M30 3.5C110 3.1 170 3.9 240 3.4S350 3.0 400 3.5' fill='none' stroke='%237a2e1f' stroke-width='0.6' stroke-opacity='0.5' stroke-linecap='round'/%3E%3C/svg%3E");
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
   color-scheme: light;
 }
@@ -22,6 +26,10 @@
     --ink-faint: #b3a285;
     --rule: #7d6a50;
     --accent: #e0a37a;
+    --bestiary-rule-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 7' preserveAspectRatio='none'%3E%3Cpath d='M0 3.7C70 3.1 140 4.3 230 3.6S390 2.9 480 3.5S660 4.4 760 3.6S910 3.0 1000 3.8' fill='none' stroke='%237d6a50' stroke-width='1.1' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M40 3.9C150 3.5 230 4.4 330 3.8S540 3.2 640 3.9S850 4.3 960 3.5' fill='none' stroke='%237d6a50' stroke-width='0.7' stroke-linecap='round' stroke-opacity='0.55' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    --bestiary-rule-double: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 9' preserveAspectRatio='none'%3E%3Cpath d='M0 2.4C90 1.9 170 3.0 260 2.4S440 1.7 540 2.3S730 3.1 830 2.5S950 1.9 1000 2.6' fill='none' stroke='%237d6a50' stroke-width='1.1' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M0 6.6C110 7.1 200 6.1 300 6.6S500 7.3 600 6.7S810 6.0 900 6.6S970 7.0 1000 6.5' fill='none' stroke='%237d6a50' stroke-width='1.1' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M60 2.7C200 2.2 330 3.0 470 2.5S760 2.1 940 2.8' fill='none' stroke='%237d6a50' stroke-width='0.6' stroke-opacity='0.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    --bestiary-leader: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='6' viewBox='0 0 260 6'%3E%3Cpath d='M0 3.6C40 3.1 90 4.1 130 3.5S220 3.0 260 3.6' fill='none' stroke='%237d6a50' stroke-width='1.1' stroke-linecap='round' stroke-dasharray='0.2 4.4 0.5 3.1 0.1 5.2 0.4 3.6 0.6 4.8 0.15 2.9 0.35 5.6 0.5 3.4 0.25 3.0 0.45 4.6'/%3E%3C/svg%3E");
+    --bestiary-underline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='6' viewBox='0 0 420 6'%3E%3Cpath d='M0 3.2C50 2.6 95 3.9 150 3.4S265 2.5 320 3.3S395 3.6 420 3.2' fill='none' stroke='%23e0a37a' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M30 3.5C110 3.1 170 3.9 240 3.4S350 3.0 400 3.5' fill='none' stroke='%23e0a37a' stroke-width='0.6' stroke-opacity='0.5' stroke-linecap='round'/%3E%3C/svg%3E");
     color-scheme: dark;
   }
 }
@@ -138,7 +146,8 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
   background: color-mix(in srgb, var(--bestiary-choice-color) 10%, transparent);
   font-variant: small-caps;
   letter-spacing: 0.08em;
-  transform: rotate(-2deg);
+  translate: var(--bestiary-nudge, 0);
+  rotate: var(--bestiary-tilt, -2deg);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -185,7 +194,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   .bestiary-card dd { margin-bottom: 0.5rem; }
 }
 
-/* Weathering: worn ink on display type, hand-drawn rules and underlines, a ragged and browned leaf, foxing and a ring stain. Body text is left clean. */
+/* Weathering: worn ink on display type, rules, leaders and underlines drawn by hand, a ragged and browned leaf, foxing and a ring stain. Body text is left clean. */
 .bestiary-weathered .bestiary-leaf::before {
   filter: url(#bestiary-edge);
   background:
@@ -201,18 +210,40 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   filter: url(#bestiary-ink);
 }
 
-.bestiary-weathered header::after,
+.bestiary-weathered header::after {
+  height: 9px;
+  border: 0;
+  background: var(--bestiary-rule-double) 0 0 / 100% 100% no-repeat;
+  filter: url(#bestiary-wear);
+}
+
 .bestiary-weathered footer::before,
 .bestiary-weathered .bestiary-card::before,
 .bestiary-weathered .bestiary-card::after,
 .bestiary-weathered .bestiary-index-section::before,
-.bestiary-weathered .bestiary-index-section::after,
+.bestiary-weathered .bestiary-index-section::after {
+  height: 7px;
+  border: 0;
+  background: var(--bestiary-rule-line) 0 0 / 100% 100% no-repeat;
+  filter: url(#bestiary-wear);
+}
+
+.bestiary-weathered :is(footer, .bestiary-card)::before,
+.bestiary-weathered .bestiary-card::after { margin: -3px 0; }
+.bestiary-weathered .bestiary-index-section::after { transform: scaleX(-1); }
+
 .bestiary-weathered .bestiary-index-entries li::after {
-  filter: url(#bestiary-rule);
+  height: 6px;
+  border: 0;
+  background: var(--bestiary-leader) 0 0 / 260px 6px repeat-x;
 }
 
 .bestiary-weathered :is(main, footer) a:not(.bestiary-index-section a, .bestiary-choice) {
-  filter: url(#bestiary-hand);
+  text-decoration: none;
+  padding-bottom: 0.12em;
+  background: var(--bestiary-underline) var(--bestiary-underline-x, 0) 100% / 420px 6px repeat-x;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 @media (prefers-color-scheme: dark) {
