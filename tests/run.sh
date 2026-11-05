@@ -57,6 +57,7 @@ grep -A3 'href="/apparitions/hollowbell/"' "$home" | grep -q '<a class="bestiary
 has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
+for mark in stain foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<filter id="bestiary-wear"'
 js=$(grep -o '<script src="[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 [ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
