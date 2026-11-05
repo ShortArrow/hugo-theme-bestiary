@@ -113,6 +113,10 @@ Pages follow the reader's system scheme. A moon in the header turns them to nigh
   schemeToggle = false
 ```
 
+## Favicon
+
+When the site has `assets/favicon.svg`, every page links it as its icon, fingerprinted so a changed icon is not kept from a cache. An SVG icon can follow the reader's scheme with a `prefers-color-scheme` media query inside it. Without the file, pages link no icon.
+
 ## Footer links
 
 Entries in the site's `footer` menu are listed at the foot of every page, in menu order. Without a footer menu, pages have no footer.

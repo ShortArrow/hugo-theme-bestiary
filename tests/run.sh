@@ -18,6 +18,9 @@ ink=$out/site/creatures/inkwyrm/index.html
 moth=$out/site/creatures/lanternmoth/index.html
 
 has "$home" '<title>Example Bestiary</title>'
+icon=$(grep -o '<link rel="icon" type="image/svg+xml" href="[^"]*"' "$home" | sed 's/.*href="//; s/"$//')
+[ -n "$icon" ] || fail "home links no favicon"
+[ -s "$out/site$icon" ] || fail "favicon $icon was not published"
 has "$home" 'href="[^"]*/creatures/inkwyrm/"'
 
 sections() { grep -o 'class="bestiary-index-section"[^>]*>[^<]*<a [^>]*>[^<]*' "$1" | sed 's/.*>//' | paste -sd, -; }
@@ -125,6 +128,7 @@ lacks "$out/plain/clean/index.html" 'bestiary-hand'
 lacks "$out/plain/clean/index.html" '<div class="bestiary-leaf" style='
 lacks "$out/plain/clean/index.html" 'bestiary-stains'
 lacks "$out/plain/clean/index.html" '<footer'
+lacks "$out/plain/clean/index.html" 'rel="icon"'
 lacks "$out/plain/clean/index.html" '<figure class="bestiary-plate'
 
 lacks "$ink" 'googletagmanager'
