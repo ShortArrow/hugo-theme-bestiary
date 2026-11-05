@@ -236,8 +236,8 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
 .bestiary-weathered .bestiary-leaf::before {
   filter: url(#bestiary-edge);
   background:
-    radial-gradient(circle at var(--mark-ring-x, 84%) var(--mark-ring-y, 12%), transparent 2.6rem, var(--mark-ring, var(--stain)) 2.75rem, transparent 3.1rem),
-    radial-gradient(circle at calc(var(--mark-ring-x, 84%) - 3%) calc(var(--mark-ring-y, 12%) + 3%), transparent 2.1rem, var(--mark-ring-2, var(--stain)) 2.2rem, transparent 2.45rem),
+    radial-gradient(circle at var(--mark-ring-x, 84%) var(--mark-ring-y, 12%), transparent calc(2.6rem * var(--mark-ring-size, 1)), var(--mark-ring, var(--stain)) calc(2.75rem * var(--mark-ring-size, 1)), transparent calc(3.1rem * var(--mark-ring-size, 1))),
+    radial-gradient(circle at calc(var(--mark-ring-x, 84%) - 3%) calc(var(--mark-ring-y, 12%) + 3%), transparent calc(2.1rem * var(--mark-ring-size, 1)), var(--mark-ring-2, var(--mark-ring, var(--stain))) calc(2.2rem * var(--mark-ring-size, 1)), transparent calc(2.45rem * var(--mark-ring-size, 1))),
     radial-gradient(circle at calc(var(--mark-ring-x, 84%) - 7%) calc(var(--mark-ring-y, 12%) + 9%), var(--mark-ring, var(--stain)) 0.2rem, transparent 0.3rem),
     radial-gradient(circle at calc(var(--mark-ring-x, 84%) + 6%) calc(var(--mark-ring-y, 12%) + 7%), var(--mark-ring, var(--stain)) 0.12rem, transparent 0.2rem),
     radial-gradient(circle at calc(var(--mark-ring-x, 84%) + 4%) calc(var(--mark-ring-y, 12%) - 6%), var(--mark-ring, var(--stain)) 0.08rem, transparent 0.15rem),
@@ -246,16 +246,16 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
     radial-gradient(ellipse 2.2rem 3.4rem at 3% var(--mark-smudge-left, 47%), var(--smudge), transparent),
     radial-gradient(ellipse 2rem 2.8rem at 97% var(--mark-smudge-right, 71%), var(--smudge), transparent),
     radial-gradient(ellipse at var(--mark-blot-x, 12%) var(--mark-blot-y, 78%), var(--stain), transparent 4rem),
-    radial-gradient(circle at calc(70% + var(--mark-fox-x, 0%)) calc(64% + var(--mark-fox-y, 0%)), var(--foxing) 0.12rem, transparent 0.5rem),
-    radial-gradient(circle at calc(26% + var(--mark-fox-x, 0%)) calc(30% + var(--mark-fox-y, 0%)), var(--foxing) 0.08rem, transparent 0.35rem),
-    radial-gradient(circle at calc(41% + var(--mark-fox-x, 0%)) calc(9% + var(--mark-fox-y, 0%)), var(--foxing) 0.05rem, transparent 0.22rem),
-    radial-gradient(circle at calc(58% + var(--mark-fox-x, 0%)) calc(37% + var(--mark-fox-y, 0%)), var(--foxing) 0.04rem, transparent 0.18rem),
-    radial-gradient(circle at calc(17% + var(--mark-fox-x, 0%)) calc(55% + var(--mark-fox-y, 0%)), var(--foxing) 0.1rem, transparent 0.3rem),
-    radial-gradient(circle at calc(63% + var(--mark-fox-x, 0%)) calc(81% + var(--mark-fox-y, 0%)), var(--foxing) 0.06rem, transparent 0.25rem),
-    radial-gradient(circle at calc(35% + var(--mark-fox-x, 0%)) calc(69% + var(--mark-fox-y, 0%)), var(--foxing) 0.03rem, transparent 0.15rem),
-    radial-gradient(circle at calc(92% + var(--mark-fox-x, 0%)) calc(44% + var(--mark-fox-y, 0%)), var(--foxing) 0.07rem, transparent 0.28rem),
-    radial-gradient(circle at calc(8% + var(--mark-fox-x, 0%)) calc(15% + var(--mark-fox-y, 0%)), var(--foxing) 0.05rem, transparent 0.2rem),
-    radial-gradient(circle at calc(49% + var(--mark-fox-x, 0%)) calc(96% + var(--mark-fox-y, 0%)), var(--foxing) 0.09rem, transparent 0.3rem),
+    radial-gradient(circle at var(--mark-fox-1-x, 70%) var(--mark-fox-1-y, 64%), var(--mark-fox-1, var(--foxing)) 0.12rem, transparent 0.5rem),
+    radial-gradient(circle at var(--mark-fox-2-x, 26%) var(--mark-fox-2-y, 30%), var(--mark-fox-2, var(--foxing)) 0.08rem, transparent 0.35rem),
+    radial-gradient(circle at var(--mark-fox-3-x, 41%) var(--mark-fox-3-y, 9%), var(--mark-fox-3, var(--foxing)) 0.05rem, transparent 0.22rem),
+    radial-gradient(circle at var(--mark-fox-4-x, 58%) var(--mark-fox-4-y, 37%), var(--mark-fox-4, var(--foxing)) 0.04rem, transparent 0.18rem),
+    radial-gradient(circle at var(--mark-fox-5-x, 17%) var(--mark-fox-5-y, 55%), var(--mark-fox-5, var(--foxing)) 0.1rem, transparent 0.3rem),
+    radial-gradient(circle at var(--mark-fox-6-x, 63%) var(--mark-fox-6-y, 81%), var(--mark-fox-6, var(--foxing)) 0.06rem, transparent 0.25rem),
+    radial-gradient(circle at var(--mark-fox-7-x, 35%) var(--mark-fox-7-y, 69%), var(--mark-fox-7, var(--foxing)) 0.03rem, transparent 0.15rem),
+    radial-gradient(circle at var(--mark-fox-8-x, 92%) var(--mark-fox-8-y, 44%), var(--mark-fox-8, var(--foxing)) 0.07rem, transparent 0.28rem),
+    radial-gradient(circle at var(--mark-fox-9-x, 8%) var(--mark-fox-9-y, 15%), var(--mark-fox-9, var(--foxing)) 0.05rem, transparent 0.2rem),
+    radial-gradient(circle at var(--mark-fox-10-x, 49%) var(--mark-fox-10-y, 96%), var(--mark-fox-10, var(--foxing)) 0.09rem, transparent 0.3rem),
     var(--paper);
 }
 

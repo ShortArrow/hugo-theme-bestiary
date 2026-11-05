@@ -1,26 +1,36 @@
 {{- /*
   Returns the custom properties that place the handling marks on a page's leaf: where its cup ring, tide mark, thumb smudges,
-  blot and foxing fall, and whether it has a cup ring, a second ring and a tide mark at all.
-  The values come from a hash of the page's path, so each page keeps its own marks from build to build.
+  blot and each foxing spot fall, how large the ring is, and which of the ring, second ring, tide mark and spots the page lacks.
+  Each value comes from its own hash of the page's path and the mark's name, so marks move independently of one another
+  and each page keeps its own marks from build to build.
 */ -}}
-{{- $a := hash.FNV32a .RelPermalink -}}
-{{- $b := hash.FNV32a (printf "%s#marks" .RelPermalink) -}}
-{{- $props := slice
-  (printf "--mark-ring-x: %d%%" (add 55 (mod $a 38)))
-  (printf "--mark-ring-y: %d%%" (add 5 (mod (div $a 38) 40)))
-  (printf "--mark-tide-x: %d%%" (add 18 (mod (div $a 1520) 64)))
-  (printf "--mark-tide-y: %d%%" (add 55 (mod (div $a 97280) 40)))
-  (printf "--mark-smudge-left: %d%%" (add 15 (mod $b 60)))
-  (printf "--mark-smudge-right: %d%%" (add 25 (mod (div $b 60) 60)))
-  (printf "--mark-blot-x: %d%%" (add 6 (mod (div $b 3600) 40)))
-  (printf "--mark-blot-y: %d%%" (add 20 (mod (div $b 144000) 70)))
-  (printf "--mark-fox-x: %d%%" (sub (mod (div $b 10080000) 17) 8))
-  (printf "--mark-fox-y: %d%%" (sub (mod (div $a 3890000) 17) 8))
+{{- $path := .RelPermalink -}}
+{{- $ranges := dict
+  "ring-x" (slice 8 92) "ring-y" (slice 4 90) "ring-size" (slice 70 135)
+  "tide-x" (slice 10 90) "tide-y" (slice 8 95)
+  "smudge-left" (slice 10 90) "smudge-right" (slice 10 90)
+  "blot-x" (slice 5 95) "blot-y" (slice 5 95)
 -}}
-{{- if eq (mod (div $a 66130000) 4) 0 }}
-  {{- $props = $props | append "--mark-ring: transparent" "--mark-ring-2: transparent" }}
-{{- else if eq (mod (div $b 171000000) 2) 0 }}
-  {{- $props = $props | append "--mark-ring-2: transparent" }}
+{{- range seq 10 }}
+  {{- $ranges = merge $ranges (dict (printf "fox-%d-x" .) (slice 3 97) (printf "fox-%d-y" .) (slice 3 97)) }}
 {{- end -}}
-{{- if eq (mod (div $a 264520000) 3) 0 }}{{ $props = $props | append "--mark-tide: transparent" }}{{ end -}}
+{{- $props := slice -}}
+{{- range $name, $range := $ranges }}
+  {{- $low := index $range 0 }}
+  {{- $value := add $low (mod (hash.FNV32a (printf "%s#%s" $path $name)) (sub (index $range 1) $low)) }}
+  {{- if eq $name "ring-size" }}
+    {{- $props = $props | append (printf "--mark-%s: %.2f" $name (div $value 100.0)) }}
+  {{- else }}
+    {{- $props = $props | append (printf "--mark-%s: %d%%" $name $value) }}
+  {{- end }}
+{{- end -}}
+{{- $absent := dict "ring" 4 "ring-2" 2 "tide" 3 -}}
+{{- range seq 10 }}
+  {{- $absent = merge $absent (dict (printf "fox-%d" .) 3) }}
+{{- end -}}
+{{- range $name, $odds := $absent }}
+  {{- if eq (mod (hash.FNV32a (printf "%s#%s?" $path $name)) $odds) 0 }}
+    {{- $props = $props | append (printf "--mark-%s: transparent" $name) }}
+  {{- end }}
+{{- end -}}
 {{- return delimit $props "; " -}}

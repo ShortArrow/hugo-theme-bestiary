@@ -60,6 +60,9 @@ grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply 
 marks() { grep -o '<div class="bestiary-leaf" style="[^"]*"' "$1"; }
 [ -n "$(marks "$ink")" ] || fail "Inkwyrm's leaf carries no marks of its own"
 [ "$(marks "$ink")" != "$(marks "$moth")" ] || fail "Inkwyrm and Lanternmoth carry the same marks"
+fox() { marks "$1" | grep -o -- '--mark-fox-[0-9]*-[xy]: [0-9]*%' | sed 's/.*: //' | paste -sd, -; }
+[ -n "$(fox "$ink")" ] || fail "Inkwyrm's foxing is not placed spot by spot"
+[ "$(fox "$ink")" != "$(fox "$moth")" ] || fail "Inkwyrm and Lanternmoth share one foxing pattern"
 for mark in stain foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'
 grep -q 'localStorage.getItem("bestiary-scheme")' "$ink" || fail "Inkwyrm does not restore the reader's chosen scheme"
