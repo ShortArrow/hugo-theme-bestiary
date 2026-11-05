@@ -83,7 +83,7 @@ By default the page is a worn leaf: headings and seals are printed in uneven ink
 
 ## Day and night
 
-Pages follow the reader's system scheme. A moon in the header turns them to night, and a sun turns them back to day; the choice is kept in the reader's browser and restored before the page is painted. Without JavaScript the button stays hidden and the system scheme applies. To leave the scheme to the system alone:
+Pages follow the reader's system scheme. A moon in the header turns them to night, and a sun turns them back to day; the new scheme billows out from the button like a puff of smoke (at once, for readers who ask for reduced motion), and the choice is kept in the reader's browser and restored before the page is painted. Without JavaScript the button stays hidden and the system scheme applies. To leave the scheme to the system alone:
 
 ```toml
 [params.bestiary]
