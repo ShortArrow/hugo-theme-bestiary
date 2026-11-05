@@ -45,6 +45,10 @@ has "$ink" '<time datetime="2026-01-02">January 2, 2026</time>'
 has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
+has "$ink" '<filter id="bestiary-rule"'
+has "$ink" '<filter id="bestiary-hand"'
+grep -q 'url(#bestiary-rule)' "$out/site$css" || fail "stylesheet does not waver the rules"
+grep -q 'url(#bestiary-hand)' "$out/site$css" || fail "stylesheet does not waver the links"
 
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
