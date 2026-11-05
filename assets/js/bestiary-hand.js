@@ -1,5 +1,6 @@
 /*
-  Sets every letter on the leaf slightly askew, as if set by hand: each one is turned and shifted by a small amount.
+  Sets every letter on the leaf slightly askew, as if set by hand: each one is turned and shifted by a small amount,
+  takes up a little more or less ink, and about one in fifteen is short of ink on one side.
   The amounts come from the letter's position on the page, so a page looks the same on every visit.
   Latin words stay unbroken across lines; Han and kana may still break between any two letters.
 */
@@ -22,11 +23,16 @@
 
   let count = 0;
   const glyph = (letter) => {
-    const n = count++ * 3;
+    const n = count++ * 6;
     const span = document.createElement("span");
     span.className = "bestiary-glyph";
     span.style.transform =
       `translate(${(noise(n) * 0.03).toFixed(3)}em, ${(noise(n + 1) * 0.08).toFixed(3)}em) rotate(${(noise(n + 2) * 4).toFixed(2)}deg)`;
+    span.style.opacity = (0.84 + noise(n + 3) * 0.3).toFixed(2);
+    if (noise(n + 4) > 0.43) {
+      span.classList.add("bestiary-glyph-dry");
+      span.style.setProperty("--bestiary-dry-angle", `${Math.round((noise(n + 5) + 0.5) * 360)}deg`);
+    }
     span.textContent = letter;
     return span;
   };

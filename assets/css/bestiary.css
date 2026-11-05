@@ -333,6 +333,8 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
 
 .bestiary-word { white-space: nowrap; }
 .bestiary-glyph { display: inline-block; }
+.bestiary-glyph-dry { mask-image: linear-gradient(var(--bestiary-dry-angle, 90deg), #000 30%, rgba(0, 0, 0, 0.3) 80%, rgba(0, 0, 0, 0.6)); }
+.bestiary-weathered .bestiary-leaf :is(p, li, dd, dt, figcaption, footer) { text-shadow: 0 0 0.6px color-mix(in srgb, currentColor 45%, transparent); }
 
 .bestiary-weathered .bestiary-choice { filter: url(#bestiary-ink) var(--bestiary-seal-light); }
 

@@ -82,6 +82,8 @@ has "$ink" '<filter id="bestiary-wear"'
 js=$(grep -o '<script src="[^"]*bestiary-hand[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 [ -n "$js" ] || fail "Inkwyrm loads no script for its weathered letters"
 grep -q 'bestiary-glyph' "$out/site$js" || fail "script $js does not set letters"
+grep -q 'bestiary-glyph-dry' "$out/site$js" || fail "script $js leaves no letter short of ink"
+grep -q '\.bestiary-glyph-dry{' "$out/site$css" || fail "stylesheet does not draw letters short of ink"
 lacks "$ink" '<filter id="bestiary-hand"'
 lacks "$ink" '<filter id="bestiary-rule"'
 for line in underline leader rule-line rule-double; do
