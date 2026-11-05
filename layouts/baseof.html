@@ -19,6 +19,15 @@
   <div class="bestiary-leaf">
     <header><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></header>
     <main>{{ block "main" . }}{{ end }}</main>
+    {{- with site.Menus.footer }}
+    <footer>
+      <ul>
+        {{- range . }}
+        <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+        {{- end }}
+      </ul>
+    </footer>
+    {{- end }}
   </div>
 </body>
 </html>

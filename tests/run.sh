@@ -26,6 +26,7 @@ grep -A3 'href="[^"]*/apparitions/hollowbell/"' "$home" | grep -q 'data-choice="
 has "$ink" 'Inkwyrm'
 has "$home" '<p>Creatures of ink and lamplight, and where to find them.</p>'
 has "$out/site/creatures/index.html" '<p>Things that breathe, after a fashion.</p>'
+grep -A3 '<footer' "$ink" | grep -q '<a href="https://example.org/colophon/">Colophon</a>' || fail "Inkwyrm has no footer link to the colophon"
 
 css=$(grep -o '<link rel="stylesheet" href="[^"]*"' "$ink" | sed 's/.*href="//; s/"$//') || fail "Inkwyrm links no stylesheet"
 [ -s "$out/site$css" ] || fail "stylesheet $css was not published"
@@ -48,6 +49,7 @@ grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply 
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
+lacks "$out/plain/clean/index.html" '<footer'
 
 lacks "$ink" 'googletagmanager'
 build "$root/tests/fixtures/analytics" ../../../.. "$out/analytics"
