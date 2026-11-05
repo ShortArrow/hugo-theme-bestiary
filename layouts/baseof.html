@@ -20,7 +20,7 @@
   {{- if $weathered }}
   {{ partial "bestiary/weathering-filters.html" . }}
   {{- end }}
-  <div class="bestiary-leaf">
+  <div class="bestiary-leaf"{{ if $weathered }} style="{{ partial "bestiary/leaf-marks.html" . | safeCSS }}"{{ end }}>
     <header>
       <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
       {{- if $toggle }}
