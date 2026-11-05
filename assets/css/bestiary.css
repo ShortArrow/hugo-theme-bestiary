@@ -211,7 +211,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   filter: url(#bestiary-rule);
 }
 
-.bestiary-weathered :is(main, footer) a:not(.bestiary-index-section a) {
+.bestiary-weathered :is(main, footer) a:not(.bestiary-index-section a, .bestiary-choice) {
   filter: url(#bestiary-hand);
 }
 

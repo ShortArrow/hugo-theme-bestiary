@@ -61,6 +61,7 @@ has "$ink" '<filter id="bestiary-rule"'
 has "$ink" '<filter id="bestiary-hand"'
 grep -q 'url(#bestiary-rule)' "$out/site$css" || fail "stylesheet does not waver the rules"
 grep -q 'url(#bestiary-hand)' "$out/site$css" || fail "stylesheet does not waver the links"
+grep -q 'a:not([^)]*\.bestiary-choice)[^{]*{filter:url(#bestiary-hand)' "$out/site$css" || fail "stylesheet wavers seal links as if they were text links"
 
 build "$root/tests/fixtures/unpaged-choice" ../../../.. "$out/unpaged-choice"
 has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
