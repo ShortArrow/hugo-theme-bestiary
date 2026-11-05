@@ -1,4 +1,5 @@
 {{ define "main" }}
+{{ .Content }}
 {{- with where site.RegularPages "Section" "" }}
 {{ partial "bestiary/index-list.html" . }}
 {{- end }}

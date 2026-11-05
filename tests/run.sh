@@ -24,6 +24,8 @@ sections() { grep -o 'class="bestiary-index-section"[^>]*>[^<]*<a [^>]*>[^<]*' "
 [ "$(sections "$home")" = "Creatures,Apparitions" ] || fail "home index sections are not in weight order: $(sections "$home")"
 grep -A3 'href="[^"]*/apparitions/hollowbell/"' "$home" | grep -q 'data-choice="spirit"' || fail "home index shows no seal beside Hollow Bell"
 has "$ink" 'Inkwyrm'
+has "$home" '<p>Creatures of ink and lamplight, and where to find them.</p>'
+has "$out/site/creatures/index.html" '<p>Things that breathe, after a fashion.</p>'
 
 css=$(grep -o '<link rel="stylesheet" href="[^"]*"' "$ink" | sed 's/.*href="//; s/"$//') || fail "Inkwyrm links no stylesheet"
 [ -s "$out/site$css" ] || fail "stylesheet $css was not published"
