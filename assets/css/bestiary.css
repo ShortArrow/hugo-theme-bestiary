@@ -1,7 +1,6 @@
 /* Bestiary: an old natural-history book. Light pages are paper by day; dark pages are the study at night. */
 :root {
   --desk: #b89a70;
-  --bestiary-desk-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02 0.6' numOctaves='2' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.235  0 0 0 0 0.137  0 0 0 0 0.059  0 0 0 1.4 -0.62'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url%28%23p%29'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0016 0.009' numOctaves='2' seed='5' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 1 0.2 0.9 0 1 0.1 0.8 0 1 0.3 1 0 0.9 0 1 0.2'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='0 0 0 0 0.314  0 0 0 0 0.188  0 0 0 0 0.078  0.32 0 0 0 -0.04'/%3E%3C/filter%3E%3Crect width='640' height='640' filter='url%28%23f%29'/%3E%3C/svg%3E");
   --paper: #f3ead6;
   --paper-burn: rgba(122, 82, 34, 0.38);
   --foxing: rgba(150, 92, 38, 0.22);
@@ -35,7 +34,6 @@
 {{- /* Night tokens, defined once: they apply when the system is dark and the reader has not chosen day, or when the reader has chosen night. */ -}}
 {{- define "bestiary-night" }}
     --desk: #0d0906;
-    --bestiary-desk-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02 0.6' numOctaves='2' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 1.6 -0.6'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url%28%23p%29'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0016 0.009' numOctaves='2' seed='5' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 1 0.2 0.9 0 1 0.1 0.8 0 1 0.3 1 0 0.9 0 1 0.2'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='0 0 0 0 0.000  0 0 0 0 0.000  0 0 0 0 0.000  0.3 0 0 0 -0.05'/%3E%3C/filter%3E%3Crect width='640' height='640' filter='url%28%23f%29'/%3E%3C/svg%3E");
     --paper: #2b231b;
     --paper-burn: rgba(10, 6, 2, 0.22);
     --foxing: rgba(200, 150, 90, 0.12);
@@ -78,10 +76,7 @@
 body {
   margin: 0;
   padding: 1.5rem 8px 3rem;
-  background:
-    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(20, 10, 0, 0.35)),
-    var(--bestiary-desk-grain),
-    var(--desk);
+  background: var(--desk);
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.125rem;

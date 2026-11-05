@@ -84,7 +84,6 @@ mishap() { grep -o 'data-mishap="[a-z-]*"' "$1" || echo none; }
 [ "$(for page in "$out"/site/index.html "$out"/site/*/index.html "$out"/site/*/*/index.html; do mishap "$page"; done | sort -u | wc -l)" -gt 1 ] || fail "every example page met the same mishap"
 grep -q '\.bestiary-glyph-speckled{mask-image:var(--bestiary-speckle)' "$out/site$css" || fail "stylesheet does not wear the letters of the text"
 grep -q 'var(--bestiary-mottle)' "$out/site$css" || fail "stylesheet leaves the paper an even tone"
-grep -q 'var(--bestiary-desk-grain)' "$out/site$css" || fail "stylesheet leaves the desk an even tone"
 tiles() { grep -o '<use href="[^"]*#t[01]\{4\}"' "$1" | sed 's/.*#t//; s/"$//'; }
 [ "$(tiles "$ink" | wc -l)" -eq 160 ] || fail "Inkwyrm's paper is not four tiles by forty"
 sprite=$(grep -o '<use href="[^"#]*' "$ink" | head -1 | sed 's/<use href="//')
