@@ -1,0 +1,20 @@
+{{- /*
+  Draws where a spark landed on a page's leaf and was put out at once: a faint brown halo, a singed ring and a dark heart,
+  each with its own irregular outline. On one page in five; its place, size and outline are rolled from the page's path.
+  Arguments: the page.
+*/ -}}
+{{- $path := .RelPermalink -}}
+{{- $roll := dict -}}
+{{- range $name, $range := dict "scorch" (slice 0 5) "scorch-x" (slice 4 94) "scorch-y" (slice 4 95) "scorch-size" (slice 12 26) }}
+  {{- $roll = merge $roll (dict $name (partial "bestiary/roll.html" (dict "path" $path "name" $name "low" (index $range 0) "high" (index $range 1)))) }}
+{{- end -}}
+{{- if eq $roll.scorch 0 }}
+{{- $size := index $roll "scorch-size" }}
+<svg x="{{ index $roll "scorch-x" }}%" y="{{ index $roll "scorch-y" }}%" width="{{ $size }}" height="{{ $size }}" viewBox="0 0 100 100" overflow="visible">
+  <path class="bestiary-scorch-halo" filter="url(#bestiary-stain-soft)" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 58 "seed" (printf "%s#scorch-halo" $path) "lumps" 5 "wobble" 0.2) }}"/>
+  <g filter="url(#bestiary-stain-edge)">
+    <path class="bestiary-scorch-singe" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 30 "seed" (printf "%s#scorch-singe" $path) "lumps" 6 "wobble" 0.25) }}"/>
+    <path class="bestiary-scorch-heart" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 52 "cy" 48 "r" 13 "seed" (printf "%s#scorch-heart" $path) "lumps" 4 "wobble" 0.3) }}"/>
+  </g>
+</svg>
+{{- end -}}

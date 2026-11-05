@@ -65,6 +65,7 @@ fox() { marks "$1" | grep -o -- '--mark-fox-[0-9]*-[xy]: [0-9]*%' | sed 's/.*: /
 [ "$(fox "$ink")" != "$(fox "$moth")" ] || fail "Inkwyrm and Lanternmoth share one foxing pattern"
 stains() { sed -n '/<svg class="bestiary-stains"/,/<\/svg>/p' "$1" | grep -o ' d="[^"]*"' | head -3; }
 [ -n "$(stains "$ink")" ] || fail "Inkwyrm's leaf has no stains drawn for it"
+for page in "$ink" "$moth" "$home"; do grep -q 'class="bestiary-crease' "$page" || fail "$page shows no fold smoothed out"; done
 [ "$(stains "$ink")" != "$(stains "$moth")" ] || fail "Inkwyrm and Lanternmoth carry stains of the same shape"
 for mark in stain-ink foxing; do grep -q "var(--$mark)" "$out/site$css" || fail "stylesheet leaves no $mark on the leaf"; done
 has "$ink" '<button type="button" class="bestiary-scheme" hidden'

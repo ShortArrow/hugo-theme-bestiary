@@ -1,6 +1,7 @@
 {{- /*
-  Draws the larger handling marks of a page's leaf as an SVG layer behind its text: where a cup was set down
-  (on three pages in four, and somewhere else as well on one page in four), a dried tide mark (on two pages in three) and a soft blot.
+  Draws the marks a cared-for leaf gathers over the years as an SVG layer behind its text: where a cup was set down
+  (on one page in four, and somewhere else as well on one in twelve), a dried tide mark (on one page in ten), a soft blot (on half),
+  the creases of a fold smoothed out again, and now and then a small scorch.
   Every position, size and outline comes from a few numbers rolled from the page's path, so each page has stains of its own
   and keeps them from build to build. The ragged edges come from noise seeded the same way.
 */ -}}
@@ -8,9 +9,9 @@
 {{- $n := dict -}}
 {{- range $name, $range := dict
   "ring" (slice 0 4) "ring-x" (slice 4 84) "ring-y" (slice 2 86) "ring-size" (slice 70 124)
-  "cup-b" (slice 0 4) "cup-b-x" (slice 4 84) "cup-b-y" (slice 2 86) "cup-b-size" (slice 60 110)
-  "tide" (slice 0 3) "tide-x" (slice 3 78) "tide-y" (slice 4 88) "tide-w" (slice 110 210) "tide-h" (slice 70 150) "tide-lumps" (slice 4 8) "tide-wobble" (slice 10 22)
-  "blot-x" (slice 3 88) "blot-y" (slice 3 92) "blot-w" (slice 45 110) "blot-h" (slice 35 95) "blot-lumps" (slice 4 9) "blot-wobble" (slice 15 30)
+  "cup-b" (slice 0 12) "cup-b-x" (slice 4 84) "cup-b-y" (slice 2 86) "cup-b-size" (slice 60 110)
+  "tide" (slice 0 10) "tide-x" (slice 3 78) "tide-y" (slice 4 88) "tide-w" (slice 110 210) "tide-h" (slice 70 150) "tide-lumps" (slice 4 8) "tide-wobble" (slice 10 22)
+  "blot" (slice 0 2) "blot-x" (slice 3 88) "blot-y" (slice 3 92) "blot-w" (slice 45 110) "blot-h" (slice 35 95) "blot-lumps" (slice 4 9) "blot-wobble" (slice 15 30)
   "edge-seed" (slice 1 9999)
 }}
   {{- $n = merge $n (dict $name (partial "bestiary/roll.html" (dict "path" $path "name" $name "low" (index $range 0) "high" (index $range 1)))) }}
@@ -26,20 +27,24 @@
     <feDisplacementMap in="SourceGraphic" scale="12" xChannelSelector="R" yChannelSelector="G"/>
     <feGaussianBlur stdDeviation="4"/>
   </filter>
-  {{- if ne $n.ring 0 }}
+  {{- if eq $n.ring 0 }}
   {{ partial "bestiary/cup-set.html" (dict "path" $path "name" "cup" "x" (index $n "ring-x") "y" (index $n "ring-y") "size" (index $n "ring-size")) }}
   {{- end }}
   {{- if eq (index $n "cup-b") 0 }}
   {{ partial "bestiary/cup-set.html" (dict "path" $path "name" "cup-b" "x" (index $n "cup-b-x") "y" (index $n "cup-b-y") "size" (index $n "cup-b-size")) }}
   {{- end }}
-  {{- if ne $n.tide 0 }}
+  {{- if eq $n.tide 0 }}
   {{- $outline := dict "cx" 50 "cy" 50 "r" 42 "seed" (printf "%s#tide" $path) "lumps" (index $n "tide-lumps") "wobble" (div (index $n "tide-wobble") 100.0) }}
   <svg x="{{ index $n "tide-x" }}%" y="{{ index $n "tide-y" }}%" width="{{ index $n "tide-w" }}" height="{{ index $n "tide-h" }}" viewBox="0 0 100 100" preserveAspectRatio="none" overflow="visible" filter="url(#bestiary-stain-edge)">
     <path class="bestiary-stain-tide" d="{{ partial "bestiary/stain-outline.html" $outline }}"/>
     <path class="bestiary-stain-wash" d="{{ partial "bestiary/stain-outline.html" (merge $outline (dict "r" 24 "seed" (printf "%s#tide-core" $path))) }}"/>
   </svg>
   {{- end }}
+  {{- if eq $n.blot 0 }}
   <svg x="{{ index $n "blot-x" }}%" y="{{ index $n "blot-y" }}%" width="{{ index $n "blot-w" }}" height="{{ index $n "blot-h" }}" viewBox="0 0 100 100" preserveAspectRatio="none" overflow="visible" filter="url(#bestiary-stain-soft)">
     <path class="bestiary-stain-blot" d="{{ partial "bestiary/stain-outline.html" (dict "cx" 50 "cy" 50 "r" 36 "seed" (printf "%s#blot" $path) "lumps" (index $n "blot-lumps") "wobble" (div (index $n "blot-wobble") 100.0)) }}"/>
   </svg>
+  {{- end }}
+  {{ partial "bestiary/creases.html" . }}
+  {{ partial "bestiary/scorch.html" . }}
 </svg>
