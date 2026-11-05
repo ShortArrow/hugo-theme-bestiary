@@ -62,7 +62,7 @@ header {
   margin-bottom: 2.5rem;
 }
 
-header::after, .bestiary-card::before, .bestiary-card::after {
+header::after, footer::before, .bestiary-card::before, .bestiary-card::after {
   content: "";
   position: absolute;
   left: 0;
@@ -82,9 +82,9 @@ header a {
 }
 
 footer {
+  position: relative;
   margin-top: 3rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--rule);
   text-align: center;
   font-size: 0.875rem;
 }
@@ -115,7 +115,7 @@ h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; ma
   padding: 1rem 0;
 }
 
-.bestiary-card::before { top: 0; }
+.bestiary-card::before, footer::before { top: 0; }
 .bestiary-card::after { bottom: 0; }
 
 .bestiary-field { display: contents; }
@@ -185,7 +185,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
   .bestiary-card dd { margin-bottom: 0.5rem; }
 }
 
-/* Weathering: worn ink on display type and rules, a ragged and browned leaf, foxing and a ring stain. Body text is left clean. */
+/* Weathering: worn ink on display type, hand-drawn rules and underlines, a ragged and browned leaf, foxing and a ring stain. Body text is left clean. */
 .bestiary-weathered .bestiary-leaf::before {
   filter: url(#bestiary-edge);
   background:
@@ -196,12 +196,23 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-c
     var(--paper);
 }
 
-.bestiary-weathered :is(header a, h1, .bestiary-index-section, .bestiary-choice),
+.bestiary-weathered :is(header a, h1, .bestiary-choice),
+.bestiary-weathered .bestiary-index-section a {
+  filter: url(#bestiary-ink);
+}
+
 .bestiary-weathered header::after,
+.bestiary-weathered footer::before,
 .bestiary-weathered .bestiary-card::before,
 .bestiary-weathered .bestiary-card::after,
+.bestiary-weathered .bestiary-index-section::before,
+.bestiary-weathered .bestiary-index-section::after,
 .bestiary-weathered .bestiary-index-entries li::after {
-  filter: url(#bestiary-ink);
+  filter: url(#bestiary-rule);
+}
+
+.bestiary-weathered :is(main, footer) a:not(.bestiary-index-section a) {
+  filter: url(#bestiary-hand);
 }
 
 @media (prefers-color-scheme: dark) {

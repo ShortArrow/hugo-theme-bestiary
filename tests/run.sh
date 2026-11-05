@@ -57,6 +57,10 @@ grep -A3 'href="/apparitions/hollowbell/"' "$home" | grep -q '<a class="bestiary
 has "$ink" '<html [^>]*class="bestiary-weathered"'
 has "$ink" '<filter id="bestiary-ink"'
 grep -q 'url(#bestiary-ink)' "$out/site$css" || fail "stylesheet does not apply the ink filter"
+has "$ink" '<filter id="bestiary-rule"'
+has "$ink" '<filter id="bestiary-hand"'
+grep -q 'url(#bestiary-rule)' "$out/site$css" || fail "stylesheet does not waver the rules"
+grep -q 'url(#bestiary-hand)' "$out/site$css" || fail "stylesheet does not waver the links"
 
 build "$root/tests/fixtures/unpaged-choice" ../../../.. "$out/unpaged-choice"
 has "$out/unpaged-choice/plain/index.html" '<span class="bestiary-choice"'
