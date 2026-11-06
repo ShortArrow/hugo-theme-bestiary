@@ -466,35 +466,84 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   filter: url(#bestiary-wear);
 }
 
-/* Going to another page turns the leaf over: it lifts at its right edge and turns to the left, its shadow lifting off the next leaf beneath it. Going back turns the earlier leaf back over the one being left. */
+/* Going to another page turns the leaf over from its bottom right corner: the fold runs up to the top left, the leaf's blank back curls over above it, and the next leaf lies beneath. Going back lays the earlier leaf down again the same way. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
     types: page-turn;
   }
 }
-:root:active-view-transition-type(page-turn) .bestiary-leaf { view-transition-name: bestiary-leaf; }
-::view-transition-group(bestiary-leaf) { animation: none; }
-::view-transition-old(bestiary-leaf),
-::view-transition-new(bestiary-leaf) {
-  animation-duration: 0.9s;
-  animation-timing-function: cubic-bezier(0.45, 0.05, 0.4, 1);
-  animation-fill-mode: both;
-  transform-origin: left 50vh;
-  backface-visibility: hidden;
-  mix-blend-mode: normal;
+
+/* The flap is the leaf's corner seen from the back; it covers the part of the leaf left on screen, the same box the fold runs through. */
+.bestiary-fold {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 1.5rem);
+  pointer-events: none;
 }
-::view-transition-old(bestiary-leaf) { z-index: 1; animation-name: bestiary-leaf-lift; }
-::view-transition-new(bestiary-leaf) { animation-name: bestiary-leaf-uncover; }
-:root:active-view-transition-type(back)::view-transition-old(bestiary-leaf) { z-index: 0; animation-name: bestiary-leaf-uncover; animation-direction: reverse; }
-:root:active-view-transition-type(back)::view-transition-new(bestiary-leaf) { z-index: 1; animation-name: bestiary-leaf-lift; animation-direction: reverse; }
-@keyframes bestiary-leaf-lift {
-  from { transform: perspective(2000px) rotateY(0deg); filter: brightness(1); }
-  to { transform: perspective(2000px) rotateY(-90deg); filter: brightness(0.6); }
+
+/* How far along the diagonal from the leaf's top left the fold lies; the leaf is folded where x + y exceeds it. */
+@property --bestiary-fold {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+@keyframes bestiary-fold {
+  from { --bestiary-fold: calc(44rem + 100vh); }
+  to { --bestiary-fold: -2rem; }
 }
 @keyframes bestiary-leaf-uncover {
   from { filter: brightness(0.7); }
   to { filter: brightness(1); }
+}
+
+:root:active-view-transition-type(page-turn) .bestiary-leaf { view-transition-name: bestiary-leaf; }
+:root:active-view-transition-type(page-turn) .bestiary-fold { view-transition-name: bestiary-fold; }
+:root:active-view-transition-type(page-turn)::view-transition {
+  animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
+}
+:root:active-view-transition-type(back)::view-transition { animation-direction: reverse; }
+::view-transition-group(bestiary-leaf),
+::view-transition-group(bestiary-fold) { animation: none; }
+::view-transition-old(bestiary-leaf),
+::view-transition-new(bestiary-leaf),
+::view-transition-old(bestiary-fold),
+::view-transition-new(bestiary-fold) { animation: none; mix-blend-mode: normal; }
+
+::view-transition-old(bestiary-leaf) {
+  z-index: 1;
+  clip-path: polygon(0 0, var(--bestiary-fold) 0, 0 var(--bestiary-fold));
+}
+::view-transition-new(bestiary-leaf) { animation: bestiary-leaf-uncover 1s ease-out both; }
+:root:active-view-transition-type(back)::view-transition-old(bestiary-leaf) {
+  z-index: 0;
+  clip-path: none;
+  animation: bestiary-leaf-uncover 1s ease-in reverse both;
+}
+:root:active-view-transition-type(back)::view-transition-new(bestiary-leaf) {
+  z-index: 1;
+  clip-path: polygon(0 0, var(--bestiary-fold) 0, 0 var(--bestiary-fold));
+  animation: none;
+}
+
+/* The flap is the folded part mirrored across the fold, so it lies on the near side of it; a crease, a sheen where the paper bends, and its shadow on the leaves beneath round it. */
+::view-transition-group(bestiary-fold) { filter: drop-shadow(0 0 0.9rem rgba(0, 0, 0, 0.45)); }
+::view-transition-image-pair(bestiary-fold) {
+  background:
+    linear-gradient(135deg,
+      transparent calc(var(--bestiary-fold) * 0.7071),
+      rgba(0, 0, 0, 0.3) calc(var(--bestiary-fold) * 0.7071),
+      rgba(0, 0, 0, 0.08) calc(var(--bestiary-fold) * 0.7071 + 1.2rem),
+      rgba(255, 255, 255, 0.1) calc(var(--bestiary-fold) * 0.7071 + 5rem),
+      transparent calc(var(--bestiary-fold) * 0.7071 + 12rem),
+      rgba(0, 0, 0, 0.1) calc(var(--bestiary-fold) * 0.7071 + 32rem)),
+    var(--paper);
+  box-shadow: inset 0 0 2.5rem var(--paper-burn);
+  transform-origin: 0 0;
+  transform: translate(var(--bestiary-fold), var(--bestiary-fold)) matrix(0, -1, -1, 0, 0, 0);
+  clip-path: polygon(var(--bestiary-fold) 0, 300vmax 0, 300vmax 300vmax, 0 300vmax, 0 var(--bestiary-fold));
 }
 
 /* The turn between day and night: the new scheme billows out from the moon or sun like a puff of smoke, soft at its edge, while the old one blurs away. */

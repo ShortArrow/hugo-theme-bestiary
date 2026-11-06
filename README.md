@@ -124,7 +124,7 @@ The leaf lies on a wooden desk. A house in the header, opposite the moon or sun,
 
 ## Turning pages
 
-Following a link to another page of the site turns the leaf over: it lifts at its right edge and turns to the left, and the next leaf lies beneath it. Going back through the browser's history turns the earlier leaf back over. The turn needs a browser with cross-document view transitions; in others, and for readers who ask for reduced motion, the next page appears at once.
+Following a link to another page of the site turns the leaf over from its bottom right corner: the fold runs up to the top left, the leaf's blank back curls over above it, and the next leaf lies beneath. Going back through the browser's history lays the earlier leaf down again. The turn needs a browser with cross-document view transitions; in others, and for readers who ask for reduced motion, the next page appears at once.
 
 ## Favicon
 

@@ -53,6 +53,7 @@
       </ul>
     </footer>
     {{- end }}
+    <div class="bestiary-fold" aria-hidden="true"></div>
   </div>
   {{- if or $toggle $places }}
   {{- with resources.Get "js/bestiary-turn.js" | minify | fingerprint }}
