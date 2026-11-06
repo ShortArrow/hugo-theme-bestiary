@@ -134,3 +134,27 @@ test("before the turn's first frame, the leaf being turned lies flat and whole",
   await expect.poll(still).toMatchObject({ lay: true });
   expect((await still()).new).toBeLessThanOrEqual(0);
 });
+
+test("a long title keeps its fleurons beside its words at any width", async ({ page }) => {
+  await page.route("**/creatures/", async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace(/(<main>\s*<h1>)[^<]*(<\/h1>)/, "$1IDE and Programming Editors$2");
+    await route.fulfill({ response, body });
+  });
+  await page.goto("/creatures/", { waitUntil: "networkidle" });
+  const strays = [];
+  for (let width = 320; width <= 1200; width += 8) {
+    await page.setViewportSize({ width, height: 700 });
+    const stray = await page.evaluate(() => {
+      const title = document.querySelector("main h1");
+      const range = document.createRange();
+      range.selectNodeContents(title);
+      const rects = [...range.getClientRects()].filter((r) => r.width > 0);
+      const box = title.getBoundingClientRect();
+      const half = parseFloat(getComputedStyle(title).lineHeight) / 2;
+      return rects[0].top - box.top > half || box.bottom - rects[rects.length - 1].bottom > half;
+    });
+    if (stray) strays.push(width);
+  }
+  expect(strays, "widths at which a fleuron stands alone on a line").toEqual([]);
+});
