@@ -474,7 +474,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   }
 }
 
-/* The flap is the leaf seen from the back, drawn only while the page turns; it covers the part of the turning leaf on screen, the same box the fold runs through. The script in the head sets the turning leaf's height. */
+/* The flap is the leaf seen from the back, drawn only on the page being revealed while the page turns, so the page being left keeps its leaf in view while it is captured; it covers the part of the turning leaf on screen, the same box the fold runs through. The script in the head sets the turning leaf's height. */
 .bestiary-fold {
   position: absolute;
   top: 0;
@@ -506,7 +506,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
 }
 
 :root:active-view-transition-type(page-turn) .bestiary-leaf { view-transition-name: bestiary-leaf; }
-:root:active-view-transition-type(page-turn) .bestiary-fold {
+:root.bestiary-revealing:active-view-transition-type(page-turn) .bestiary-fold {
   view-transition-name: bestiary-fold;
   visibility: visible;
   background:
