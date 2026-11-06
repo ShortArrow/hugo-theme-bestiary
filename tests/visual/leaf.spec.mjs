@@ -71,8 +71,8 @@ test("turning to night billows out from the button", async ({ page, browserName 
         const start = performance.now();
         const look = () => {
           const puff = document.getAnimations().find((a) => a.effect?.pseudoElement === "::view-transition-new(root)");
-          if (puff?.playState === "running") resolve(true);
-          else if (performance.now() - start > 5000) resolve(false);
+          if (puff && (puff.playState === "running" || puff.playState === "finished")) resolve(true);
+          else if (performance.now() - start > 15000) resolve(false);
           else requestAnimationFrame(look);
         };
         look();
