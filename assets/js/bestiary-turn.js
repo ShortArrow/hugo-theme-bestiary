@@ -2,7 +2,7 @@
   Turns the pages when the reader presses one of the header's buttons, and remembers the choice:
   - the moon or the sun turns between day and night; until the reader chooses, the pages follow the system's scheme;
   - the tree, the cloud or the house moves the leaf between the forest floor, the sky and the desk at home, in that order; until the reader chooses, it lies on the desk.
-  The new state billows out from the button like a puff of smoke, unless the reader asks for reduced motion.
+  The new state billows out from the button like a puff of smoke, unless the reader asks for reduced motion; the billow waits until the new place's drawings have loaded and the new pages' first frame is drawn, so however long either takes, none of the billow is skipped.
   Each choice is restored by a script in the head before the first paint.
 */
 (() => {
@@ -43,6 +43,15 @@
     label(t);
   };
 
+  const drawn = () =>
+    Promise.all(
+      [...getComputedStyle(document.body).backgroundImage.matchAll(/url\("([^"]+)"\)/g)].map(([, url]) => {
+        const picture = new Image();
+        picture.src = url;
+        return picture.decode().catch(() => {});
+      }),
+    );
+
   const billow = (button) => {
     const box = button.getBoundingClientRect();
     const x = box.left + box.width / 2;
@@ -50,16 +59,20 @@
     const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
     const size = (reach * 2) / 0.55;
     const timing = { duration: 950, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both" };
-    root.animate(
-      {
-        maskSize: ["0px 0px", `${size}px ${size}px`],
-        maskPosition: [`${x}px ${y}px`, `${x - size / 2}px ${y - size / 2}px`],
-        filter: ["blur(10px)", "blur(0px)"],
-        opacity: [0.5, 1],
-      },
-      { ...timing, pseudoElement: "::view-transition-new(root)" },
-    );
-    root.animate({ filter: ["blur(0px)", "blur(4px)"] }, { ...timing, pseudoElement: "::view-transition-old(root)" });
+    const puffs = [
+      root.animate(
+        {
+          maskSize: ["1px 1px", `${size}px ${size}px`],
+          maskPosition: [`${x}px ${y}px`, `${x - size / 2}px ${y - size / 2}px`],
+          filter: ["blur(10px)", "blur(0px)"],
+          opacity: [0.5, 1],
+        },
+        { ...timing, pseudoElement: "::view-transition-new(root)" },
+      ),
+      root.animate({ filter: ["blur(0px)", "blur(4px)"] }, { ...timing, pseudoElement: "::view-transition-old(root)" }),
+    ];
+    puffs.forEach((a) => a.pause());
+    drawn().then(() => requestAnimationFrame(() => requestAnimationFrame(() => puffs.forEach((a) => a.play()))));
   };
 
   for (const t of turners) {
