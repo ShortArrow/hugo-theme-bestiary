@@ -108,6 +108,9 @@ tr -d ' \r\n' < "$out/site$css" | grep -q '@media(prefers-reduced-motion:no-pref
 grep -q ':active-view-transition-type(page-turn) .bestiary-leaf{view-transition-name:bestiary-leaf}' "$out/site$css" || fail "the page turn does not lift the leaf from what lies behind it"
 grep -q '::view-transition-old(bestiary-leaf)' "$out/site$css" || fail "the page turn does not shape the leaf turning over"
 has "$ink" 'addEventListener("pagereveal"'
+has "$ink" 'addEventListener("pageswap"'
+grep -q 'height:min(var(--bestiary-turned' "$out/site$css" || fail "a short leaf turns over from the bottom of the window, where it has no paper"
+grep -o 'radial-gradient([^)]*)[^,;]*' "$out/site$css" | grep -q 'fixed' || fail "the shade at the edges of the window ends where a short page ends"
 has "$ink" '<div class="bestiary-fold" aria-hidden="true"></div>'
 grep -q ':active-view-transition-type(page-turn) .bestiary-fold{view-transition-name:bestiary-fold' "$out/site$css" || fail "the page turn has no flap to curl over"
 grep -q '.bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold{filter:url(#bestiary-edge)}' "$out/site$css" || fail "the flap of the page turn is cut clean while the leaf is ragged"

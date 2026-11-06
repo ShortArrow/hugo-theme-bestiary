@@ -15,8 +15,8 @@
   {{- if $places }}
   <script>try{var p=localStorage.getItem("bestiary-place");if(p==="forest"||p==="sky"||p==="home")document.documentElement.dataset.place=p}catch(e){}</script>
   {{- end }}
-  {{- /* Going back through the history turns the leaf the other way. */}}
-  <script>addEventListener("pagereveal",function(e){var t=e.viewTransition,a=window.navigation&&navigation.activation;if(t&&a&&a.from&&a.navigationType==="traverse"&&a.entry.index<a.from.index)t.types.add("back")})</script>
+  {{- /* Going on, the leaf being left turns over, and it records its height as it is swapped out; going back through the history, the leaf being laid down turns the other way. The turning leaf's height places the corner the fold starts from. */}}
+  <script>addEventListener("pageswap",function(e){var l=document.querySelector(".bestiary-leaf");if(e.viewTransition&&l)try{sessionStorage.setItem("bestiary-turned",l.offsetHeight)}catch(x){}});addEventListener("pagereveal",function(e){var t=e.viewTransition,a=window.navigation&&navigation.activation,b=t&&a&&a.from&&a.navigationType==="traverse"&&a.entry.index<a.from.index,l=document.querySelector(".bestiary-leaf"),h=null;if(!t)return;if(b)t.types.add("back");try{h=b?l&&l.offsetHeight:sessionStorage.getItem("bestiary-turned")}catch(x){}if(h)document.documentElement.style.setProperty("--bestiary-turned",h+"px")})</script>
   {{- with resources.Get "css/bestiary.css" | resources.ExecuteAsTemplate "css/bestiary.css" . | minify | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
   {{- end }}

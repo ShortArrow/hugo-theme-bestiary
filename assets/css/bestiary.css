@@ -2,11 +2,11 @@
 :root {
   --desk: #b89a70;
   --bestiary-home:
-    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)),
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)) fixed,
     {{ template "bestiary-drawing" "desk-day" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
     var(--desk);
   --bestiary-forest:
-    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)),
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)) fixed,
     {{ template "bestiary-drawing" "forest-day-canopy" }} fixed,
     {{ template "bestiary-drawing" "forest-day-floor" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
     #6a5a3e;
@@ -52,11 +52,11 @@
 {{- define "bestiary-night" }}
     --desk: #0d0906;
     --bestiary-home:
-      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)),
+      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)) fixed,
       {{ template "bestiary-drawing" "desk-night" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
       var(--desk);
     --bestiary-forest:
-      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)),
+      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)) fixed,
       {{ template "bestiary-drawing" "forest-night-canopy" }} fixed,
       {{ template "bestiary-drawing" "forest-night-floor" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
       #14130d;
@@ -474,13 +474,13 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   }
 }
 
-/* The flap is the leaf seen from the back, drawn only while the page turns; it covers the part of the leaf left on screen, the same box the fold runs through. */
+/* The flap is the leaf seen from the back, drawn only while the page turns; it covers the part of the turning leaf on screen, the same box the fold runs through. The script in the head sets the turning leaf's height. */
 .bestiary-fold {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100vh - 1.5rem);
+  height: min(var(--bestiary-turned, 100vh), 100vh - 1.5rem);
   pointer-events: none;
   visibility: hidden;
 }
@@ -497,7 +497,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   initial-value: 45deg;
 }
 @keyframes bestiary-fold {
-  from { --bestiary-fold: calc(44rem * cos(52deg) + 100vh * sin(52deg)); --bestiary-fold-turn: 52deg; }
+  from { --bestiary-fold: calc(44rem * cos(52deg) + min(var(--bestiary-turned, 100vh), 100vh - 1.5rem) * sin(52deg)); --bestiary-fold-turn: 52deg; }
   to { --bestiary-fold: -2rem; --bestiary-fold-turn: 18deg; }
 }
 @keyframes bestiary-leaf-uncover {
