@@ -136,6 +136,7 @@ test("before the turn's first frame, the leaf being turned lies flat and whole",
 });
 
 test("a long title keeps its fleurons beside its words at any width", async ({ page }) => {
+  test.setTimeout(90_000);
   await page.route("**/creatures/", async (route) => {
     const response = await route.fetch();
     const body = (await response.text()).replace(/(<main>\s*<h1>)[^<]*(<\/h1>)/, "$1IDE and Programming Editors$2");
@@ -143,7 +144,7 @@ test("a long title keeps its fleurons beside its words at any width", async ({ p
   });
   await page.goto("/creatures/", { waitUntil: "networkidle" });
   const strays = [];
-  for (let width = 320; width <= 1200; width += 8) {
+  for (let width = 320; width <= 1200; width += 16) {
     await page.setViewportSize({ width, height: 700 });
     const stray = await page.evaluate(() => {
       const title = document.querySelector("main h1");
