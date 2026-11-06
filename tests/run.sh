@@ -114,8 +114,10 @@ for drawing in desk-day desk-night forest-day forest-night sky-day sky-night sky
   [ -n "$url" ] || fail "stylesheet draws no $drawing"
   [ -s "$out/site$url" ] || fail "drawing $url was not published"
 done
-grep -q "sky-[a-z]*-near[^,]*var(--bestiary-drift)[^,]*fixed" "$out/site$css" || fail "the near clouds scroll with the leaf instead of drifting behind it"
-grep -q "animation-timeline:scroll(root)" "$out/site$css" || fail "nothing drifts the near clouds as the page scrolls"
+for drawing in sky-day-near sky-night-near desk-day desk-night forest-day-floor forest-night-floor; do
+  grep -q "$drawing[^,]*var(--bestiary-scroll)[^,]*fixed" "$out/site$css" || fail "$drawing scrolls with the leaf instead of drifting behind it"
+done
+grep -q "animation-timeline:scroll(root)" "$out/site$css" || fail "nothing drifts the places as the page scrolls"
 for drawing in "$root"/assets/images/bestiary/places/*.svg; do
   twice=$(grep -o "id='[^']*'" "$drawing" | sort | uniq -d | head -1)
   [ -z "$twice" ] || fail "drawing $drawing names $twice twice, so its copies clip or fill by the wrong shape"
