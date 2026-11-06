@@ -15,6 +15,8 @@
   {{- if $places }}
   <script>try{var p=localStorage.getItem("bestiary-place");if(p==="forest"||p==="sky"||p==="home")document.documentElement.dataset.place=p}catch(e){}</script>
   {{- end }}
+  {{- /* Going back through the history turns the leaf the other way. */}}
+  <script>addEventListener("pagereveal",function(e){var t=e.viewTransition,a=window.navigation&&navigation.activation;if(t&&a&&a.from&&a.navigationType==="traverse"&&a.entry.index<a.from.index)t.types.add("back")})</script>
   {{- with resources.Get "css/bestiary.css" | resources.ExecuteAsTemplate "css/bestiary.css" . | minify | fingerprint }}
   <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
   {{- end }}
@@ -51,6 +53,7 @@
       </ul>
     </footer>
     {{- end }}
+    <div class="bestiary-fold" aria-hidden="true"></div>
   </div>
   {{- if or $toggle $places }}
   {{- with resources.Get "js/bestiary-turn.js" | minify | fingerprint }}
