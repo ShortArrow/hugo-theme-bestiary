@@ -227,6 +227,16 @@ h1 {
   margin: 0 0 1.5rem;
 }
 
+/* The running head: the section an entry is listed under, set small above its title as at the head of a book's page, and the way back to that section. */
+.bestiary-running-head {
+  display: block;
+  width: fit-content;
+  margin: -0.5rem auto 0.5rem;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-size: 0.95rem;
+}
+
 h1::before, h1::after { content: "❦"; color: var(--rule); font-size: 0.7em; margin: 0 0.6em; vertical-align: 0.15em; }
 
 .bestiary-plate {
