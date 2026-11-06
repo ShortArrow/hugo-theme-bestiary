@@ -49,6 +49,17 @@ test("a taller leaf is laid down over a shorter one, and turned away from it", a
   await expect.poll(turned).toBe("page-turn");
 });
 
+test("following a link to the page already open does not turn the leaf", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
+  const turned = await watchTurns(page);
+  await page.addInitScript(() => addEventListener("pagereveal", () => sessionStorage.setItem("revealed", (+sessionStorage.getItem("revealed") || 0) + 1)));
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.click("header a[href='/']");
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("revealed"))).toBe("2");
+  await page.waitForTimeout(500);
+  expect(await turned()).toBeNull();
+});
+
 test("between leaves as tall as the window, going on turns the leaf and going back lays it down", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
   const turned = await watchTurns(page);
