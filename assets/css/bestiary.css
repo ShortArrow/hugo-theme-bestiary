@@ -521,6 +521,11 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
 }
 .bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold { filter: url(#bestiary-edge); }
+/* Until the fold's animation takes hold, which a slow machine can draw a frame or two before, the turn stands at its start: going on, the leaf being left lies whole with no flap; going back, the leaf being laid down is not yet over the one being left. */
+:root:active-view-transition-type(page-turn)::view-transition,
+:root:active-view-transition-type(page-turn) .bestiary-fold { --bestiary-fold: 100000px; --bestiary-fold-turn: 52deg; }
+:root:active-view-transition-type(back)::view-transition,
+:root:active-view-transition-type(back) .bestiary-fold { --bestiary-fold: -100000px; --bestiary-fold-turn: 18deg; }
 :root:active-view-transition-type(back) .bestiary-fold { animation-direction: reverse; }
 :root:active-view-transition-type(page-turn)::view-transition {
   animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;

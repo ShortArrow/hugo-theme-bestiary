@@ -62,3 +62,30 @@ test("turning to night billows out from the button", async ({ page, browserName 
   expect(billowed).toBe(true);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
+
+test("before the turn's first frame, the leaf being turned lies flat and whole", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
+  await page.addInitScript(() =>
+    addEventListener("pagereveal", (e) =>
+      e.viewTransition?.ready.then(() => {
+        document.getAnimations().forEach((a) => a.cancel());
+        const reach = (pseudo) => {
+          const clip = getComputedStyle(document.documentElement, pseudo).clipPath;
+          return clip === "none" ? Infinity : parseFloat(clip.split(",")[1]);
+        };
+        const back = e.viewTransition.types.has("back");
+        sessionStorage.setItem("still", JSON.stringify({ back, old: reach("::view-transition-old(bestiary-leaf)"), new: reach("::view-transition-new(bestiary-leaf)") }));
+      }),
+    ),
+  );
+  const still = () => page.evaluate(() => JSON.parse(sessionStorage.getItem("still") || "null"));
+  await page.goto("/creatures/inkwyrm/", { waitUntil: "networkidle" });
+  await page.click("header a[href='/']");
+  await page.waitForURL("http://127.0.0.1:1313/");
+  await expect.poll(still).toMatchObject({ back: false });
+  expect((await still()).old).toBeGreaterThan(page.viewportSize().width + page.viewportSize().height);
+  await page.evaluate(() => sessionStorage.removeItem("still"));
+  await page.goBack();
+  await expect.poll(still).toMatchObject({ back: true });
+  expect((await still()).new).toBeLessThanOrEqual(0);
+});
