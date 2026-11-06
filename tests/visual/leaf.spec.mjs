@@ -1,7 +1,7 @@
 // What exampleSite looks like in each browser, and how its pages turn.
 import { test, expect } from "@playwright/test";
 
-/** Opens a page with the reader's scheme and place already chosen, and waits until its drawings and fonts are in. */
+/** Opens a page with the reader's scheme and place already chosen, and waits until its drawings and fonts are in and its letters are fitted to the grain. */
 async function open(page, path, { scheme, place }) {
   await page.addInitScript(
     ([scheme, place]) => {
@@ -12,6 +12,8 @@ async function open(page, path, { scheme, place }) {
   );
   await page.goto(path, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => window.bestiaryTurned);
+  await page.waitForLoadState("networkidle");
 }
 
 for (const scheme of ["light", "dark"]) {
