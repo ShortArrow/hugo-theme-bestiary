@@ -58,21 +58,16 @@
     const y = box.top + box.height / 2;
     const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
     const size = (reach * 2) / 0.55;
-    const timing = { duration: 950, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both" };
-    const puffs = [
-      root.animate(
-        {
-          maskSize: ["1px 1px", `${size}px ${size}px`],
-          maskPosition: [`${x}px ${y}px`, `${x - size / 2}px ${y - size / 2}px`],
-          filter: ["blur(10px)", "blur(0px)"],
-          opacity: [0.5, 1],
-        },
-        { ...timing, pseudoElement: "::view-transition-new(root)" },
-      ),
-      root.animate({ filter: ["blur(0px)", "blur(4px)"] }, { ...timing, pseudoElement: "::view-transition-old(root)" }),
-    ];
-    puffs.forEach((a) => a.pause());
-    drawn().then(() => requestAnimationFrame(() => requestAnimationFrame(() => puffs.forEach((a) => a.play()))));
+    const puff = root.animate(
+      {
+        maskSize: ["1px 1px", `${size}px ${size}px`],
+        maskPosition: [`${x}px ${y}px`, `${x - size / 2}px ${y - size / 2}px`],
+        opacity: [0.5, 1],
+      },
+      { duration: 600, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both", pseudoElement: "::view-transition-new(root)" },
+    );
+    puff.pause();
+    drawn().then(() => requestAnimationFrame(() => requestAnimationFrame(() => puff.play())));
   };
 
   for (const t of turners) {
