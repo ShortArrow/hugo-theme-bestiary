@@ -11,6 +11,9 @@
   against the paper where its mottling leaves it least in contrast (WCAG 2 AA for body text), worked out from the page's own
   colours and again when the scheme turns.
   Every amount comes from the page's path and the letter's place, so a page prints the same on every visit.
+  The letters are fitted to the grain once its picture has loaded and any page turn has finished, so that work never holds up a turn.
+  Each letter's place is read once, with every other letter's, before any letter is changed, so the page is laid out once rather than once per letter;
+  the places are kept for when the scheme turns, since turning it moves no letter.
   Latin words stay unbroken across lines; Han and kana may still break between any two letters.
 */
 (() => {
@@ -19,9 +22,8 @@
 
   const skipped = new Set(["SCRIPT", "STYLE", "PRE", "CODE", "SVG", "TEXTAREA"]);
   const breaksAnywhere = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
-  const letters = typeof Intl.Segmenter === "function"
-    ? (text) => Array.from(new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text), (s) => s.segment)
-    : (text) => Array.from(text);
+  const graphemes = typeof Intl.Segmenter === "function" ? new Intl.Segmenter(undefined, { granularity: "grapheme" }) : null;
+  const letters = graphemes ? (text) => Array.from(graphemes.segment(text), (s) => s.segment) : (text) => Array.from(text);
 
   const page = Array.from(location.pathname).reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
   const noise = (n) => {
@@ -88,10 +90,9 @@
   const tides = Array.from(leaf.querySelectorAll(".bestiary-stain-tide"), (tide) => tide.getBoundingClientRect());
 
   const wornAlready = "h1, header, .bestiary-index-section, .bestiary-choice";
+  const placed = glyphs.filter(([span]) => !span.closest(wornAlready)).map(([span, n]) => [span, n, span.getBoundingClientRect()]);
   const inked = [];
-  for (const [span, n] of glyphs) {
-    if (span.closest(wornAlready)) continue;
-    const box = span.getBoundingClientRect();
+  for (const [span, n, box] of placed) {
     const x = box.left + box.width / 2 - sheet.left;
     const y = box.top + box.height / 2 - sheet.top;
     let ink = 1;
@@ -129,7 +130,9 @@
     span.classList.add("bestiary-glyph-speckled");
     span.style.setProperty("--bestiary-speckle-x", `${-(box.left - sheet.left).toFixed(1)}px`);
     span.style.setProperty("--bestiary-speckle-y", `${-(box.top - sheet.top).toFixed(1)}px`);
-    inked.push([span, ink]);
+    inked.push([span, ink, {
+      left: box.left - sheet.left, top: box.top - sheet.top, right: box.right - sheet.left, bottom: box.bottom - sheet.top,
+    }]);
   }
 
   const rgb = (value) => {
@@ -170,10 +173,11 @@
       }
       return least.get(color);
     };
-    for (const [span, ink] of inked) {
-      const need = leastFor(getComputedStyle(span).color);
+    const needs = inked.map(([span]) => leastFor(getComputedStyle(span).color));
+    inked.forEach(([span, ink, at], i) => {
+      const need = needs[i];
       span.classList.add("bestiary-glyph-speckled");
-      let cover = speckleAt(span);
+      let cover = speckleAt(at);
       if (span.classList.contains("bestiary-glyph-low")) {
         if (need / (cover * LOW) <= 1) cover *= LOW;
         else span.classList.remove("bestiary-glyph-low");
@@ -183,7 +187,7 @@
         cover = span.classList.contains("bestiary-glyph-low") ? LOW : 1;
       }
       span.style.opacity = String(Math.min(1, Math.ceil(Math.max(ink, need / cover) * 1000) / 1000));
-    }
+    });
   };
 
   const loadSpeckle = () => {
@@ -208,11 +212,9 @@
         const px = x - fx * w, py = y - fy * h;
         return fx * fy * sum[h * (w + 1) + w] + fx * sum[py * (w + 1) + w] + fy * sum[h * (w + 1) + px] + sum[py * (w + 1) + px];
       };
-      speckleAt = (span) => {
-        const origin = leaf.getBoundingClientRect();
-        const box = span.getBoundingClientRect();
-        const x0 = Math.max(0, Math.floor(box.left - origin.left)), y0 = Math.max(0, Math.floor(box.top - origin.top));
-        const x1 = Math.max(x0 + 1, Math.ceil(box.right - origin.left)), y1 = Math.max(y0 + 1, Math.ceil(box.bottom - origin.top));
+      speckleAt = (box) => {
+        const x0 = Math.max(0, Math.floor(box.left)), y0 = Math.max(0, Math.floor(box.top));
+        const x1 = Math.max(x0 + 1, Math.ceil(box.right)), y1 = Math.max(y0 + 1, Math.ceil(box.bottom));
         return Math.max(0.05, (at(x1, y1) - at(x0, y1) - at(x1, y0) + at(x0, y0)) / ((x1 - x0) * (y1 - y0)));
       };
       legible();
@@ -220,7 +222,7 @@
   };
 
   legible();
-  loadSpeckle();
+  (window.bestiaryTurned || Promise.resolve()).then(loadSpeckle);
   new MutationObserver(legible).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", legible);
 })();
