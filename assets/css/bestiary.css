@@ -474,7 +474,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   }
 }
 
-/* The flap is the leaf's corner seen from the back; it covers the part of the leaf left on screen, the same box the fold runs through. */
+/* The flap is the leaf seen from the back, drawn only while the page turns; it covers the part of the leaf left on screen, the same box the fold runs through. */
 .bestiary-fold {
   position: absolute;
   top: 0;
@@ -482,6 +482,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   width: 100%;
   height: calc(100vh - 1.5rem);
   pointer-events: none;
+  visibility: hidden;
 }
 
 /* How far along the diagonal from the leaf's top left the fold lies; the leaf is folded where x + y exceeds it. */
@@ -500,7 +501,22 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
 }
 
 :root:active-view-transition-type(page-turn) .bestiary-leaf { view-transition-name: bestiary-leaf; }
-:root:active-view-transition-type(page-turn) .bestiary-fold { view-transition-name: bestiary-fold; }
+:root:active-view-transition-type(page-turn) .bestiary-fold {
+  view-transition-name: bestiary-fold;
+  visibility: visible;
+  background:
+    linear-gradient(135deg,
+      rgba(0, 0, 0, 0.3) calc(var(--bestiary-fold) * 0.7071),
+      rgba(0, 0, 0, 0.08) calc(var(--bestiary-fold) * 0.7071 + 1.2rem),
+      rgba(255, 255, 255, 0.06) calc(var(--bestiary-fold) * 0.7071 + 5rem),
+      transparent calc(var(--bestiary-fold) * 0.7071 + 12rem),
+      rgba(0, 0, 0, 0.1) calc(var(--bestiary-fold) * 0.7071 + 32rem)),
+    var(--paper);
+  box-shadow: inset 0 0 2.5rem var(--paper-burn);
+  animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
+}
+.bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold { filter: url(#bestiary-edge); }
+:root:active-view-transition-type(back) .bestiary-fold { animation-direction: reverse; }
 :root:active-view-transition-type(page-turn)::view-transition {
   animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
 }
@@ -528,19 +544,10 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   animation: none;
 }
 
-/* The flap is the folded part mirrored across the fold, so it lies on the near side of it; a crease, a sheen where the paper bends, and its shadow on the leaves beneath round it. */
+/* The flap is the folded part mirrored across the fold, so it lies on the near side of it; its own drawing, live in the new page, carries the ragged edge, a crease and a sheen where the paper bends, and its shadow falls on the leaves beneath. */
 ::view-transition-group(bestiary-fold) { filter: drop-shadow(0 0 0.9rem rgba(0, 0, 0, 0.45)); }
+::view-transition-old(bestiary-fold) { display: none; }
 ::view-transition-image-pair(bestiary-fold) {
-  background:
-    linear-gradient(135deg,
-      transparent calc(var(--bestiary-fold) * 0.7071),
-      rgba(0, 0, 0, 0.3) calc(var(--bestiary-fold) * 0.7071),
-      rgba(0, 0, 0, 0.08) calc(var(--bestiary-fold) * 0.7071 + 1.2rem),
-      rgba(255, 255, 255, 0.1) calc(var(--bestiary-fold) * 0.7071 + 5rem),
-      transparent calc(var(--bestiary-fold) * 0.7071 + 12rem),
-      rgba(0, 0, 0, 0.1) calc(var(--bestiary-fold) * 0.7071 + 32rem)),
-    var(--paper);
-  box-shadow: inset 0 0 2.5rem var(--paper-burn);
   transform-origin: 0 0;
   transform: translate(var(--bestiary-fold), var(--bestiary-fold)) matrix(0, -1, -1, 0, 0, 0);
   clip-path: polygon(var(--bestiary-fold) 0, 300vmax 0, 300vmax 300vmax, 0 300vmax, 0 var(--bestiary-fold));
