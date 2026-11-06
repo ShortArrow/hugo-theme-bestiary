@@ -1,0 +1,12 @@
+{
+  "name": "hugo-theme-bestiary-tests",
+  "private": true,
+  "type": "module",
+  "description": "Browser tests for the theme; the theme itself needs none of this.",
+  "scripts": {
+    "visual": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}
