@@ -100,6 +100,10 @@ grep -q '::view-transition-new(root)' "$out/site$css" || fail "stylesheet does n
 scheme_js=$(grep -o '<script src="[^"]*bestiary-turn[^"]*"' "$ink" | sed 's/.*src="//; s/"$//')
 grep -q 'startViewTransition' "$out/site$scheme_js" || fail "the scheme turns without a transition"
 grep -q 'prefers-reduced-motion' "$out/site$scheme_js" || fail "the scheme turn ignores a request for reduced motion"
+tr -d ' \r\n' < "$out/site$css" | grep -q '@media(prefers-reduced-motion:no-preference){@view-transition{navigation:auto;types:page-turn;\?}' || fail "going to another page does not turn the leaf, or turns it for readers who ask for reduced motion"
+grep -q ':active-view-transition-type(page-turn) .bestiary-leaf{view-transition-name:bestiary-leaf}' "$out/site$css" || fail "the page turn does not lift the leaf from what lies behind it"
+grep -q '::view-transition-old(bestiary-leaf)' "$out/site$css" || fail "the page turn does not shape the leaf turning over"
+has "$ink" 'addEventListener("pagereveal"'
 grep -q ':root\[data-theme=.\?dark.\?\]' "$out/site$css" || fail "stylesheet has no dark scheme a reader can choose"
 grep -q ':root:not(\[data-theme=.\?light.\?\])' "$out/site$css" || fail "stylesheet does not follow the system scheme when the reader chose none"
 has "$ink" '<button type="button" class="bestiary-place" hidden'

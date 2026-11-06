@@ -122,6 +122,10 @@ The leaf lies on a wooden desk. A house in the header, opposite the moon or sun,
   placeToggle = false
 ```
 
+## Turning pages
+
+Following a link to another page of the site turns the leaf over: it lifts at its right edge and turns to the left, and the next leaf lies beneath it. Going back through the browser's history turns the earlier leaf back over. The turn needs a browser with cross-document view transitions; in others, and for readers who ask for reduced motion, the next page appears at once.
+
 ## Favicon
 
 When the site has `assets/favicon.svg`, every page links it as its icon, fingerprinted so a changed icon is not kept from a cache. An SVG icon can follow the reader's scheme with a `prefers-color-scheme` media query inside it. Without the file, pages link no icon.

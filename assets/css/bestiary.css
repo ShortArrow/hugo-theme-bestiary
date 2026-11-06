@@ -466,6 +466,37 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   filter: url(#bestiary-wear);
 }
 
+/* Going to another page turns the leaf over: it lifts at its right edge and turns to the left, its shadow lifting off the next leaf beneath it. Going back turns the earlier leaf back over the one being left. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+    types: page-turn;
+  }
+}
+:root:active-view-transition-type(page-turn) .bestiary-leaf { view-transition-name: bestiary-leaf; }
+::view-transition-group(bestiary-leaf) { animation: none; }
+::view-transition-old(bestiary-leaf),
+::view-transition-new(bestiary-leaf) {
+  animation-duration: 0.9s;
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.4, 1);
+  animation-fill-mode: both;
+  transform-origin: left 50vh;
+  backface-visibility: hidden;
+  mix-blend-mode: normal;
+}
+::view-transition-old(bestiary-leaf) { z-index: 1; animation-name: bestiary-leaf-lift; }
+::view-transition-new(bestiary-leaf) { animation-name: bestiary-leaf-uncover; }
+:root:active-view-transition-type(back)::view-transition-old(bestiary-leaf) { z-index: 0; animation-name: bestiary-leaf-uncover; animation-direction: reverse; }
+:root:active-view-transition-type(back)::view-transition-new(bestiary-leaf) { z-index: 1; animation-name: bestiary-leaf-lift; animation-direction: reverse; }
+@keyframes bestiary-leaf-lift {
+  from { transform: perspective(2000px) rotateY(0deg); filter: brightness(1); }
+  to { transform: perspective(2000px) rotateY(-90deg); filter: brightness(0.6); }
+}
+@keyframes bestiary-leaf-uncover {
+  from { filter: brightness(0.7); }
+  to { filter: brightness(1); }
+}
+
 /* The turn between day and night: the new scheme billows out from the moon or sun like a puff of smoke, soft at its edge, while the old one blurs away. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
