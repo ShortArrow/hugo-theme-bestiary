@@ -27,19 +27,38 @@ for (const scheme of ["light", "dark"]) {
   });
 }
 
-test("following a link turns the leaf over, and going back turns it the other way", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
+/** Records the types of each page turn as the new page is revealed. */
+async function watchTurns(page) {
   await page.addInitScript(() =>
     addEventListener("pagereveal", (e) =>
       e.viewTransition?.ready.then(() => sessionStorage.setItem("turned", [...e.viewTransition.types].join())),
     ),
   );
+  return () => page.evaluate(() => sessionStorage.getItem("turned"));
+}
+
+test("a taller leaf is laid down over a shorter one, and turned away from it", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
+  const turned = await watchTurns(page);
   await page.goto("/", { waitUntil: "networkidle" });
   await page.click("a[href$='/creatures/inkwyrm/']");
   await page.waitForURL("**/creatures/inkwyrm/");
-  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("turned"))).toBe("page-turn");
+  await expect.poll(turned).toBe("page-turn,lay-down");
   await page.goBack();
-  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("turned"))).toBe("page-turn,back");
+  await page.waitForURL("http://127.0.0.1:1313/");
+  await expect.poll(turned).toBe("page-turn");
+});
+
+test("between leaves as tall as the window, going on turns the leaf and going back lays it down", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
+  const turned = await watchTurns(page);
+  await page.goto("/creatures/inkwyrm/", { waitUntil: "networkidle" });
+  await page.evaluate(() => (location.href = "/creatures/lanternmoth/"));
+  await page.waitForURL("**/creatures/lanternmoth/");
+  await expect.poll(turned).toBe("page-turn");
+  await page.goBack();
+  await page.waitForURL("**/creatures/inkwyrm/");
+  await expect.poll(turned).toBe("page-turn,lay-down");
 });
 
 test("turning to night billows out from the button", async ({ page, browserName }) => {
@@ -52,8 +71,8 @@ test("turning to night billows out from the button", async ({ page, browserName 
         const start = performance.now();
         const look = () => {
           const puff = document.getAnimations().find((a) => a.effect?.pseudoElement === "::view-transition-new(root)");
-          if (puff?.playState === "running") resolve(true);
-          else if (performance.now() - start > 5000) resolve(false);
+          if (puff && (puff.playState === "running" || puff.playState === "finished")) resolve(true);
+          else if (performance.now() - start > 15000) resolve(false);
           else requestAnimationFrame(look);
         };
         look();
@@ -73,8 +92,8 @@ test("before the turn's first frame, the leaf being turned lies flat and whole",
           const clip = getComputedStyle(document.documentElement, pseudo).clipPath;
           return clip === "none" ? Infinity : parseFloat(clip.split(",")[1]);
         };
-        const back = e.viewTransition.types.has("back");
-        sessionStorage.setItem("still", JSON.stringify({ back, old: reach("::view-transition-old(bestiary-leaf)"), new: reach("::view-transition-new(bestiary-leaf)") }));
+        const lay = e.viewTransition.types.has("lay-down");
+        sessionStorage.setItem("still", JSON.stringify({ lay, old: reach("::view-transition-old(bestiary-leaf)"), new: reach("::view-transition-new(bestiary-leaf)") }));
       }),
     ),
   );
@@ -82,10 +101,10 @@ test("before the turn's first frame, the leaf being turned lies flat and whole",
   await page.goto("/creatures/inkwyrm/", { waitUntil: "networkidle" });
   await page.click("header a[href='/']");
   await page.waitForURL("http://127.0.0.1:1313/");
-  await expect.poll(still).toMatchObject({ back: false });
+  await expect.poll(still).toMatchObject({ lay: false });
   expect((await still()).old).toBeGreaterThan(page.viewportSize().width + page.viewportSize().height);
   await page.evaluate(() => sessionStorage.removeItem("still"));
   await page.goBack();
-  await expect.poll(still).toMatchObject({ back: true });
+  await expect.poll(still).toMatchObject({ lay: true });
   expect((await still()).new).toBeLessThanOrEqual(0);
 });

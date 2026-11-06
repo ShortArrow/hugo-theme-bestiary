@@ -466,7 +466,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   filter: url(#bestiary-wear);
 }
 
-/* Going to another page turns the leaf over from its bottom right corner: the fold runs up to the top left and swings from lying low to standing upright as the leaf turns, the leaf's blank back curls over above it, and the next leaf lies beneath. Going back lays the earlier leaf down again the same way. */
+/* Going to another page turns the leaf over from its bottom right corner: the fold runs up to the top left and swings from lying low to standing upright as the leaf turns, the leaf's blank back curls over above it, and the next leaf lies beneath. When the new leaf is the taller, or going back between leaves as tall as the window, the new leaf is laid down over the old the same way in reverse. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
@@ -521,16 +521,16 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
 }
 .bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold { filter: url(#bestiary-edge); }
-/* Until the fold's animation takes hold, which a slow machine can draw a frame or two before, the turn stands at its start: going on, the leaf being left lies whole with no flap; going back, the leaf being laid down is not yet over the one being left. */
+/* Until the fold's animation takes hold, which a slow machine can draw a frame or two before, the turn stands at its start: turning a leaf away, it lies whole with no flap; laying a leaf down, it is not yet over the one being left. */
 :root:active-view-transition-type(page-turn)::view-transition,
 :root:active-view-transition-type(page-turn) .bestiary-fold { --bestiary-fold: 100000px; --bestiary-fold-turn: 52deg; }
-:root:active-view-transition-type(back)::view-transition,
-:root:active-view-transition-type(back) .bestiary-fold { --bestiary-fold: -100000px; --bestiary-fold-turn: 18deg; }
-:root:active-view-transition-type(back) .bestiary-fold { animation-direction: reverse; }
+:root:active-view-transition-type(lay-down)::view-transition,
+:root:active-view-transition-type(lay-down) .bestiary-fold { --bestiary-fold: -100000px; --bestiary-fold-turn: 18deg; }
+:root:active-view-transition-type(lay-down) .bestiary-fold { animation-direction: reverse; }
 :root:active-view-transition-type(page-turn)::view-transition {
   animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
 }
-:root:active-view-transition-type(back)::view-transition { animation-direction: reverse; }
+:root:active-view-transition-type(lay-down)::view-transition { animation-direction: reverse; }
 ::view-transition-group(bestiary-leaf),
 ::view-transition-group(bestiary-fold) { animation: none; }
 ::view-transition-old(bestiary-leaf),
@@ -543,12 +543,12 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   clip-path: polygon(0 0, calc(var(--bestiary-fold) / cos(var(--bestiary-fold-turn))) 0, 0 calc(var(--bestiary-fold) / sin(var(--bestiary-fold-turn))));
 }
 ::view-transition-new(bestiary-leaf) { animation: bestiary-leaf-uncover 1s ease-out both; }
-:root:active-view-transition-type(back)::view-transition-old(bestiary-leaf) {
+:root:active-view-transition-type(lay-down)::view-transition-old(bestiary-leaf) {
   z-index: 0;
   clip-path: none;
   animation: bestiary-leaf-uncover 1s ease-in reverse both;
 }
-:root:active-view-transition-type(back)::view-transition-new(bestiary-leaf) {
+:root:active-view-transition-type(lay-down)::view-transition-new(bestiary-leaf) {
   z-index: 1;
   clip-path: polygon(0 0, calc(var(--bestiary-fold) / cos(var(--bestiary-fold-turn))) 0, 0 calc(var(--bestiary-fold) / sin(var(--bestiary-fold-turn))));
   animation: none;
