@@ -125,6 +125,14 @@ for drawing in sky-day-near sky-night-near desk-day desk-night forest-day-floor 
   grep -q "$drawing[^,]*var(--bestiary-scroll)[^,]*fixed" "$out/site$css" || fail "$drawing scrolls with the leaf instead of drifting behind it"
 done
 grep -q "animation-timeline:scroll(root)" "$out/site$css" || fail "nothing drifts the places as the page scrolls"
+for place in desk forest-floor forest-canopy sky-near; do
+  day=$root/assets/images/bestiary/places/$(echo "$place" | sed 's/^\([a-z]*\)/\1-day/').svg
+  night=$(echo "$day" | sed 's/-day/-night/')
+  [ -s "$day" ] && [ -s "$night" ] || fail "no drawing of $place by day and by night"
+  grep -o " \(d\|transform\)='[^']*'" "$day" | sort > "$out/day-shapes"
+  grep -o " \(d\|transform\)='[^']*'" "$night" | sort > "$out/night-shapes"
+  [ -z "$(comm -13 "$out/day-shapes" "$out/night-shapes" | head -1)" ] || fail "$place lays out its shapes differently by day and by night"
+done
 for drawing in "$root"/assets/images/bestiary/places/*.svg; do
   twice=$(grep -o "id='[^']*'" "$drawing" | sort | uniq -d | head -1)
   [ -z "$twice" ] || fail "drawing $drawing names $twice twice, so its copies clip or fill by the wrong shape"
