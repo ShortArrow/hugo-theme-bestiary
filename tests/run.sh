@@ -140,6 +140,7 @@ for place in desk forest-floor forest-canopy sky-near; do
   grep -o " \(d\|transform\)='[^']*'" "$night" | sort > "$out/night-shapes"
   [ -z "$(comm -13 "$out/day-shapes" "$out/night-shapes" | head -1)" ] || fail "$place lays out its shapes differently by day and by night"
 done
+! grep -q '<style' "$root/assets/images/bestiary/paper.svg" || fail "the paper's fibres are styled by a stylesheet in their sprite, which Firefox does not apply through <use>, so it fills them black"
 for drawing in "$root"/assets/images/bestiary/places/*.svg; do
   twice=$(grep -o "id='[^']*'" "$drawing" | sort | uniq -d | head -1)
   [ -z "$twice" ] || fail "drawing $drawing names $twice twice, so its copies clip or fill by the wrong shape"
