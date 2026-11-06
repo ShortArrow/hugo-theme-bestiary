@@ -148,6 +148,8 @@ When the site sets `services.googleAnalytics.ID`, every page loads Hugo's Google
 
 `tests/run.sh` builds `exampleSite` with the theme and fails if a page does not render. It needs `hugo` on `PATH`.
 
+`tests/visual` opens `exampleSite` in Chromium, Firefox and WebKit, compares each page with a reference screenshot under `tests/visual/screenshots`, and checks that pages turn and the scheme billows. Run it with `sh scripts/visual.sh`, which needs Docker and uses the same Linux image as CI, so that fonts and rendering match the references. After a change meant to alter how pages look, run `sh scripts/visual.sh --update-snapshots`, look at the new screenshots, and commit them with the change.
+
 ## License
 
 MIT
