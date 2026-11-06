@@ -60,6 +60,21 @@ test("following a link to the page already open does not turn the leaf", async (
   expect(await turned()).toBeNull();
 });
 
+test("the page being left keeps its leaf in view while it is captured", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
+  await page.addInitScript(() =>
+    addEventListener("pageswap", (e) => {
+      if (!e.viewTransition) return;
+      const fold = document.querySelector(".bestiary-fold");
+      sessionStorage.setItem("flap-while-leaving", getComputedStyle(fold).visibility);
+    }),
+  );
+  await page.goto("/creatures/inkwyrm/", { waitUntil: "networkidle" });
+  await page.evaluate(() => (location.href = "/creatures/lanternmoth/"));
+  await page.waitForURL("**/creatures/lanternmoth/");
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("flap-while-leaving"))).toBe("hidden");
+});
+
 test("between leaves as tall as the window, going on turns the leaf and going back lays it down", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "only Chromium turns pages across documents");
   const turned = await watchTurns(page);
