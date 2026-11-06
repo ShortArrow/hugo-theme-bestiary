@@ -514,35 +514,20 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   from { --bestiary-fold: calc(44rem * cos(52deg) + min(var(--bestiary-turned, 100vh), 100vh - 1.5rem) * sin(52deg)); --bestiary-fold-turn: 52deg; }
   to { --bestiary-fold: -2rem; --bestiary-fold-turn: 18deg; }
 }
-@keyframes bestiary-leaf-uncover {
-  from { filter: brightness(0.7); }
-  to { filter: brightness(1); }
-}
 
 :root:active-view-transition-type(page-turn) .bestiary-leaf { view-transition-name: bestiary-leaf; }
 :root.bestiary-revealing:active-view-transition-type(page-turn) .bestiary-fold {
   view-transition-name: bestiary-fold;
   visibility: visible;
-  background:
-    linear-gradient(calc(90deg + var(--bestiary-fold-turn)),
-      rgba(0, 0, 0, 0.3) var(--bestiary-fold),
-      rgba(0, 0, 0, 0.08) calc(var(--bestiary-fold) + 1.2rem),
-      rgba(255, 255, 255, 0.06) calc(var(--bestiary-fold) + 5rem),
-      transparent calc(var(--bestiary-fold) + 12rem),
-      rgba(0, 0, 0, 0.1) calc(var(--bestiary-fold) + 32rem)),
-    var(--paper);
+  background: var(--paper);
   box-shadow: inset 0 0 2.5rem var(--paper-burn);
-  animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
 }
 .bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold { filter: url(#bestiary-edge); }
 /* Until the fold's animation takes hold, which a slow machine can draw a frame or two before, the turn stands at its start: turning a leaf away, it lies whole with no flap; laying a leaf down, it is not yet over the one being left. */
-:root:active-view-transition-type(page-turn)::view-transition,
-:root:active-view-transition-type(page-turn) .bestiary-fold { --bestiary-fold: 100000px; --bestiary-fold-turn: 52deg; }
-:root:active-view-transition-type(lay-down)::view-transition,
-:root:active-view-transition-type(lay-down) .bestiary-fold { --bestiary-fold: -100000px; --bestiary-fold-turn: 18deg; }
-:root:active-view-transition-type(lay-down) .bestiary-fold { animation-direction: reverse; }
+:root:active-view-transition-type(page-turn)::view-transition { --bestiary-fold: 100000px; --bestiary-fold-turn: 52deg; }
+:root:active-view-transition-type(lay-down)::view-transition { --bestiary-fold: -100000px; --bestiary-fold-turn: 18deg; }
 :root:active-view-transition-type(page-turn)::view-transition {
-  animation: bestiary-fold 1s cubic-bezier(0.4, 0.1, 0.45, 1) both;
+  animation: bestiary-fold 0.65s cubic-bezier(0.4, 0.1, 0.45, 1) both;
 }
 :root:active-view-transition-type(lay-down)::view-transition { animation-direction: reverse; }
 ::view-transition-group(bestiary-leaf),
@@ -556,19 +541,16 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   z-index: 1;
   clip-path: polygon(0 0, calc(var(--bestiary-fold) / cos(var(--bestiary-fold-turn))) 0, 0 calc(var(--bestiary-fold) / sin(var(--bestiary-fold-turn))));
 }
-::view-transition-new(bestiary-leaf) { animation: bestiary-leaf-uncover 1s ease-out both; }
 :root:active-view-transition-type(lay-down)::view-transition-old(bestiary-leaf) {
   z-index: 0;
   clip-path: none;
-  animation: bestiary-leaf-uncover 1s ease-in reverse both;
 }
 :root:active-view-transition-type(lay-down)::view-transition-new(bestiary-leaf) {
   z-index: 1;
   clip-path: polygon(0 0, calc(var(--bestiary-fold) / cos(var(--bestiary-fold-turn))) 0, 0 calc(var(--bestiary-fold) / sin(var(--bestiary-fold-turn))));
-  animation: none;
 }
 
-/* The flap is the folded part mirrored across the fold and drawn eight tenths as deep, so it lies on the near side of it and stands up off the leaf as it curls; its own drawing, live in the new page, carries the ragged edge, a crease and a sheen where the paper bends, and its shadow falls on the leaves beneath. */
+/* The flap is the folded part mirrored across the fold and drawn eight tenths as deep, so it lies on the near side of it and stands up off the leaf as it curls; its own drawing, made once in the new page, carries the ragged edge and browned rim, and only its placement and clip change from frame to frame; its shadow falls on the leaves beneath. */
 ::view-transition-group(bestiary-fold) { filter: drop-shadow(0 0 0.9rem rgba(0, 0, 0, 0.45)); }
 ::view-transition-old(bestiary-fold) { display: none; }
 ::view-transition-image-pair(bestiary-fold) {
@@ -584,7 +566,7 @@ a.bestiary-choice:hover { background: color-mix(in srgb, var(--bestiary-choice-i
   clip-path: polygon(calc(var(--bestiary-fold) / cos(var(--bestiary-fold-turn))) 0, 300vmax 0, 300vmax 300vmax, 0 300vmax, 0 calc(var(--bestiary-fold) / sin(var(--bestiary-fold-turn))));
 }
 
-/* The turn between day and night: the new scheme billows out from the moon or sun like a puff of smoke, soft at its edge, while the old one blurs away. The puff is a picture drawn once and only scaled as it grows, so a slow machine shows the same billow as a fast one. */
+/* The turn between day and night: the new scheme billows out from the moon or sun like a puff of smoke, soft at its edge, over the old one. The puff is a picture drawn once and only scaled as it grows, so a slow machine shows the same billow as a fast one. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
