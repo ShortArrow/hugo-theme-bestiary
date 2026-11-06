@@ -105,7 +105,8 @@ grep -q ':active-view-transition-type(page-turn) .bestiary-leaf{view-transition-
 grep -q '::view-transition-old(bestiary-leaf)' "$out/site$css" || fail "the page turn does not shape the leaf turning over"
 has "$ink" 'addEventListener("pagereveal"'
 has "$ink" '<div class="bestiary-fold" aria-hidden="true"></div>'
-grep -q ':active-view-transition-type(page-turn) .bestiary-fold{view-transition-name:bestiary-fold}' "$out/site$css" || fail "the page turn has no flap to curl over"
+grep -q ':active-view-transition-type(page-turn) .bestiary-fold{view-transition-name:bestiary-fold' "$out/site$css" || fail "the page turn has no flap to curl over"
+grep -q '.bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold{filter:url(#bestiary-edge)}' "$out/site$css" || fail "the flap of the page turn is cut clean while the leaf is ragged"
 grep -q ':root\[data-theme=.\?dark.\?\]' "$out/site$css" || fail "stylesheet has no dark scheme a reader can choose"
 grep -q ':root:not(\[data-theme=.\?light.\?\])' "$out/site$css" || fail "stylesheet does not follow the system scheme when the reader chose none"
 has "$ink" '<button type="button" class="bestiary-place" hidden'
