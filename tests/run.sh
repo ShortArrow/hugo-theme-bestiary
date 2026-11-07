@@ -85,6 +85,8 @@ grep -q '<svg class="bestiary-stains"' "$ink" || fail "Inkwyrm's leaf has no sta
 mishap() { grep -o 'data-mishap="[a-z-]*"' "$1" || echo none; }
 [ "$(for page in "$out"/site/index.html "$out"/site/*/index.html "$out"/site/*/*/index.html; do mishap "$page"; done | sort -u | wc -l)" -gt 1 ] || fail "every example page met the same mishap"
 grep -q '\.bestiary-glyph-speckled{mask-image:var(--bestiary-speckle)' "$out/site$css" || fail "stylesheet does not wear the letters of the text"
+speckle=$(grep -o -- '--bestiary-speckle:url([^)]*)' "$out/site$css" | head -1 | sed 's/^--bestiary-speckle:url(//; s/)$//; s/^"//; s/"$//')
+case $speckle in *.png) [ -s "$out/site$speckle" ] || fail "the speckle $speckle was not published" ;; *) fail "every speckled letter draws the speckle afresh from its filter, which a weak GPU feels on every scroll" ;; esac
 grep -q 'var(--bestiary-mottle)' "$out/site$css" || fail "stylesheet leaves the paper an even tone"
 tiles() { grep -o '<use href="[^"]*#t[01]\{4\}"' "$1" | sed 's/.*#t//; s/"$//'; }
 [ "$(tiles "$ink" | wc -l)" -eq 160 ] || fail "Inkwyrm's paper is not four tiles by forty"
