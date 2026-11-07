@@ -1,0 +1,21 @@
+{{- /*
+  Draws each tile of the sprite images/bestiary/paper.svg as an image of its own, once by day and once by night, and returns
+  their addresses as a map from scheme ("day", "night") to tile name (such as "t0110") to path.
+  The fibres are coloured in the image itself, since the page's variables do not reach into an image. Arguments: none.
+*/ -}}
+{{- $sprite := (resources.Get "images/bestiary/paper.svg").Content -}}
+{{- $fibres := dict
+  "day" (dict "dark" "#6b4a2a" "light" "#fffaf0")
+  "night" (dict "dark" "#0e0a06" "light" "#6e5d45") -}}
+{{- $tiles := dict -}}
+{{- range $scheme, $ink := $fibres }}
+  {{- $drawn := dict }}
+  {{- range findRESubmatch `(?s)<symbol id='(t[01]{4})' viewBox='([^']*)'[^>]*>(.*?)</symbol>` $sprite }}
+    {{- $name := index . 1 }}
+    {{- $body := index . 3 | replaceRE `var\(--bestiary-fibre-dark,[^)]*\)` $ink.dark | replaceRE `var\(--bestiary-fibre-light,[^)]*\)` $ink.light }}
+    {{- $svg := printf "<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='%s'>%s</svg>\n" (index . 2) $body }}
+    {{- $drawn = merge $drawn (dict $name (resources.FromString (printf "images/bestiary/paper/%s-%s.svg" $scheme $name) $svg | fingerprint).RelPermalink) }}
+  {{- end }}
+  {{- $tiles = merge $tiles (dict $scheme $drawn) }}
+{{- end -}}
+{{- return $tiles -}}

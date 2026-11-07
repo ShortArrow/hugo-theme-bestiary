@@ -88,10 +88,21 @@ grep -q '\.bestiary-glyph-speckled{mask-image:var(--bestiary-speckle)' "$out/sit
 speckle=$(grep -o -- '--bestiary-speckle:url([^)]*)' "$out/site$css" | head -1 | sed 's/^--bestiary-speckle:url(//; s/)$//; s/^"//; s/"$//')
 case $speckle in *.png) [ -s "$out/site$speckle" ] || fail "the speckle $speckle was not published" ;; *) fail "every speckled letter draws the speckle afresh from its filter, which a weak GPU feels on every scroll" ;; esac
 grep -q 'var(--bestiary-mottle)' "$out/site$css" || fail "stylesheet leaves the paper an even tone"
-tiles() { grep -o '<use href="[^"]*#t[01]\{4\}"' "$1" | sed 's/.*#t//; s/"$//'; }
+tiles() { grep -o "<image href=\"[^\"]*/paper/${2:-day}-t[01]\{4\}[.\"]" "$1" | sed 's/.*-t\([01]*\).*/\1/'; }
+! grep -q '<use href="[^"]*paper' "$ink" || fail "Inkwyrm lays its fibres with <use>, which copies every fibre into the page and makes each style recalculation walk ten thousand of them"
 [ "$(tiles "$ink" | wc -l)" -eq 160 ] || fail "Inkwyrm's paper is not four tiles by forty"
-sprite=$(grep -o '<use href="[^"#]*' "$ink" | head -1 | sed 's/<use href="//')
-[ -s "$out/site$sprite" ] || fail "paper sprite $sprite was not published"
+[ "$(tiles "$ink" night)" = "$(tiles "$ink")" ] || fail "Inkwyrm's paper is laid differently by night"
+for scheme in day night; do
+  for tile in $(grep -o "<image href=\"[^\"]*/paper/$scheme-t[01]*[^\"]*\"" "$ink" | sed 's/<image href="//; s/"$//' | sort -u); do
+    [ -s "$out/site$tile" ] || fail "paper tile $tile was not published"
+  done
+done
+day_tile=$(grep -o '<image href="[^"]*/paper/day-t[^"]*"' "$ink" | head -1 | sed 's/<image href="//; s/"$//')
+night_tile=$(grep -o "<image href=\"[^\"]*/paper/night-t$(tiles "$ink" | head -1)[^\"]*\"" "$ink" | head -1 | sed 's/<image href="//; s/"$//')
+! grep -q 'var(' "$out/site$day_tile" || fail "paper tile $day_tile colours its fibres with page variables, which do not reach into an image"
+[ "$(grep -o "d='[^']*'" "$out/site$day_tile")" = "$(grep -o "d='[^']*'" "$out/site$night_tile")" ] || fail "a paper tile lays its fibres differently by night"
+[ "$(grep -o 'stroke:[^;]*' "$out/site$day_tile" | sort -u)" != "$(grep -o 'stroke:[^;]*' "$out/site$night_tile" | sort -u)" ] || fail "the paper's fibres keep their day colours by night"
+grep -q -- '--bestiary-paper-night:visible' "$out/site$css" || fail "the night paper tiles are never shown"
 tiles "$ink" | awk 'NR > 1 && (NR - 1) % 4 != 0 && substr($0, 4, 1) != right { bad = 1 }
   NR > 4 && substr($0, 1, 1) != bottom[(NR - 1) % 4] { bad = 1 }
   { right = substr($0, 2, 1); bottom[(NR - 1) % 4] = substr($0, 3, 1) }
@@ -144,7 +155,6 @@ for place in desk forest-floor forest-canopy sky-near; do
   grep -o " \(d\|transform\)='[^']*'" "$night" | sort > "$out/night-shapes"
   [ -z "$(comm -13 "$out/day-shapes" "$out/night-shapes" | head -1)" ] || fail "$place lays out its shapes differently by day and by night"
 done
-! grep -q '<style' "$root/assets/images/bestiary/paper.svg" || fail "the paper's fibres are styled by a stylesheet in their sprite, which Firefox does not apply through <use>, so it fills them black"
 for drawing in "$root"/assets/images/bestiary/places/*.svg; do
   twice=$(grep -o "id='[^']*'" "$drawing" | sort | uniq -d | head -1)
   [ -z "$twice" ] || fail "drawing $drawing names $twice twice, so its copies clip or fill by the wrong shape"
