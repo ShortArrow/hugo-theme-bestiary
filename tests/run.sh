@@ -126,7 +126,9 @@ has "$ink" 'addEventListener("pagereveal"'
 has "$ink" 'addEventListener("pageswap"'
 grep -q 'height:min(var(--bestiary-turned' "$out/site$css" || fail "a short leaf turns over from the bottom of the window, where it has no paper"
 grep -o 'radial-gradient([^)]*)[^,;]*' "$out/site$css" | grep -q 'fixed' || fail "the shade at the edges of the window ends where a short page ends"
-has "$ink" '<div class="bestiary-fold" aria-hidden="true"></div>'
+has "$ink" '<div class="bestiary-fold" id="bestiary-fold" aria-hidden="true"></div>'
+has "$ink" '<link rel="expect" href="#bestiary-fold" blocking="render">'
+[ "$(grep -n 'rel="expect"' "$ink" | cut -d: -f1)" -lt "$(grep -n '<body' "$ink" | cut -d: -f1)" ] || fail "Inkwyrm asks to wait for its flap only after its body has begun, so a slow page is revealed and turned before the flap is parsed"
 grep -q 'bestiary-revealing:active-view-transition-type(page-turn) .bestiary-fold{view-transition-name:bestiary-fold' "$out/site$css" || fail "the page turn has no flap to curl over"
 grep -q '.bestiary-weathered:active-view-transition-type(page-turn) .bestiary-fold{filter:url(#bestiary-edge)}' "$out/site$css" || fail "the flap of the page turn is cut clean while the leaf is ragged"
 grep -q ':root\[data-theme=.\?dark.\?\]' "$out/site$css" || fail "stylesheet has no dark scheme a reader can choose"
