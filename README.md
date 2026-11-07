@@ -150,6 +150,8 @@ When the site sets `services.googleAnalytics.ID`, every page loads Hugo's Google
 
 `tests/visual` opens `exampleSite` in Chromium, Firefox and WebKit, compares each page with a reference screenshot under `tests/visual/screenshots`, and checks that pages turn and the scheme billows. Run it with `sh scripts/visual.sh`, which needs Docker and uses the same Linux image as CI, so that fonts and rendering match the references. After a change meant to alter how pages look, run `sh scripts/visual.sh --update-snapshots`, look at the new screenshots, and commit them with the change.
 
+The letters are worn through `assets/images/bestiary/speckle.png`, a picture of the noise that `speckle.svg` beside it describes. After editing the SVG, run `sh scripts/speckle.sh`, which needs Chrome, to draw the picture again, and commit both.
+
 ## License
 
 MIT
