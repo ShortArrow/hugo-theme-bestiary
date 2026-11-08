@@ -89,24 +89,24 @@ test("between leaves as tall as the window, going on turns the leaf and going ba
   await expect.poll(turned).toBe("page-turn,lay-down");
 });
 
-test("turning to night billows out from the button", async ({ page, browserName }) => {
+test("turning to night billows out from the button over 0.8 s", async ({ page, browserName }) => {
   test.skip(browserName === "firefox", "Firefox has no view transitions to billow with");
   await open(page, "/", { scheme: "light", place: "home" });
   await page.click(".bestiary-scheme");
-  const billowed = await page.evaluate(
+  const billow = await page.evaluate(
     () =>
       new Promise((resolve) => {
         const start = performance.now();
         const look = () => {
           const puff = document.getAnimations().find((a) => a.effect?.pseudoElement === "::view-transition-new(root)");
-          if (puff && (puff.playState === "running" || puff.playState === "finished")) resolve(true);
-          else if (performance.now() - start > 15000) resolve(false);
+          if (puff && (puff.playState === "running" || puff.playState === "finished")) resolve(puff.effect.getTiming().duration);
+          else if (performance.now() - start > 15000) resolve(null);
           else requestAnimationFrame(look);
         };
         look();
       }),
   );
-  expect(billowed).toBe(true);
+  expect(billow).toBe(800);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 

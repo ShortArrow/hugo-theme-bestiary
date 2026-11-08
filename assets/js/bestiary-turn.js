@@ -64,7 +64,7 @@
         maskPosition: [`${x}px ${y}px`, `${x - size / 2}px ${y - size / 2}px`],
         opacity: [0.5, 1],
       },
-      { duration: 600, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both", pseudoElement: "::view-transition-new(root)" },
+      { duration: 800, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both", pseudoElement: "::view-transition-new(root)" },
     );
     puff.pause();
     drawn().then(() => requestAnimationFrame(() => requestAnimationFrame(() => puff.play())));
