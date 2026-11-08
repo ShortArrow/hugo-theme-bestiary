@@ -126,6 +126,13 @@ The leaf lies on a wooden desk. A house in the header, opposite the moon or sun,
 
 Following a link to another page of the site turns the leaf over from its bottom right corner: the fold runs up to the top left, standing more upright as the leaf turns, the leaf's blank back curls up over it, and the next leaf lies beneath. When the next leaf is the taller, it is laid down over the old one instead, so the shorter leaf never shows beneath the taller. Between leaves as tall as the window, going back through the browser's history lays the earlier leaf down again. The turn needs a browser with cross-document view transitions; in others, and for readers who ask for reduced motion, the next page appears at once.
 
+When the pointer rests on a link to another page of the site, or presses it, browsers that support speculation rules load and draw that page ahead, so the turn starts as soon as the link is followed; a page readied ahead still opens in the scheme and place chosen after it was readied. Each page readied ahead costs the reader a download and some work in the background, and runs the page's scripts, analytics included, though gtag.js counts the visit only when the page is shown. To load each page only when it is followed:
+
+```toml
+[params.bestiary]
+  prerender = false
+```
+
 ## Favicon
 
 When the site has `assets/favicon.svg`, every page links it as its icon, fingerprinted so a changed icon is not kept from a cache. An SVG icon can follow the reader's scheme with a `prefers-color-scheme` media query inside it. Without the file, pages link no icon.

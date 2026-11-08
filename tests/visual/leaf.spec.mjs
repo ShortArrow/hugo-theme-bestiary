@@ -137,6 +137,40 @@ test("before the turn's first frame, the leaf being turned lies flat and whole",
   expect((await still()).new).toBeLessThanOrEqual(0);
 });
 
+/** Starts recording the pages the browser tries to ready ahead, by the path each was for. Chrome does not ready a page while DevTools is attached, which is how Playwright drives it, so each attempt is recorded and then fails. */
+async function watchReadying(page) {
+  const tried = new Set();
+  const devtools = await page.context().newCDPSession(page);
+  devtools.on("Preload.prerenderStatusUpdated", (e) => tried.add(new URL(e.key.url).pathname));
+  await devtools.send("Preload.enable");
+  return tried;
+}
+
+test("a link is readied ahead once the pointer rests on it, and not before", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "only Chromium readies pages ahead from speculation rules");
+  const tried = await watchReadying(page);
+  await open(page, "/", { scheme: "light", place: "home" });
+  await page.waitForTimeout(1000);
+  expect([...tried]).toEqual([]);
+  await page.hover("a[href$='/creatures/inkwyrm/']");
+  await expect.poll(() => [...tried]).toEqual(["/creatures/inkwyrm/"]);
+});
+
+test("a page readied ahead is revealed in the scheme and place chosen since it was readied", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "pagereveal is fired only where pages turn across documents");
+  await open(page, "/creatures/inkwyrm/", { scheme: "light", place: "home" });
+  const elsewhere = await page.context().newPage();
+  await elsewhere.goto("/", { waitUntil: "networkidle" });
+  await elsewhere.emulateMedia({ reducedMotion: "reduce" });
+  await elsewhere.click(".bestiary-scheme");
+  await elsewhere.click(".bestiary-place");
+  await page.evaluate(() => dispatchEvent(new Event("pagereveal")));
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("html")).toHaveAttribute("data-place", "forest");
+  await expect(page.locator(".bestiary-scheme")).toHaveAttribute("aria-label", "Turn to day pages");
+  await expect(page.locator(".bestiary-place")).toHaveAttribute("aria-label", /forest floor/);
+});
+
 test("a long title keeps its fleurons beside its words at any width", async ({ page }) => {
   test.setTimeout(90_000);
   await page.route("**/creatures/", async (route) => {

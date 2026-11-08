@@ -82,4 +82,5 @@
     t.button.hidden = false;
   }
   systemNight.addEventListener("change", () => turners.forEach(label));
+  addEventListener("pagereveal", () => turners.forEach(label));
 })();

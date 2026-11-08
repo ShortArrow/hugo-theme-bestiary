@@ -190,6 +190,13 @@ lacks "$out/fixed-place/still/index.html" 'class="bestiary-place"'
 lacks "$out/fixed-place/still/index.html" 'bestiary-place")'
 has "$out/fixed-place/still/index.html" 'class="bestiary-scheme"'
 
+has "$ink" '<script type="speculationrules">{"prerender":'
+has "$ink" '{"where":{"href_matches":"/[*]"},"eagerness":"moderate"}'
+grep -q 'bestiary-scheme")[^<]*addEventListener("pagereveal"' "$ink" || fail "the scheme is not restored again as a page readied ahead is revealed"
+grep -q 'bestiary-place")[^<]*addEventListener("pagereveal"' "$ink" || fail "the place is not restored again as a page readied ahead is revealed"
+build "$root/tests/fixtures/no-prerender" ../../../.. "$out/no-prerender"
+lacks "$out/no-prerender/ahead/index.html" 'speculationrules'
+
 build "$root/tests/fixtures/plain" ../../../.. "$out/plain"
 lacks "$out/plain/clean/index.html" 'bestiary-weathered'
 lacks "$out/plain/clean/index.html" '<filter id='
