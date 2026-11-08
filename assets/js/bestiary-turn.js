@@ -43,9 +43,15 @@
     label(t);
   };
 
+  const layers = [
+    [root, "::before"],
+    [document.body, "::before"],
+    [document.body, "::after"],
+  ];
+
   const drawn = () =>
     Promise.all(
-      [...getComputedStyle(document.body).backgroundImage.matchAll(/url\("([^"]+)"\)/g)].map(([, url]) => {
+      layers.flatMap(([element, pseudo]) => [...getComputedStyle(element, pseudo).backgroundImage.matchAll(/url\("([^"]+)"\)/g)]).map(([, url]) => {
         const picture = new Image();
         picture.src = url;
         return picture.decode().catch(() => {});

@@ -1,20 +1,20 @@
 /* Bestiary: an old natural-history book. Light pages are paper by day; dark pages are the study at night. */
 :root {
   --desk: #b89a70;
-  --bestiary-home:
-    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)) fixed,
-    {{ template "bestiary-drawing" "desk-day" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
-    var(--desk);
-  --bestiary-forest:
-    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)) fixed,
-    {{ template "bestiary-drawing" "forest-day-canopy" }} fixed,
-    {{ template "bestiary-drawing" "forest-day-floor" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
-    #6a5a3e;
-  --bestiary-sky:
-    {{ template "bestiary-drawing" "sky-day-near" }} 0 calc(var(--bestiary-scroll) * 0.3) fixed,
-    {{ template "bestiary-drawing" "sky-day-sun" }} right 6% top 12rem / 200px no-repeat fixed,
-    {{ template "bestiary-drawing" "sky-day-far" }} fixed,
-    linear-gradient(#6f97bd, #a9c3d6 65%, #dcdcd0) fixed,
+  --bestiary-home-over: radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3));
+  --bestiary-home-drift: {{ template "bestiary-drawing" "desk-day" }};
+  --bestiary-home-under: var(--desk);
+  --bestiary-forest-over:
+    radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.3)),
+    {{ template "bestiary-drawing" "forest-day-canopy" }};
+  --bestiary-forest-drift: {{ template "bestiary-drawing" "forest-day-floor" }};
+  --bestiary-forest-under: #6a5a3e;
+  --bestiary-sky-over: none;
+  --bestiary-sky-drift: {{ template "bestiary-drawing" "sky-day-near" }};
+  --bestiary-sky-under:
+    {{ template "bestiary-drawing" "sky-day-sun" }} right 6% top 12rem / 200px no-repeat,
+    {{ template "bestiary-drawing" "sky-day-far" }},
+    linear-gradient(#6f97bd, #a9c3d6 65%, #dcdcd0),
     #93b2cc;
   --paper: #f3ead6;
   --paper-burn: rgba(122, 82, 34, 0.38);
@@ -46,25 +46,25 @@
   color-scheme: light;
 }
 
-{{- /* A drawing of a place behind the leaf, by its name under images/bestiary/places. */ -}}
-{{- define "bestiary-drawing" }}url("{{ (resources.Get (printf "images/bestiary/places/%s.svg" .) | fingerprint).RelPermalink }}"){{ end }}
+{{- /* A drawing of a place behind the leaf, by its name under images/bestiary/places: the picture drawn from its SVG by scripts/places.sh. */ -}}
+{{- define "bestiary-drawing" }}url("{{ (resources.Get (printf "images/bestiary/places/%s.webp" .) | fingerprint).RelPermalink }}"){{ end }}
 {{- /* Night tokens, defined once: they apply when the system is dark and the reader has not chosen day, or when the reader has chosen night. */ -}}
 {{- define "bestiary-night" }}
     --desk: #0d0906;
-    --bestiary-home:
-      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)) fixed,
-      {{ template "bestiary-drawing" "desk-night" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
-      var(--desk);
-    --bestiary-forest:
-      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)) fixed,
-      {{ template "bestiary-drawing" "forest-night-canopy" }} fixed,
-      {{ template "bestiary-drawing" "forest-night-floor" }} 0 calc(var(--bestiary-scroll) * 0.7) fixed,
-      #14130d;
-    --bestiary-sky:
-      {{ template "bestiary-drawing" "sky-night-near" }} 0 calc(var(--bestiary-scroll) * 0.3) fixed,
-      {{ template "bestiary-drawing" "sky-night-moon" }} right 6% top 12rem / 160px no-repeat fixed,
-      {{ template "bestiary-drawing" "sky-night-far" }} fixed,
-      linear-gradient(#060a1c, #18203d) fixed,
+    --bestiary-home-over: radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45));
+    --bestiary-home-drift: {{ template "bestiary-drawing" "desk-night" }};
+    --bestiary-home-under: var(--desk);
+    --bestiary-forest-over:
+      radial-gradient(ellipse 120% 90% at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.45)),
+      {{ template "bestiary-drawing" "forest-night-canopy" }};
+    --bestiary-forest-drift: {{ template "bestiary-drawing" "forest-night-floor" }};
+    --bestiary-forest-under: #14130d;
+    --bestiary-sky-over: none;
+    --bestiary-sky-drift: {{ template "bestiary-drawing" "sky-night-near" }};
+    --bestiary-sky-under:
+      {{ template "bestiary-drawing" "sky-night-moon" }} right 6% top 12rem / 160px no-repeat,
+      {{ template "bestiary-drawing" "sky-night-far" }},
+      linear-gradient(#060a1c, #18203d),
       #0b1026;
     --paper: #2b231b;
     --paper-burn: rgba(10, 6, 2, 0.22);
@@ -108,7 +108,6 @@
 body {
   margin: 0;
   padding: 1.5rem 8px 3rem;
-  background: var(--bestiary-home);
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.125rem;
@@ -177,22 +176,45 @@ header::after { bottom: 0; height: 4px; border-bottom: 1px solid var(--rule); }
 :root[data-place="sky"] .bestiary-place-sky { display: block; }
 :is(.bestiary-scheme, .bestiary-place)[hidden] { display: none; }
 
-:root[data-place="forest"] body { background: var(--bestiary-forest); }
-:root[data-place="sky"] body { background: var(--bestiary-sky); }
-
-/* How far the page has scrolled, negated, so that a place can move by a share of it: the ground beneath the leaf at seven tenths, the near clouds at three. */
-@property --bestiary-scroll {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0px;
-}
-@keyframes bestiary-scroll {
-  to { --bestiary-scroll: -100000px; }
-}
+/* A place is three layers fixed to the window behind the leaf: what lies under the drifting drawing, the drawing that drifts as the page scrolls, and what lies over it. Each is drawn once into a layer of its own and only moved, so scrolling repaints none of them: the ground beneath the leaf drifts by seven tenths of the scroll, the near clouds by three. */
 :root {
-  animation: bestiary-scroll linear both;
-  animation-timeline: scroll(root);
-  animation-range: 0px 100000px;
+  --bestiary-under: var(--bestiary-home-under);
+  --bestiary-drift: var(--bestiary-home-drift);
+  --bestiary-over: var(--bestiary-home-over);
+  --bestiary-drift-share: 0.7;
+}
+:root[data-place="forest"] {
+  --bestiary-under: var(--bestiary-forest-under);
+  --bestiary-drift: var(--bestiary-forest-drift);
+  --bestiary-over: var(--bestiary-forest-over);
+}
+:root[data-place="sky"] {
+  --bestiary-under: var(--bestiary-sky-under);
+  --bestiary-drift: var(--bestiary-sky-drift);
+  --bestiary-over: var(--bestiary-sky-over);
+  --bestiary-drift-share: 0.3;
+}
+:root::before, body::before, body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+:root::before { background: var(--bestiary-under); }
+body::before { background: var(--bestiary-drift); will-change: transform; }
+body::after { background: var(--bestiary-over); }
+@keyframes bestiary-drift {
+  to { transform: translateY(calc(-100000px * var(--bestiary-drift-share))); }
+}
+@supports (animation-timeline: scroll()) {
+  body::before {
+    bottom: auto;
+    height: calc(100vh + 100000px * var(--bestiary-drift-share));
+    animation: bestiary-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 100000px;
+  }
 }
 
 header a {

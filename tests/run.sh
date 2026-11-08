@@ -125,7 +125,7 @@ grep -q '::view-transition-old(bestiary-leaf)' "$out/site$css" || fail "the page
 has "$ink" 'addEventListener("pagereveal"'
 has "$ink" 'addEventListener("pageswap"'
 grep -q 'height:min(var(--bestiary-turned' "$out/site$css" || fail "a short leaf turns over from the bottom of the window, where it has no paper"
-grep -o 'radial-gradient([^)]*)[^,;]*' "$out/site$css" | grep -q 'fixed' || fail "the shade at the edges of the window ends where a short page ends"
+grep -q -- '--bestiary-home-over:radial-gradient(' "$out/site$css" && grep -q 'body::\?after{background:var(--bestiary-over)}' "$out/site$css" && grep -o '[^}]*{content:"";position:fixed;inset:0' "$out/site$css" | grep -q 'body::\?after' || fail "the shade at the edges of the window ends where a short page ends"
 has "$ink" '<div class="bestiary-fold" id="bestiary-fold" aria-hidden="true"></div>'
 has "$ink" '<link rel="expect" href="#bestiary-fold" blocking="render">'
 [ "$(grep -n 'rel="expect"' "$ink" | cut -d: -f1)" -lt "$(grep -n '<body' "$ink" | cut -d: -f1)" ] || fail "Inkwyrm asks to wait for its flap only after its body has begun, so a slow page is revealed and turned before the flap is parsed"
@@ -137,17 +137,26 @@ has "$ink" '<button type="button" class="bestiary-place" hidden'
 grep -q 'localStorage.getItem("bestiary-place")' "$ink" || fail "Inkwyrm does not restore the reader's chosen place"
 grep -q 'bestiary-place' "$out/site$scheme_js" || fail "the place button turns nothing"
 for place in forest sky; do
-  grep -q ":root\[data-place=.\?$place.\?\] body" "$out/site$css" || fail "stylesheet lays the leaf nowhere in the $place"
-  grep -q -- "--bestiary-$place:" "$out/site$css" || fail "stylesheet paints no $place"
+  grep -q ":root\[data-place=.\?$place.\?\]{--bestiary-under:var(--bestiary-$place-under)" "$out/site$css" || fail "stylesheet lays the leaf nowhere in the $place"
+done
+for place in home forest sky; do
+  for layer in under drift over; do
+    grep -q -- "--bestiary-$place-$layer:" "$out/site$css" || fail "stylesheet paints no $layer layer of the $place"
+  done
 done
 for drawing in desk-day desk-night forest-day forest-night sky-day sky-night sky-day-sun sky-night-moon; do
-  url=$(grep -o "/images/bestiary/places/$drawing[^\")]*\.svg" "$out/site$css" | head -1)
+  url=$(grep -o "/images/bestiary/places/$drawing[^\")]*\.webp" "$out/site$css" | head -1)
   [ -n "$url" ] || fail "stylesheet draws no $drawing"
   [ -s "$out/site$url" ] || fail "drawing $url was not published"
 done
-for drawing in sky-day-near sky-night-near desk-day desk-night forest-day-floor forest-night-floor; do
-  grep -q "$drawing[^,]*var(--bestiary-scroll)[^,]*fixed" "$out/site$css" || fail "$drawing scrolls with the leaf instead of drifting behind it"
+! grep -q '/images/bestiary/places/[^")]*\.svg' "$out/site$css" || fail "stylesheet lays a place as an SVG, so its blurs and grain are run again for every part of it that scrolls into view"
+for drawing in "$root"/assets/images/bestiary/places/*.svg; do
+  [ -s "${drawing%.svg}.webp" ] || fail "$drawing has no picture drawn from it; run scripts/places.sh"
 done
+for drift in sky:sky-day-near sky:sky-night-near home:desk-day home:desk-night forest:forest-day-floor forest:forest-night-floor; do
+  grep -q -- "--bestiary-${drift%%:*}-drift:url([^)]*${drift#*:}" "$out/site$css" || fail "${drift#*:} scrolls with the leaf or stands still instead of drifting behind it"
+done
+! grep -q ') fixed' "$out/site$css" || fail "a place is painted fixed to the window, so every frame of a scroll paints it again"
 grep -q "animation-timeline:scroll(root)" "$out/site$css" || fail "nothing drifts the places as the page scrolls"
 for place in desk forest-floor forest-canopy sky-near; do
   day=$root/assets/images/bestiary/places/$(echo "$place" | sed 's/^\([a-z]*\)/\1-day/').svg

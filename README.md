@@ -159,6 +159,8 @@ When the site sets `services.googleAnalytics.ID`, every page loads Hugo's Google
 
 The letters are worn through `assets/images/bestiary/speckle.png`, a picture of the noise that `speckle.svg` beside it describes. After editing the SVG, run `sh scripts/speckle.sh`, which needs Chrome, to draw the picture again, and commit both.
 
+The places behind the leaf are laid as the WebP pictures under `assets/images/bestiary/places`, each drawn from the SVG beside it. After editing an SVG there, run `sh scripts/places.sh`, which needs Docker, to draw the pictures again, and commit both.
+
 ## License
 
 MIT

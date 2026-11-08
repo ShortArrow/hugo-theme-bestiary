@@ -29,6 +29,19 @@ for (const scheme of ["light", "dark"]) {
   });
 }
 
+for (const [place, share] of [["home", 0.7], ["forest", 0.7], ["sky", 0.3]]) {
+  test(`scrolling the page drifts the ${place === "home" ? "desk" : place} by ${share} of it, as one layer moved whole and never repainted`, async ({ page, browserName }) => {
+    test.skip(browserName !== "chromium", "only Chromium drifts the places with scroll-driven animation");
+    await open(page, "/creatures/inkwyrm/", { scheme: "light", place });
+    await page.evaluate(() => scrollTo(0, 200));
+    await expect.poll(() => page.evaluate(() => new DOMMatrix(getComputedStyle(document.body, "::before").transform).m42)).toBeCloseTo(-200 * share, 0);
+    const attachments = await page.evaluate(() =>
+      [[document.documentElement, "::before"], [document.body, "::before"], [document.body, "::after"], [document.body, null]].map(([el, pseudo]) => getComputedStyle(el, pseudo).backgroundAttachment),
+    );
+    expect(attachments.join()).not.toContain("fixed");
+  });
+}
+
 /** Records the types of each page turn as the new page is revealed. */
 async function watchTurns(page) {
   await page.addInitScript(() =>
