@@ -46,8 +46,8 @@
   color-scheme: light;
 }
 
-{{- /* A drawing of a place behind the leaf, by its name under images/bestiary/places. */ -}}
-{{- define "bestiary-drawing" }}url("{{ (resources.Get (printf "images/bestiary/places/%s.svg" .) | fingerprint).RelPermalink }}"){{ end }}
+{{- /* A drawing of a place behind the leaf, by its name under images/bestiary/places: the picture drawn from its SVG by scripts/places.sh. */ -}}
+{{- define "bestiary-drawing" }}url("{{ (resources.Get (printf "images/bestiary/places/%s.webp" .) | fingerprint).RelPermalink }}"){{ end }}
 {{- /* Night tokens, defined once: they apply when the system is dark and the reader has not chosen day, or when the reader has chosen night. */ -}}
 {{- define "bestiary-night" }}
     --desk: #0d0906;

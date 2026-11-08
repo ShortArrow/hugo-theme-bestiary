@@ -145,9 +145,13 @@ for place in home forest sky; do
   done
 done
 for drawing in desk-day desk-night forest-day forest-night sky-day sky-night sky-day-sun sky-night-moon; do
-  url=$(grep -o "/images/bestiary/places/$drawing[^\")]*.svg" "$out/site$css" | head -1)
+  url=$(grep -o "/images/bestiary/places/$drawing[^\")]*\.webp" "$out/site$css" | head -1)
   [ -n "$url" ] || fail "stylesheet draws no $drawing"
   [ -s "$out/site$url" ] || fail "drawing $url was not published"
+done
+! grep -q '/images/bestiary/places/[^")]*\.svg' "$out/site$css" || fail "stylesheet lays a place as an SVG, so its blurs and grain are run again for every part of it that scrolls into view"
+for drawing in "$root"/assets/images/bestiary/places/*.svg; do
+  [ -s "${drawing%.svg}.webp" ] || fail "$drawing has no picture drawn from it; run scripts/places.sh"
 done
 for drift in sky:sky-day-near sky:sky-night-near home:desk-day home:desk-night forest:forest-day-floor forest:forest-night-floor; do
   grep -q -- "--bestiary-${drift%%:*}-drift:url([^)]*${drift#*:}" "$out/site$css" || fail "${drift#*:} scrolls with the leaf or stands still instead of drifting behind it"
