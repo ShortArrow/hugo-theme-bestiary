@@ -13,7 +13,7 @@ jobs:
   smoke:
     strategy:
       matrix:
-        # The oldest version is module.hugoVersion.min in hugo.toml.
+        # The oldest version is module.hugoVersion.min in hugo.toml; tests/run.sh fails when they differ.
         hugo: ["0.158.0", "0.169.0"]
     runs-on: ubuntu-latest
     steps:
