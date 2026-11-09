@@ -5,7 +5,7 @@ description = "A field guide to imaginary creatures, where each page is an entry
 homepage = "https://github.com/ShortArrow/hugo-theme-bestiary"
 demosite = "https://vhabitat.shortarrow.jp/"
 tags = ["catalog", "directory", "dark", "light", "responsive", "retro"]
-features = ["entry fields declared by the site", "a page per choice", "weathered paper and ink", "day and night toggle", "Google Analytics"]
+features = ["entry fields declared by the site", "a page per choice", "weathered paper and ink", "day and night toggle", "desk, forest and sky backgrounds", "page-turn transitions between pages", "Google Analytics"]
 
 [author]
   name = "ShortArrow"
