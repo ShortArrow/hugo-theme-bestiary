@@ -12,6 +12,12 @@ has() { grep -q -- "$2" "$1" || fail "$1 lacks $2"; }
 lacks() { ! grep -q -- "$2" "$1" || fail "$1 has $2"; }
 labels() { grep -o 'class="bestiary-field-label">[^<]*' "$1" | sed 's/.*>//' | paste -sd, -; }
 
+min=$(sed -n 's/^ *min = "\(.*\)"/\1/p' "$root/hugo.toml")
+[ -n "$min" ] || fail "hugo.toml declares no module.hugoVersion.min"
+min_re=$(printf %s "$min" | sed 's/[.]/[.]/g')
+has "$root/README.md" "^Hugo $min_re or later"
+has "$root/.github/workflows/ci.yml" "hugo: \[\"$min_re\","
+
 build "$root/exampleSite" ../.. "$out/site"
 home=$out/site/index.html
 ink=$out/site/creatures/inkwyrm/index.html
