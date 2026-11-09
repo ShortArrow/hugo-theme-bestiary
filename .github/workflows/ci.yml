@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # Builds with the latest Hugo each week, so that a release that breaks the theme is found between changes.
+  schedule:
+    - cron: "17 3 * * 1"
 
 permissions:
   contents: read
@@ -14,19 +17,26 @@ jobs:
     strategy:
       matrix:
         # The oldest version is module.hugoVersion.min in hugo.toml; tests/run.sh fails when they differ.
-        hugo: ["0.158.0", "0.169.0"]
+        # latest is the newest Hugo release when the job runs.
+        hugo: ["0.158.0", "latest"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: hugo-theme-bestiary
       - name: Install Hugo
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          curl -fsSL "https://github.com/gohugoio/hugo/releases/download/v${{ matrix.hugo }}/hugo_${{ matrix.hugo }}_linux-amd64.tar.gz" | tar -xz -C "$RUNNER_TEMP" hugo
+          version=${{ matrix.hugo }}
+          if [ "$version" = latest ]; then version=$(gh api repos/gohugoio/hugo/releases/latest --jq .tag_name | sed "s/^v//"); fi
+          echo "Hugo $version"
+          curl -fsSL "https://github.com/gohugoio/hugo/releases/download/v$version/hugo_${version}_linux-amd64.tar.gz" | tar -xz -C "$RUNNER_TEMP" hugo
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
       - run: sh hugo-theme-bestiary/tests/run.sh
 
   visual:
+    if: github.event_name != 'schedule'
     # The image the references in tests/visual/screenshots were made in; scripts/visual.sh runs the same one.
     runs-on: ubuntu-latest
     container:
