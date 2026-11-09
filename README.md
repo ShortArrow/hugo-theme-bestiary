@@ -2,7 +2,7 @@
 
 A Hugo theme for field guides to imaginary creatures: an old natural-history book, with ragged, stained pages and entries stamped by kind.
 
-![The home page of a site using Bestiary](https://raw.githubusercontent.com/ShortArrow/hugo-theme-bestiary/main/images/screenshot.png)
+![The home page of a site using Bestiary, in four slanted bands: on the desk by day, on the forest floor by night, under the sky by day and by night](https://raw.githubusercontent.com/ShortArrow/hugo-theme-bestiary/main/images/screenshot.png)
 
 The home page is an index of every entry, grouped by section in the order of the sections' `weight`, with the seals of each entry's choice fields beside it. Each section has a list page of the same form, and each entry has a page with its entry card, headed by the name of its section as a link back to it. The site declares which fields an entry has; the theme names none of its own. A live example is [VHabitat](https://vhabitat.shortarrow.jp/).
 
